@@ -1,8 +1,10 @@
 # TT2021-A047
 SISTEMA DE MONITOREO DE PULSO, TEMPERATURA Y SATURACIÓN DE OXÍGENO PARA SEGUIMIENTO DE PACIENTES EN CENTROS DE SALUD “DOC-CHECKER”
 Trabajo Terminal No. 2021-A047
+
 Alumnos: Conde Francisco José Angel, Domínguez Reyes Jesús Alejandro, Nambo Velázquez 
 Carlos, Velasco Martínez Alan Alexis
+
 Directores: Ocampo Botello Fabiola, Rocha Bernabé María del Rosario
 
 Se desarrollará un sistema que utilizará un sistema embebido que considerando diversos datos y la 
