@@ -30,10 +30,15 @@
 <script>
 
 export default {
-  
   name: 'Home',
   components: {
-    
+  },
+  data: function(){
+    return{
+      usuario: "",
+      pasword: "",
+      error: false
+    }
   }
 }
 </script>
