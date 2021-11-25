@@ -1,5 +1,5 @@
 <template>
-<div class="home">
+<div class="iniciodesesion">
    <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
@@ -12,7 +12,7 @@
     <!-- Login Form -->
     <form>
       <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="Contraseña">
+      <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña">
       <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
       <input type="submit" class="fadeIn fourth" value="Registrate">
     </form>
@@ -31,7 +31,7 @@
 <script>
 
 export default {
-  name: 'Home',
+  name: 'Iniciodesesion',
   components: {
   },
   data: function(){
@@ -156,7 +156,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   transform: scale(0.95);
 }
 
-input[type=text] {
+input[type=text], input[type = password] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
