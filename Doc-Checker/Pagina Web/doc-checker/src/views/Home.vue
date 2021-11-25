@@ -11,14 +11,14 @@
 
     <!-- Login Form -->
     <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario">
+      <input type="text" id="password" class="fadeIn third" name="login" placeholder="Contraseña">
+      <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
     </form>
 
     <!-- Remind Passowrd -->
     <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
+      <a class="underlineHover" href="#">¿Olvidó la contraseña?</a>
     </div>
 
   </div>
