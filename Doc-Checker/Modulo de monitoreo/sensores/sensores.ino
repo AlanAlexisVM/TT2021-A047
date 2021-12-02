@@ -2,6 +2,9 @@
 #include <Wire.h>
 #include "MAX30105.h"
 #include "spo2_algorithm.h"
+#include "Protocentral_MAX30205.h"
+
+MAX30205 tempSensor;
 
 MAX30105 particleSensor;
 
@@ -24,6 +27,16 @@ Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 void setup() {
   //Serial.begin(9600);
   Serial.begin(115200); // initialize serial communication at 115200 bits per second:
+
+  Wire.begin();
+
+  //scan for temperature in every 30 sec untill a sensor is found. Scan for both addresses 0x48 and 0x49
+  while(!tempSensor.scanAvailableSensors()){
+    Serial.println("Couldn't find the temperature sensor, please connect the sensor." );
+    delay(30000);
+  }
+
+  tempSensor.begin();   // set continuos mode, active mode
 
   while (!Serial);
 
@@ -65,10 +78,10 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempC());
+  /*Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempC());
   Serial.print("*C\tObject = "); Serial.print(mlx.readObjectTempC()); Serial.println("*C");
   Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempF());
-  Serial.print("*F\tObject = "); Serial.print(mlx.readObjectTempF()); Serial.println("*F");
+  Serial.print("*F\tObject = "); Serial.print(mlx.readObjectTempF()); Serial.println("*F");*/
   
   Serial.println();
   delay(500);
@@ -97,13 +110,22 @@ void loop() {
   //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
   while (1)
   {
-    Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempC());
+    /*Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempC());
     Serial.print("*C\tObject = "); Serial.print(mlx.readObjectTempC()); Serial.println("*C");
     Serial.print("Ambient = "); Serial.print(mlx.readAmbientTempF());
-    Serial.print("*F\tObject = "); Serial.print(mlx.readObjectTempF()); Serial.println("*F");
+    Serial.print("*F\tObject = "); Serial.print(mlx.readObjectTempF()); Serial.println("*F");*/
+    Serial.print("Temperatura Persona = "); Serial.print(mlx.readObjectTempC()); Serial.println("*C");
+
+    Serial.println();
+    
+    float temp = tempSensor.getTemperature(); // read temperature for every 100ms
+    Serial.print("Temperatura MAX30205: ");
+    Serial.print(temp ,2);
+    Serial.println("'c" );
+    //delay(100);
   
     Serial.println();
-    delay(500);
+    //delay(500);
     
     //dumping the first 25 sets of samples in the memory and shift the last 75 sets of samples to the top
     for (byte i = 25; i < 100; i++)
@@ -130,7 +152,7 @@ void loop() {
     Serial.print(F(", ir="));
     Serial.print(irBuffer[i], DEC);*/
 
-    Serial.print(F(", HR="));
+    /*Serial.print(F(", HR="));
     Serial.print(heartRate, DEC);
 
     Serial.print(F(", HRvalid="));
@@ -140,7 +162,11 @@ void loop() {
     Serial.print(spo2, DEC);
 
     Serial.print(F(", SPO2Valid="));
-    Serial.println(validSPO2, DEC);
+    Serial.println(validSPO2, DEC);*/
+    Serial.print(F("\nFrecuencia cardiaca: "));
+    Serial.print(heartRate, DEC);
+    Serial.print(F("\nSaturación de oxígeno: "));
+    Serial.println(spo2, DEC);
 
     //After gathering 25 new samples recalculate HR and SP02
     maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
