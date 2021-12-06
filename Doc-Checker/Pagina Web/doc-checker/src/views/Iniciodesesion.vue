@@ -10,9 +10,9 @@
     </div>
 
     <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario">
-      <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña">
+    <form v-on:submit.prevent ="login">
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="suario">
+      <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
       <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
       <input type="submit" class="fadeIn fourth" value="Registrate">
     </form>
@@ -37,8 +37,9 @@ export default {
   data: function(){
     return{
       usuario: "",
-      pasword: "",
-      error: false
+      contraseña: "",
+      error: false,
+      error_msg:"",
     }
   }
 }
