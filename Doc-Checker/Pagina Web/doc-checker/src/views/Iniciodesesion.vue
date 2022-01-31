@@ -41,6 +41,11 @@ export default {
       error: false,
       error_msg:"",
     }
+  },
+  methods:{
+    login(){
+      console.log(this.usuario);
+    }
   }
 }
 </script>

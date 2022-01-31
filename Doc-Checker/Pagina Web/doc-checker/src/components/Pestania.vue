@@ -1,5 +1,9 @@
 <template>
-    <img src={{ imagen }} />
+    <div>
+        <li>
+            <img src={{ imagen }} />
+        </li>
+    </div>
 </template>
 
 <script>
