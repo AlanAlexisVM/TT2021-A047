@@ -1,6 +1,7 @@
 <template>
     <div>
         <li>
+            Pestania
             <img src={{ imagen }} />
         </li>
     </div>
