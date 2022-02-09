@@ -1,6 +1,13 @@
 <template>
 
     <div class="Barradenavegacion">
+    
+    <nav class="navbar navbar-light bg-light">
+        <Pestania v-for="image in images"
+                :key="image.name"
+                :alt="image.name"
+                :imagen="image.url" />
+    </nav>
     <!--
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand" href="#">
@@ -16,22 +23,29 @@
                 <Pestania imagen="../assets/configuracion.png" />
             </a>
         </nav> -->
-                <Pestania imagen="../assets/paciente.png"/>
-                <Pestania imagen="../assets/informe-medico.png" />
-                <Pestania imagen="../assets/seguir.png" />
-                <Pestania imagen="../assets/configuracion.png" />
     </div>
 </template>
 
 <script>
 import Pestania from '@/components/Pestania.vue'
+
 export default {
     name: 'Barradenavegacion',
     components: {
         Pestania
     },
+    data: function(){
+        return {
+            images: [
+                { name: "image1", url: require("@/assets/paciente.png") },
+                { name: "image1", url: require("@/assets/informe-medico.png") },
+                { name: "image1", url: require("@/assets/seguir.png") },
+                { name: "image1", url: require("@/assets/configuracion.png") }
+            ]
+        }
+    },
     setup() {
-        
     }
 }
+
 </script>

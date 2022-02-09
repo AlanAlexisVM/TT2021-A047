@@ -1,9 +1,8 @@
 <template>
     <div>
-        <li>
-            Pestania
-            <img src={{ imagen }} />
-        </li>
+        <img v-bind:src="imagen"
+            height="100"
+            width="100"/>
     </div>
 </template>
 
