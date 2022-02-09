@@ -1,13 +1,12 @@
 <template>
-    <div class="Registro">
+    <div class="Pacientes">
+        Pacientes
     </div>    
 </template>
 
 <script>
 export default {
-    name: 'Registro',
-    components: {
-    },
+    name: 'Pacientes',
     setup() {
 
     }

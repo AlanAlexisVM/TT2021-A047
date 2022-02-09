@@ -3,6 +3,11 @@ import VueRouter from 'vue-router'
 import Iniciodesesion from '../views/Iniciodesesion.vue'
 import Registro from '../views/Registro.vue'
 import Registropacientes from '../views/Registropacientes.vue'
+import Home from '../views/Home.vue'
+import Informe from '../views/Informe.vue'
+import Aniadir from '../views/Aniadir.vue'
+import Configuracion from '../views/Configuracion.vue'
+import Pacientes from '../views/Pacientes.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +26,32 @@ const routes = [
     path: '/registropacientes',
     name: 'Registropacientes',
     component: Registropacientes
+  },
+  {
+    path: '/doc-checker',
+    component: Home,
+    children:[
+      {
+        path:'/pacientes',
+        name:'Pacientes',
+        component: Pacientes
+      },
+      {
+        path: '/informe',
+        name: 'Informe',
+        component: Informe
+      },
+      {
+        path: '/aniadir',
+        name: 'Aniadir',
+        component: Aniadir
+      },
+      {
+        path: '/configuracion',
+        name: 'Configuracion',
+        component: Configuracion
+      }
+    ]
   },
   {
     path: '/about',

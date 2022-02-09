@@ -1,13 +1,12 @@
 <template>
-    <div class="Registro">
+    <div class="Configuracion">
+        Configuracion
     </div>    
 </template>
 
 <script>
 export default {
-    name: 'Registro',
-    components: {
-    },
+    name: 'Configuracion',
     setup() {
 
     }

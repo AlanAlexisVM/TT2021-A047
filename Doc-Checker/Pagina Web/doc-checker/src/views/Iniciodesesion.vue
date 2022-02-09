@@ -13,7 +13,9 @@
     <form v-on:submit.prevent ="login">
       <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="suario">
       <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
-      <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
+      <router-link to="/pacientes">
+        <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
+      </router-link>
       <router-link to="/registro">
         <input type="submit" class="fadeIn fourth" value="Registrate">
       </router-link>

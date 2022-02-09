@@ -5,7 +5,7 @@
     <nav class="navbar navbar-light bg-light">
         <Pestania v-for="image in images"
                 :key="image.name"
-                :alt="image.name"
+                :dir="image.name"
                 :imagen="image.url" />
     </nav>
     <!--
@@ -34,18 +34,23 @@ export default {
     components: {
         Pestania
     },
+    props: {
+        sel: String
+    },
     data: function(){
         return {
             images: [
-                { name: "image1", url: require("@/assets/paciente.png") },
-                { name: "image1", url: require("@/assets/informe-medico.png") },
-                { name: "image1", url: require("@/assets/seguir.png") },
-                { name: "image1", url: require("@/assets/configuracion.png") }
+                { name: "pacientes", url: require("@/assets/paciente.png") },
+                { name: "informe", url: require("@/assets/informe-medico.png") },
+                { name: "aniadir", url: require("@/assets/seguir.png") },
+                { name: "configuracion", url: require("@/assets/configuracion.png") }
             ]
         }
     },
     setup() {
     }
-}
 
+}
 </script>
+<style scoped>
+</style>
