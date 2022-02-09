@@ -1,6 +1,8 @@
 <template>
     <div class="Pacientes">
-        Pacientes
+        <router-link to="registropacientes">
+            <img src="@/assets/mas.png" height="60" width="60" />
+        </router-link>
     </div>    
 </template>
 
