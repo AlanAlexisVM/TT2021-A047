@@ -6,9 +6,11 @@ import Registropacientes from '../views/Registropacientes.vue'
 import Registropacientes2 from '../views/Registropacientes2.vue'
 import Home from '../views/Home.vue'
 import Informe from '../views/Informe.vue'
-import Aniadir from '../views/Aniadir.vue'
+import Buscador from '../views/Buscador.vue'
 import Configuracion from '../views/Configuracion.vue'
 import Pacientes from '../views/Pacientes.vue'
+import Signos from '../views/Signos.vue'
+import Mineria from '../views/Mineria.vue'
 
 Vue.use(VueRouter)
 
@@ -38,9 +40,9 @@ const routes = [
         component: Informe
       },
       {
-        path: '/aniadir',
-        name: 'Aniadir',
-        component: Aniadir
+        path: '/buscador',
+        name: 'Buscador',
+        component: Buscador
       },
       {
         path: '/configuracion',
@@ -56,6 +58,16 @@ const routes = [
         path: '/registropacientes2',
         name: 'Registropacientes2',
         component: Registropacientes2
+      },
+      {
+        path: '/signos',
+        name: 'Signos',
+        component: Signos
+      },
+      {
+        path: '/mineria',
+        name: 'Mineria',
+        component: Mineria
       }
     ]
   },

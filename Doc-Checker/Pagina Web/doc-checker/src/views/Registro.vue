@@ -29,96 +29,38 @@
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example4" class="form-control"/>
+                            <input type="email" id="form6Example4" class="form-control"/>
                             <label class="form-label" for="form6Example4">Correo</label>
                         </div>
+                    </div>
 
+                    <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example4" class="form-control"/>
+                            <input type="password" id="form6Example4" class="form-control"/>
                             <label class="form-label" for="form6Example4">Contraseña</label>
                         </div>
-                        
                     </div>
+                </div>
 
+                <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example5" class="form-control" />
-                            <label class="form-label" for="form6Example5">Modelo de Laptop</label>
+                            <label class="form-label" for="form6Example2">Eres Médico?</label>
                         </div>
-
-                        <div class="form-outline">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="Peticion" id="flexRadioDefault4">
-                                <label class="form-check-label" for="flexRadioDefault4">
-                                    Sustitución
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="Peticion" id="flexRadioDefault5">
-                                <label class="form-check-label" for="flexRadioDefault5">
-                                    Permanente
-                                </label>
-                                <br>
-                                <label class="form-label" for="form6Example2">Tipo de Petición</label>
-                            </div>
-                        </div>
-                    </div>
-                  <!-- </div> -->
-
+                    </div>    
                     <div class="col">
-
-                        <div class="form-outline">
-                            <div class="form-check">
-                            <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault6">
-                            <label class="form-check-label" for="flexRadioDefault6">
-                                Entregado
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Peticion" id="flexRadioDefault4">
+                            <label class="form-check-label" for="flexRadioDefault4">
+                                Si
                             </label>
-                            </div>
+                        </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault7">
-                                <label class="form-check-label" for="flexRadioDefault7">
-                                    Disponible
-                                </label>
-                            </div>
-                            
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault8">
-                                <label class="form-check-label" for="flexRadioDefault8">
-                                    En Preparación
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault9">
-                                <label class="form-check-label" for="flexRadioDefault9">
-                                    Nuevo
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault10">
-                                <label class="form-check-label" for="flexRadioDefault10">
-                                    Recuperado
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault11">
-                                <label class="form-check-label" for="flexRadioDefault11">
-                                    Reasignado
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="EstadoInv" id="flexRadioDefault12">
-                                <label class="form-check-label" for="flexRadioDefault12">
-                                    Proceso de Seguro
-                                </label>
-                                <br>
-                                <label class="form-label" for="form6Example2">Estado de Inventario</label>
-                            </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Peticion" id="flexRadioDefault5">
+                            <label class="form-check-label" for="flexRadioDefault5">
+                                No
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -129,19 +71,7 @@
                     <div class="col">
                         <div class="form-outline">
                             <input type="text" id="form6Example6" class="form-control" />
-                            <label class="form-label" for="form6Example6">Equipo Recuperado</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example7" class="form-control" />
-                            <label class="form-label" for="form6Example7">Dirección</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example8" class="form-control" />
-                            <label class="form-label" for="form6Example8">Clave</label>
+                            <label class="form-label" for="form6Example6">Cédula Profesional</label>
                         </div>
                     </div>
                 </div>
@@ -150,72 +80,18 @@
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example9" class="form-control" />
-                            <label class="form-label" for="form6Example9">Accesorios</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example10" class="form-control" />
-                            <label class="form-label" for="form6Example10">Ultima Preparación</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example11" class="form-control" />
-                            <label class="form-label" for="form6Example11">Nombre de Usuario</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                    <!--
-                        <div class="form-outline">
-                            <script type="text/javascript">
-                                $('.datepicker').datepicker();
-                            </script>
-                            <div id="date-picker" class="md-form md-outline input-with-post-icon datepicker">
-                                <input placeholder="Select date" type="text" id="form6Example12" class="form-control">
-                                <label class="form-label" for="form6Example12">Fecha de Entrega</label>
-                                <i class="fas fa-calendar input-prefix" tabindex=0></i>
-                            </div>       
-                        </div>
-                    -->
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="form-outline">
                             <input type="text" id="form6Example13" class="form-control" />
-                            <label class="form-label" for="form6Example13">Reporte</label>
+                            <label class="form-label" for="form6Example13">Telefono 1</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
                             <input type="text" id="form6Example14" class="form-control" />
-                            <label class="form-label" for="form6Example14">Fecha de Asignación</label>
+                            <label class="form-label" for="form6Example14">Telefono 2</label>
                         </div>
                     </div>
                 </div>
-              
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example15" class="form-control" />
-                            <label class="form-label" for="form6Example15">Entregados para Docking</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-outline">
-                            <input type="text" id="form6Example16" class="form-control" />
-                            <label class="form-label" for="form6Example16">Ubicacion de Visoramas</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Checkbox 
+                <!--
                 <div class="form-check d-flex justify-content-center mb-4">
                   <input
                     class="form-check-input me-2"
@@ -225,13 +101,12 @@
                     checked
                   />
                   <label class="form-check-label" for="form6Example8"> Create an account? </label>
-                </div> -->
-              
+                </div>
+                 -->
                 <!-- Submit button -->
                 <div class="d-flex justify-content-evenly">
-                <button type="button" class="btn btn-primary btn-block mb-4">Eliminar</button>
                 <button type="reset" class="btn btn-primary btn-block mb-4">Limpiar</button>
-                <button type="submit" class="btn btn-primary btn-block mb-4">Agregar</button>
+                <button type="submit" class="btn btn-primary btn-block mb-4">Registrarse</button>
                 </div>
             </form>
         </div>

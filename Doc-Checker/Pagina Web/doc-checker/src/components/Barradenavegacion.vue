@@ -42,7 +42,7 @@ export default {
             images: [
                 { name: "pacientes", url: require("@/assets/paciente.png") },
                 { name: "informe", url: require("@/assets/informe-medico.png") },
-                { name: "aniadir", url: require("@/assets/seguir.png") },
+                { name: "buscador", url: require("@/assets/seguir.png") },
                 { name: "configuracion", url: require("@/assets/configuracion.png") }
             ]
         }
