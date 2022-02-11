@@ -9,36 +9,37 @@
 
 		<input v-model.number="page" type="number" style="width: 5em"> /{{numPages}}
 		<!--<button @click="rotate += 90">&#x27F3;</button>-->
-        <button @click="recargar(documento)">&#x27F3;</button>
+        <button @click="rotate += 90">&#x27F3;</button>
 		<button @click="rotate -= 90">&#x27F2;</button>
         
-        <pdf v-bind:src="documento"
+        <!--<pdf v-bind:src="documento"
             :page="page"
             :rotate="rotate"
             @num-pages="numPages = $event"
             @link-clicked="page = $event"
             style="width: 50%"
-            v-if="show" ></pdf>
+            v-if="show" />-->
+        <vuePdf viewHeight="500px" pdfUrl="static/dddd.pdf"></vuePdf>
     </div>    
 </template>
 
 <script>
-import pdf from 'vue-pdf'
+
+import vuePdf from 'vue-pdf-syl'
+
 
 export default {
     name: 'Informe',
     components: {
-        pdf
+        vuePdf
     },
 	data () {
 		return {
 			show: true,
 			pdfList: [
                 'https://pdftron.s3.amazonaws.com/downloads/pl/demo-annotated.pdf',
-				'http://jornadasciberseguridad.riasc.unileon.es/archivos/ejemplo_esp.pdf',
-                'https://campusinteligencialimite.org/fichas/VENTILACI%C3%93N_DE_ESPACIOS',
 			],
-			documento:' ',
+			documento: "https://campusinteligencialimite.org/fichas/VENTILACI%C3%93N_DE_ESPACIOS",
 			loadedRatio: 0,
 			page: 1,
 			numPages: 0,
@@ -46,15 +47,6 @@ export default {
 		}
 	},
     setup() {
-    },
-    methods: {
-        // Vista previa del pdf
-        previewPDF(url){
-            this.documento = pdf.createLoadingTask(url)
-        },
-        recargar: function(url){
-            this.documento = pdf.createLoadingTask(url)
-        }
     }
 }
 </script>
