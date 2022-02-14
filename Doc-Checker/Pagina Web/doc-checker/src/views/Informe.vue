@@ -8,21 +8,23 @@
 		<input v-model.number="page" type="number" style="width: 5em"> /{{numPages}}
 		<button @click="rotate += 90">&#x27F3;</button>
 		<button @click="rotate -= 90">&#x27F2;</button>
+		<input v-model.number="escala" type="number" style="width: 5em">
 		<button @click="$refs.pdf.print()">print</button>
-		<div style="width: 50%">
+		<div style="width: 50%" >
 			<div v-if="loadedRatio > 0 && loadedRatio < 1" style="background-color: green; color: white; text-align: center" :style="{ width: loadedRatio * 100 + '%' }">{{ Math.floor(loadedRatio * 100) }}%</div>
 			<pdf v-if="show" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @password="password" @progress="loadedRatio = $event" @error="error" @num-pages="numPages = $event" @link-clicked="page = $event"></pdf>
 		</div>
-    </div>    
+    </div>
 </template>
 
 <script>
 import pdf from 'vue-pdf'
+//import panzoom from 'panzoom'
 
 export default {
     name: 'Informe',
     components: {
-		pdf: pdf
+		pdf,
 	},
 	data () {
 		return {
@@ -43,17 +45,25 @@ export default {
 			page: 1,
 			numPages: 0,
 			rotate: 0,
+			//escala: 10
 		}
 	},
 	methods: {
 		password: function(updatePassword, reason) {
-		console.log(reason);
+			console.log(reason);
 			updatePassword(prompt('password is "test"'));
 		},
 		error: function(err) {
 
 			console.log(err);
-		}
+		},
+		/*onLoad() {
+            panzoom(this.$refs.pdf, {
+				maxZoom: 1,
+				minZoom: 0.1,
+				initialZoom: 0.5
+			});*/
+        //}
 	}
 }
 </script>

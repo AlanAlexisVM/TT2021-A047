@@ -7,14 +7,32 @@
                     <th>Nombre</th>
                     <th>Informe</th>
                     <th>Signos vitales</th>
-                    <th>editar</th>
+                    <th>Editar</th>
                 </tr>
                 <tr>
                     <td>01</td>
                     <td>Jesús</td>
-                    <td>Img01</td>
-                    <td>Img02</td>
-                    <td>Img03</td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/notas.png"
+                                    v-bind:height="alto"
+                                    v-bind:width="ancho" />
+                        </router-link>
+                    </td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/latido-del-corazon.png"
+                                v-bind:height="alto"
+                                v-bind:width="ancho" />
+                        </router-link>
+                    </td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/editar.png"
+                                v-bind:height="alto"
+                                v-bind:width="ancho" />
+                        </router-link>
+                    </td>
                 </tr>
             </table>
         </template>
@@ -28,7 +46,13 @@
                 <tr>
                     <td>01</td>
                     <td>Jesús</td>
-                    <td>Img01</td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/mas.png"
+                                v-bind:height="alto"
+                                v-bind:width="ancho" />
+                        </router-link>
+                    </td>
                 </tr>
             </table>
         </template>
@@ -43,7 +67,13 @@
                 <tr>
                     <td>Jesús</td>
                     <td>123456789</td>
-                    <td>Img01</td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/mas.png"
+                                v-bind:height="alto"
+                                v-bind:width="ancho" />
+                        </router-link>
+                    </td>
                     <td>Img02</td>
                 </tr>
             </table>
@@ -58,7 +88,13 @@
                 <tr>
                     <td>01</td>
                     <td>Jesús</td>
-                    <td>Img01</td>
+                    <td>
+                        <router-link to="pacientes">
+                            <img src="@/assets/mas.png"
+                                v-bind:height="alto"
+                                v-bind:width="ancho" />
+                        </router-link>
+                    </td>
                 </tr>
             </table>
         </template>
@@ -100,6 +136,12 @@ export default {
     name: 'Tabla',
     props: {
         tipoTabla: String
+    },
+    data: function(){
+        return{
+            ancho: 35,
+            alto: 35
+        }
     },
     setup() {
 
