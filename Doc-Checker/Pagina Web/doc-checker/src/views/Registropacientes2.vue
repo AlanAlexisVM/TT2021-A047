@@ -1,99 +1,98 @@
 <template>
     <div class="Registropacientes">
         <form action="/my-handling-form-page" method="post">
-            <ul>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Actividad física:</label>
                 <select v-model="selActividadFisica">
                     <option disabled value=" ">Actividad física</option>
                     <option v-for="nivel in niveles" :key=nivel :label=nivel />
                 </select>
-            </li>
-            <li>
+            </div>
+            <div class="row mb-4">
                 <label for="name">Adicciones:</label>
                 <select v-model="selAdicciones">
                     <option disabled value=" ">Adicciones</option>
                     <option v-for="adiccion in adicciones" :key=adiccion :label=adiccion />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Antecedentes familiares:</label>
                 <select v-model="selAntecedentes">
                     <option disabled value=" ">Antecedentes familiares</option>
                     <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">¿Consume farmacos?: </label>
                 <select v-model="selFarmacos">
                     <option>Si</option>
                     <option>No</option>
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Máximo grado de estudios:</label>
                 <select v-model="selGrado">
                     <option disabled value=" ">Máximo grado de estudios</option>
                     <option v-for="grado in grados" :key=grado :label=grado />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Estado civil:</label>
                 <select v-model="selEstadoCivil">
                     <option disabled value=" ">Estado civil</option>
                     <option v-for="estadoCivil in estadosCiviles" :key=estadoCivil :label=estadoCivil />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Exposición al ruido:</label>
                 <select v-model="selExposicionRuido">
                     <option disabled value=" ">Exposición al ruido</option>
                     <option v-for="nivel in niveles" :key=nivel :label=nivel />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Exposición solar:</label>
                 <select v-model="selExposicionSolar">
                     <option disabled value=" ">Exposición solar</option>
                     <option v-for="nivel in niveles" :key=nivel :label=nivel />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Horas de sueño:</label>
                 <select v-model="selHorasSuenio">
                     <option disabled value=" ">Horas de sueño</option>
                     <option v-for="horasSuenio in horariosSuenio" :key=horasSuenio :label=horasSuenio />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Padecimientos:</label>
                 <select v-model="selPadecimientos">
                     <option disabled value=" ">Padecimientos</option>
                     <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Personas dependientes:</label>
                 <select v-model="selPersonasDependientes">
                     <option disabled value=" ">Personas dependientes</option>
                     <option v-for="numero in numeros" :key=numero :label=numero />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Trabajo:</label>
                 <select v-model="selTrabajo">
                     <option disabled value=" ">Trabajo</option>
                     <option v-for="trabajo in trabajos" :key=trabajo :label=trabajo />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Variaciones de humedad:</label>
                 <select v-model="selVariacionesHumedad">
                     <option disabled value=" ">Variaciones de humedad</option>
                     <option v-for="nivel in niveles" :key=nivel :label=nivel />
                 </select>
             </li>
-            <li>
+            <div class="row mb-4">
                 <label for="name">Variaciones de temperatura:</label>
                 <select v-model="selVariacionesTemperatura">
                     <option disabled value=" ">Variaciones de Temperatura</option>

@@ -41,21 +41,17 @@
           </div>
 
           <div class="col">
-           <!-- <div class="input-group mb-3"> -->
-                <div class="form-outline">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">Sexo</label>
-                </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                    <option selected>Opciones...</option>
-                    <option value="1">Masculino</option>
-                    <option value="2">Femenino</option>
-                </select>
-            </div>
-
-            <div class="form-outline">
-              <input type="password" id="form6Example4" class="form-control" />
-              <label class="form-label" for="form6Example4">Sexo</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Sexo
+                </label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Opciones...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+              </select>
             </div>
           </div>
         </div>
@@ -74,9 +70,7 @@
           <div class="col">
             <div class="form-outline">
               <input type="email" id="form6Example6" class="form-control" />
-              <label class="form-label" for="form6Example6"
-                >Correo Electronico</label
-              >
+              <label class="form-label" for="form6Example6">Correo Electronico</label>
             </div>
           </div>
         </div>
@@ -106,9 +100,17 @@
             </div>
           </div>
           <div class="col">
-            <div class="form-outline">
-              <input type="text" id="form6Example6" class="form-control" />
-              <label class="form-label" for="form6Example6">Estado</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  Estado
+                </label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Opciones...</option>
+                <option value="CDMX">CDMX</option>
+                <option value="Estado de Mexico">Estado de México</option>
+              </select>
             </div>
           </div>
         </div>
@@ -152,3 +154,23 @@ export default {
   setup() {},
 };
 </script>
+
+<style scoped>
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.button {
+  background-color: #56baed;
+  border: none;
+  color: white;
+  padding: 10px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  box-shadow: 0 10px 30px 0 rgba(95, 186, 233, 0.4);
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+}
+</style>
