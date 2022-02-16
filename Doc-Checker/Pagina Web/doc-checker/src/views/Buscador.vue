@@ -1,7 +1,9 @@
 <template>
     <div class="Buscador">
-        <label for="mail">Buscar paciente:</label>
-        <input type="email" id="mail" name="user_mail">
+        <p>
+            Búsqueda de pacientes: <input type="search" name="busqueda" placeholder="Id de paciente, Nombre, ...">
+            <input type="submit" value="Buscar">
+        </p>
         <Tabla tipoTabla="buscadorPacientes" />
     </div>
 </template>
