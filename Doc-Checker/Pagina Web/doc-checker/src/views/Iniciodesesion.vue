@@ -11,7 +11,7 @@
 
     <!-- Login Form -->
     <form v-on:submit.prevent ="login">
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="suario">
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="usuario">
       <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
       <router-link to="/pacientes">
         <input type="submit" class="fadeIn fourth" value="Inciar Sesión">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
   name: 'Iniciodesesion',
   components: {
@@ -44,13 +44,23 @@ export default {
       contraseña: "",
       error: false,
       error_msg:"",
+      mensaje: "vue"
     }
   },
   methods:{
     login(){
       console.log(this.usuario);
+    },getMensaje(){
+            const path = 'http://127.0.0.1:4000/api/guardarpaciente'
+            axios.get(path).then((respuesta) =>{
+                this.mensaje = respuesta.data
+            }).catch((error) =>{
+                console.error(error);
+            })
+        }
+  },created(){
+        this.getMensaje()
     }
-  }
 }
 </script>
 

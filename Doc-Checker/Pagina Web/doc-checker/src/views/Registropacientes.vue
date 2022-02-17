@@ -156,10 +156,8 @@ export default {
 </script>
 
 <style scoped>
-input[type="button"],
-input[type="reset"],
-input[type="submit"],
-.button {
+.button,
+input[type=submit]{
   background-color: #56baed;
   border: none;
   color: white;
@@ -167,10 +165,7 @@ input[type="submit"],
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  text-transform: uppercase;
-  font-size: 13px;
   box-shadow: 0 10px 30px 0 rgba(95, 186, 233, 0.4);
   border-radius: 5px 5px 5px 5px;
-  margin: 5px 20px 40px 20px;
 }
 </style>

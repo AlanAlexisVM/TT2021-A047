@@ -4,6 +4,12 @@ from flask_cors import CORS
 
 from config import config
 
+# Models:
+from models.ModelUser import ModelUser
+
+# Entities:
+from models.entities.User import User
+
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
