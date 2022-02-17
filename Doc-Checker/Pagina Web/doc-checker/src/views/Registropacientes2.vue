@@ -76,12 +76,12 @@
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                            <label class="input-group-text" for="name">Exposición al ruido:</label>
+                        <label class="input-group-text" for="name">Exposición al ruido:</label>
                     </div>
                     <select v-model="selExposicionRuido">
-                            <option disabled value=" ">Exposición al ruido</option>
-                            <option v-for="nivel in niveles" :key=nivel :label=nivel />
-                        </select>
+                        <option disabled value=" ">Exposición al ruido</option>
+                        <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                    </select>
                 </div>
             </div>
 
