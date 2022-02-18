@@ -1,5 +1,5 @@
 <template>
-    <div class="table-responsive" >
+    <div class="table-responsive container" >
         <table class="table table-hover table-bordered" >
             <template v-if="tipoTabla === 'pacientes'">
                 <TuplaH v-bind:datos="c1"/>
