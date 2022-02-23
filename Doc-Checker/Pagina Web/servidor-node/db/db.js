@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-mysql.createConnection({
+const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -8,7 +8,7 @@ mysql.createConnection({
 
 connection.connect((error) => {
     if(error){
-        console.log('El error de conexion es: ' + error);
+        console.error('El error de conexion es: ' + error);
         return;
     }
     console.log('Conectado');
