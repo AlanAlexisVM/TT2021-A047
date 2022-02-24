@@ -13,7 +13,7 @@
     <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="usuario">
     <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
     <!--<router-link to="/pacientes">-->
-    <input v-on:click="validar" type="submit" class="fadeIn fourth" value="Inciar Sesión">
+    <input v-on:click="autentificar" type="submit" class="fadeIn fourth" value="Inciar Sesión">
     <router-link to="/registro">
       <input type="submit" class="fadeIn fourth" value="Registrate">
     </router-link>
@@ -50,7 +50,7 @@ export default {
     }
   },
   methods:{
-    validar: function(){
+    autentificar: function(){
       const params = new URLSearchParams();
       params.append('user', this.usuario);
       params.append('pass', this.contraseña);
@@ -58,7 +58,15 @@ export default {
         this.auxiliar = result.data
         this.$router.push({ path: this.auxiliar })
       });
+    },
+    validar: function(){
+      axios.get('http://localhost:8081/validar').then((result) => {
+        this.$router.push({ path: result.data })
+      });
     }
+  },
+  created: function(){
+      this.validar()
   }
 }
 </script>
