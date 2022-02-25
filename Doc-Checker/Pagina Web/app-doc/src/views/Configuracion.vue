@@ -1,7 +1,7 @@
 <template>
     <div class="Configuracion">
         <img src="@/assets/doc.png" height="100" width="100" />
-        <form action="/my-handling-form-page" method="post">
+        <!--<form action="/my-handling-form-page" method="post">-->
         <h2>Cambiar contraseña</h2>
             <ul>
             <li>
@@ -31,19 +31,25 @@
             <li>
                 <label for="name">Terminos del servicio</label>
             </li>
-            <router-link to="/">
-                <input type="submit" class="fadeIn fourth" value="Cerrar sesión">
-            </router-link>
+                <input v-on:click="cerrarSesion" type="submit" class="fadeIn fourth" value="Cerrar sesión">
             </ul>
-        </form>
+        <!--</form>-->
     </div>    
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'Configuracion',
     setup() {
 
+    },
+    methods:{
+        cerrarSesion: function(){
+            axios.get('http://localhost:8081/logout',{withCredentials:true,credentials:'include'}).then((result) => {
+                this.$router.push({ path: result.data })
+            });
+        }
     }
 }
 </script>

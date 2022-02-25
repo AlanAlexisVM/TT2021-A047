@@ -25,7 +25,7 @@ app.use(session({
 const connection = require('./db/db');
 
 app.get('/', (req, res)=>{
-	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
     res.send('HOLA MUNDO');
 	console.log('Cliente');
 	res.end();
@@ -35,28 +35,19 @@ app.get('/', (req, res)=>{
 app.post('/auth', async (req, res)=> {
     const user = req.body.user;
 	const pass = req.body.pass;
-    res.header('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
     //let passwordHash = await bcrypt.hash(pass, 8);
 	if (user && pass) {
 		connection.query('SELECT * FROM users WHERE user = ?', [user], async (error, results, fields)=> {
-			console.log(results)
 			//if( results.length == 0 || !(await bcrypt.compare(pass, results[0].pass)) ) {
 			if( results.length == 0 || !(pass == results[0].pass) ) {
 				//Contrasenia incorrecta
 				res.send("/");
-				//Mensaje simple y poco vistoso
 			} else {
-				//creamos una var de session y le asignamos true si INICIO SESSION
-				insertar = "INSERT INTO `sesiones`(`id`, `session_iniciada`, `id_usuario`) VALUES (NULL, TRUE, "+String(results[0].id)+")"
-				//insertar = ['NULL','TRUE',String(results[0].id)]
-				//connection.query("INSERT INTO `sesiones`(`id`, `session_iniciada`, `id_usuario`) VALUES ?", [insertar],async (error, results)=>{
-				connection.query(insertar,async (error, results)=>{
-					console.log(insertar);
-					console.log(results);
-				})
 				req.session.loggedin = true;                
 				req.session.name = results[0].name;
-				console.log(req.session);
+				//console.log(req.session);
 				res.send("pacientes");        			
 			}			
 			res.end();
@@ -67,38 +58,42 @@ app.post('/auth', async (req, res)=> {
 	}
 });
 
+
 //12 - Método para controlar que está auth en todas las páginas
 app.get('/validar', (req, res)=> {
-	console.log(req.session);
-	res.header('Access-Control-Allow-Origin', '*');
+	//console.log(req.session);
+	var dirigir = req.query.ruta.toLowerCase();
+	//console.log(dirigir);
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
-		/*res.render('index',{
-			login: true,
-			name: req.session.name			
-		});*/
-		res.send('pacientes');		
+		if(dirigir == 'undefined')
+			res.send('/');
+		else
+			res.send(dirigir);
 	} else {
-		/*res.render('index',{
-			login:false,
-			name:'Debe iniciar sesión',			
-		});*/
-		res.send('/');
+		res.send("/");
 	}
 	res.end();
 });
 
 //función para limpiar la caché luego del logout
-/*app.use(function(req, res, next) {
+app.use(function(req, res, next) {
     if (!req.user)
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     next();
-});*/
+});
 
 //Logout
 //Destruye la sesión.
 app.get('/logout', function (req, res) {
 	req.session.destroy(() => {
-	  res.redirect('/') // siempre se ejecutará después de que se destruya la sesión
+		res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+		res.setHeader('Access-Control-Allow-Credentials', true);
+		//res.setHeader('credentials', 'include');
+		//res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+		res.send('/');
+		res.end();
 	})
 });
 

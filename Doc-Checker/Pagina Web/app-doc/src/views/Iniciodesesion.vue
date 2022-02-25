@@ -23,10 +23,6 @@
       <a class="underlineHover" href="#">¿Olvidó la contraseña?</a>
     </div>
 
-    <div>
-      {{auxiliar}}
-    </div>
-
   </div>
 </div>
   
@@ -45,8 +41,7 @@ export default {
       contraseña: "",
       error: false,
       error_msg:"",
-      mensaje: "vue",
-      auxiliar: "Nada"
+      mensaje: "vue"
     }
   },
   methods:{
@@ -54,13 +49,12 @@ export default {
       const params = new URLSearchParams();
       params.append('user', this.usuario);
       params.append('pass', this.contraseña);
-      axios.post('http://localhost:8081/auth', params).then((result) => {
-        this.auxiliar = result.data
-        this.$router.push({ path: this.auxiliar })
+      axios.post('http://localhost:8081/auth',params, {withCredentials: true}).then((result) => {
+        this.$router.push({ path: result.data })
       });
     },
     validar: function(){
-      axios.get('http://localhost:8081/validar').then((result) => {
+      axios.get('http://localhost:8081/validar?ruta=pacientes', { withCredentials: true }).then((result) => {
         this.$router.push({ path: result.data })
       });
     }

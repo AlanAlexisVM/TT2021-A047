@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios'
 import pdf from 'vue-pdf'
-
 export default {
     name: 'Informe',
     components: {
@@ -54,16 +52,7 @@ export default {
 		error: function(err) {
 
 			console.log(err);
-		},
-		validar: function(){
-			axios.get('http://localhost:8081/validar').then((result) => {
-				console.log(result)
-				this.$router.push({ path: result.data })
-			});
 		}
-	},
-	created: function(){
-		this.validar()
 	}
 }
 </script>
