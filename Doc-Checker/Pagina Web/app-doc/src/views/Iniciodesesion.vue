@@ -49,7 +49,7 @@ export default {
       const params = new URLSearchParams();
       params.append('user', this.usuario);
       params.append('pass', this.contraseña);
-      axios.post('http://localhost:8081/auth',params, {withCredentials: true}).then((result) => {
+      axios.post('http://localhost:8081/auth', params, { withCredentials: true }).then((result) => {
         this.$router.push({ path: result.data })
       });
     },
