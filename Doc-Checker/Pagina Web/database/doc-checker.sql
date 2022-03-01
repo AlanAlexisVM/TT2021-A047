@@ -16,13 +16,13 @@ CREATE TABLE Administrador
   Nombre VARCHAR(20) NOT NULL,
   Apellidos VARCHAR(30) NOT NULL,
   CorreoE VARCHAR(50) NULL,
-  Contraseña VARCHAR(255) NOT NULL,
+  Contrasenia VARCHAR(255) NOT NULL,
   PRIMARY KEY (IdAdmin)
 );
 
-CREATE TABLE Doc-CheckerH
+CREATE TABLE DocCheckerH
 (
-  IdDCH INT NOT NULL AUTO_INCREMENT,
+  IdDCH VARCHAR(15) NOT NULL,
   Clave VARCHAR(20) NOT NULL,
   IdAdmin INT NOT NULL,
   PRIMARY KEY (IdDCH),
@@ -83,7 +83,7 @@ CREATE TABLE Doctor
   CorreoE VARCHAR(20) NOT NULL,
   Contraseña VARCHAR(255) NOT NULL,
   Sexo VARCHAR(10) NOT NULL,
-  FechaNac INT NOT NULL,
+  FechaNac DATE NOT NULL,
   Especialidad VARCHAR(20) NOT NULL,
   Direccion VARCHAR(20) NOT NULL,
   Telefono VARCHAR(10) NOT NULL,
@@ -97,18 +97,18 @@ CREATE TABLE Paciente
   Nombre VARCHAR(20) NOT NULL,
   Apellidos VARCHAR(20) NOT NULL,
   IdPac INT NOT NULL,
-  FechaNac INT NOT NULL,
+  FechaNac DATE NOT NULL,
   Sexo VARCHAR(10) NOT NULL,
   Telefono1 VARCHAR(10) NOT NULL,
   Telefono2 VARCHAR(10) NOT NULL,
   CorreoE VARCHAR(20) NOT NULL,
   Direccion VARCHAR(20) NOT NULL,
   IdLoc INT NOT NULL,
-  IdDCH INT NOT NULL,
+  IdDCH VARCHAR(15) NOT NULL,
   IdSi INT NOT NULL,
   PRIMARY KEY (IdPac),
   FOREIGN KEY (IdLoc) REFERENCES Locacion(IdLoc),
-  FOREIGN KEY (IdDCH) REFERENCES Doc-CheckerH(IdDCH),
+  FOREIGN KEY (IdDCH) REFERENCES DocCheckerH(IdDCH),
   FOREIGN KEY (IdSi) REFERENCES SignosVitales(IdSi)
 );
 
@@ -120,7 +120,7 @@ CREATE TABLE InformePaciente
   ExposicionRuido INT NOT NULL,
   IdInforme INT NOT NULL,
   ActividadFisica INT NOT NULL,
-  Educacion INT NOT NULL,
+  Educacion VARCHAR(20) NOT NULL,
   HorasDeSuenio INT NOT NULL,
   EstadoCivil VARCHAR(10) NOT NULL,
   PersonasDependientes INT NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE InformePaciente
 CREATE TABLE Tiene
 (
   CedulaProf INT NOT NULL,
-  Clave INT NOT NULL,
+  Clave VARCHAR(20) NOT NULL,
   PRIMARY KEY (CedulaProf, Clave),
   FOREIGN KEY (CedulaProf) REFERENCES Doctor(CedulaProf),
   FOREIGN KEY (Clave) REFERENCES Unidad(Clave)
@@ -150,7 +150,7 @@ CREATE TABLE Atiende
 
 CREATE TABLE InformePaciente_AntecedentesFam
 (
-  AntecedentesFam INT NOT NULL,
+  AntecedentesFam VARCHAR(20) NOT NULL,
   IdInforme INT NOT NULL,
   PRIMARY KEY (AntecedentesFam, IdInforme),
   FOREIGN KEY (IdInforme) REFERENCES InformePaciente(IdInforme)
@@ -158,7 +158,7 @@ CREATE TABLE InformePaciente_AntecedentesFam
 
 CREATE TABLE InformePaciente_Padecimientos
 (
-  Padecimientos INT NOT NULL,
+  Padecimientos VARCHAR(20) NOT NULL,
   IdInforme INT NOT NULL,
   PRIMARY KEY (Padecimientos, IdInforme),
   FOREIGN KEY (IdInforme) REFERENCES InformePaciente(IdInforme)
@@ -166,7 +166,7 @@ CREATE TABLE InformePaciente_Padecimientos
 
 CREATE TABLE InformePaciente_Trabajo
 (
-  Trabajo INT NOT NULL,
+  Trabajo VARCHAR(20) NOT NULL,
   IdInforme INT NOT NULL,
   PRIMARY KEY (Trabajo, IdInforme),
   FOREIGN KEY (IdInforme) REFERENCES InformePaciente(IdInforme)
@@ -174,7 +174,7 @@ CREATE TABLE InformePaciente_Trabajo
 
 CREATE TABLE InformePaciente_Adicciones
 (
-  Adicciones INT NOT NULL,
+  Adicciones VARCHAR(20) NOT NULL,
   IdInforme INT NOT NULL,
   PRIMARY KEY (Adicciones, IdInforme),
   FOREIGN KEY (IdInforme) REFERENCES InformePaciente(IdInforme)

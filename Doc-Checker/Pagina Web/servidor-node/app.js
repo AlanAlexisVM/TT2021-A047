@@ -39,9 +39,10 @@ app.post('/auth', async (req, res)=> {
 	res.setHeader('Access-Control-Allow-Credentials', true);
     //let passwordHash = await bcrypt.hash(pass, 8);
 	if (user && pass) {
-		connection.query('SELECT * FROM users WHERE user = ?', [user], async (error, results, fields)=> {
+		connection.query('SELECT * FROM Doctor WHERE CorreoE = ?', [user], async (error, results, fields)=> {
 			//if( results.length == 0 || !(await bcrypt.compare(pass, results[0].pass)) ) {
-			if( results.length == 0 || !(pass == results[0].pass) ) {
+			//console.log(results[0]);
+			if( results.length == 0 || !(pass == results[0].Contrasenia) ) {
 				//Contrasenia incorrecta
 				res.send("/");
 			} else {
@@ -56,6 +57,39 @@ app.post('/auth', async (req, res)=> {
 		res.send('/');
 		res.end();
 	}
+});
+
+app.post('/registrar', async (req, res)=> {
+    const Cedula = req.body.cedula;
+	const Nombre = req.body.nombre;
+	const ApellidoP = req.body.apellidoPaterno;
+	const ApellidoM = req.body.apellidoMaterno;
+	const Apellidos = ApellidoP + " " + ApellidoM;
+	const CorreoE = req.body.correo;
+	const Contrasenia = req.body.contrasenia;
+	const Telefono = req.body.tel1;
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+    //let passwordHash = await bcrypt.hash(pass, 8);
+	const sql = 'INSERT INTO Doctor(CedulaProf,Nombre,Apellidos,CorreoE,Contrasenia,Sexo,FechaNac,Especialidad,Direccion,Telefono,IdAdmin) VALUES (?)';
+	const valores =  [
+						Cedula,
+						Nombre,
+						Apellidos,
+						CorreoE,
+						Contrasenia,
+						'Masculino',
+						'1999-01-01',
+						'Doctor',
+						'Lugar en que reside',
+						Telefono,
+						'1'];
+	//console.log(valores);
+	connection.query(sql, [valores], async (error, results)=> {
+		//console.log(error)
+		res.send("/");		
+		res.end();
+	});
 });
 
 

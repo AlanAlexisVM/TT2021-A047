@@ -2,24 +2,24 @@
     <div class="Registro">
         <img src="@/assets/doc.png" height="200" width="200" />
         <div id="cuerpo" class="d-flex justify-content-around">
-            <form>
+            <form action="/">
                 <!-- 2 column grid layout with text inputs for the first and last names -->
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example1" class="form-control" />
+                            <input type="text" id="form6Example1" class="form-control"  v-model="nombre" />
                             <label class="form-label" for="form6Example1">Nombre(s)</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example2" class="form-control" />
+                            <input type="text" id="form6Example2" class="form-control" v-model="apellidoPaterno" />
                             <label class="form-label" for="form6Example2">Apellido Paterno</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example3" class="form-control" />
+                            <input type="text" id="form6Example3" class="form-control" v-model="apellidoMaterno" />
                             <label class="form-label" for="form6Example3">Apellido Materno</label>
                         </div>
                     </div>
@@ -29,14 +29,14 @@
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="email" id="form6Example4" class="form-control"/>
+                            <input type="email" id="form6Example4" class="form-control" v-model="correo" />
                             <label class="form-label" for="form6Example4">Correo</label>
                         </div>
                     </div>
 
                     <div class="col">
                         <div class="form-outline">
-                            <input type="password" id="form6Example4" class="form-control"/>
+                            <input type="password" id="form6Example4" class="form-control" v-model="contrasenia" />
                             <label class="form-label" for="form6Example4">Contraseña</label>
                         </div>
                     </div>
@@ -70,23 +70,23 @@
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example6" class="form-control" />
+                            <input type="text" id="form6Example6" class="form-control" v-model="cedula" />
                             <label class="form-label" for="form6Example6">Cédula Profesional</label>
                         </div>
                     </div>
                 </div>
-              
+               
                 <!-- Text input -->
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example13" class="form-control" />
+                            <input type="text" id="form6Example13" class="form-control" v-model="tel1" />
                             <label class="form-label" for="form6Example13">Telefono 1</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
-                            <input type="text" id="form6Example14" class="form-control" />
+                            <input type="text" id="form6Example14" class="form-control" v-model="tel2" />
                             <label class="form-label" for="form6Example14">Telefono 2</label>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                 <!-- Submit button -->
                 <div class="d-flex justify-content-evenly">
                 <button type="reset" class="btn btn-primary btn-block mb-4">Limpiar</button>
-                <button type="submit" class="btn btn-primary btn-block mb-4">Registrarse</button>
+                <button v-on:click="registrar" type="submit" class="btn btn-primary btn-block mb-4">Registrarse</button>
                 </div>
             </form>
         </div>
@@ -114,12 +114,41 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'Registro',
     components: {
     },
+    data: function(){
+        return{
+            nombre: "",
+            apellidoPaterno: "",
+            apellidoMaterno: "",
+            correo: "",
+            contrasenia: "",
+            cedula: "",
+            tel1: "",
+            tel2: ""
+        }
+    },
     setup() {
 
+    },
+    methods:{
+        registrar: function(){
+            const params = new URLSearchParams();
+            params.append('nombre', this.nombre);
+            params.append('apellidoPaterno', this.apellidoPaterno);
+            params.append('apellidoMaterno', this.apellidoMaterno);
+            params.append('correo', this.correo);
+            params.append('contrasenia', this.contrasenia);
+            params.append('cedula', this.cedula);
+            params.append('tel1', this.tel1);
+            axios.post('http://localhost:8081/registrar', params, { withCredentials: true }).then((result) => {
+                console.log(result)
+                this.$router.push({ path: result.data })
+            });
+        }
     }
 }
 </script>
