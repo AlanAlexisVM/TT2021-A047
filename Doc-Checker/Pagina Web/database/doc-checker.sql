@@ -96,7 +96,7 @@ CREATE TABLE Paciente
 (
   Nombre VARCHAR(20) NOT NULL,
   Apellidos VARCHAR(20) NOT NULL,
-  IdPac INT NOT NULL AUTO_INCREMENT,
+  CURP VARCHAR(18) NOT NULL,
   FechaNac DATE NOT NULL,
   Sexo VARCHAR(10) NOT NULL,
   Telefono1 VARCHAR(10) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE Paciente
   IdLoc INT NOT NULL,
   IdDCH VARCHAR(15) NOT NULL,
   IdSi INT NOT NULL,
-  PRIMARY KEY (IdPac),
+  PRIMARY KEY (CURP),
   FOREIGN KEY (IdLoc) REFERENCES Locacion(IdLoc),
   FOREIGN KEY (IdDCH) REFERENCES DocCheckerH(IdDCH),
   FOREIGN KEY (IdSi) REFERENCES SignosVitales(IdSi)
@@ -125,9 +125,9 @@ CREATE TABLE InformePaciente
   EstadoCivil VARCHAR(10) NOT NULL,
   PersonasDependientes INT NOT NULL,
   ConsumoDeFarmacos INT NOT NULL,
-  IdPac INT,
+  CURP VARCHAR(18),
   PRIMARY KEY (IdInforme),
-  FOREIGN KEY (IdPac) REFERENCES Paciente(IdPac)
+  FOREIGN KEY (CURP) REFERENCES Paciente(CURP)
 );
 
 CREATE TABLE Tiene
@@ -142,10 +142,10 @@ CREATE TABLE Tiene
 CREATE TABLE Atiende
 (
   CedulaProf INT NOT NULL,
-  IdPac INT NOT NULL,
-  PRIMARY KEY (CedulaProf, IdPac),
+  CURP VARCHAR(18) NOT NULL,
+  PRIMARY KEY (CedulaProf, CURP),
   FOREIGN KEY (CedulaProf) REFERENCES Doctor(CedulaProf),
-  FOREIGN KEY (IdPac) REFERENCES Paciente(IdPac)
+  FOREIGN KEY (CURP) REFERENCES Paciente(CURP)
 );
 
 CREATE TABLE InformePaciente_AntecedentesFam
