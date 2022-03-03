@@ -1,6 +1,6 @@
 <template>
     <div class="table-responsive container" >
-        <table class="table table-hover table-bordered" >
+        <table class="table table-striped table-bordered" >
             <template v-if="tipoTabla === 'pacientes'">
                 <TuplaH v-bind:datos="c1"/>
                 <TuplaB v-bind:datos="t1" v-bind:informe="true" v-bind:signos="true" v-bind:edicion="true" />

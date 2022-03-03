@@ -53,7 +53,7 @@
                   Sexo
                 </label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01">
+              <select v-model="sexo" class="custom-select" id="inputGroupSelect01">
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
@@ -175,10 +175,31 @@
                   Especialidad
                 </label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01">
+              <select v-model="especialidad" class="custom-select" id="inputGroupSelect01">
                 <option selected>Opciones...</option>
-                <option value="Masculino">Pediatria</option>
-                <option value="Femenino">PO</option>
+                <option value="Medicina Familiar">Medicina Familiar</option>
+                <option value="Medicina Intera">Medicina Interna</option>
+                <option value="Pediatria">Pediatria</option>
+                <option value="Gineco Obstetrica">Gineco Obstetrica</option>
+                <option value="Cirujia">Cirujia</option>
+                <option value="Psiquiatria">Psiquiatria</option>
+                <option value="Cardiologia">Cardiologia</option>
+                <option value="Dermatologia">Dermatologia</option>
+                <option value="Endocronologia">Endocronologia</option>
+                <option value="Gastroenterologia">Gastroenterologia</option>
+                <option value="Infectologia">Infectologia</option>
+                <option value="Nefrologia">Nefrologia</option>
+                <option value="Oftalmologia">Oftalmologia</option>
+                <option value="Otorrinolaringología">Otorrinolaringología</option>
+                <option value="Neumologia">Neumologia</option>
+                <option value="Neurologia">Neurologia</option>
+                <option value="Radiologia">Radiologia</option>
+                <option value="Anestesiologia">Anestesiologia</option>
+                <option value="Oncologia">Oncologia</option>
+                <option value="Patologia">Patologia</option>
+                <option value="Urologia">Urologia</option>
+                <option value="Medicina física y rehabilitación">Medicina física y rehabilitación</option>
+                <option value="Medicina Intensiva">Medicina Intensiva</option>
               </select>
             </div>
           </div>
@@ -242,6 +263,7 @@ export default {
       nombre: "",
       apellidoPaterno: "",
       apellidoMaterno: "",
+      sexo: "",
       fechaNacimiento: "",
       direccion: "",
       correo: "",
@@ -256,15 +278,16 @@ export default {
   methods: {
     registrar: function () {
       const params = new URLSearchParams();
+      params.append("cedula", this.cedula);
       params.append("nombre", this.nombre);
       params.append("apellidoPaterno", this.apellidoPaterno);
       params.append("apellidoMaterno", this.apellidoMaterno);
-      params.append("fechaNacimiento", this.fechaNacimiento);
-      params.append("direccion", this.direccion);
       params.append("correo", this.correo);
       params.append("contrasenia", this.contrasenia);
-      params.append("cedula", this.cedula);
+      params.append("sexo", this.sexo);
+      params.append("fechaNacimiento", this.fechaNacimiento);
       params.append("especialidad", this.especialidad);
+      params.append("direccion", this.direccion);
       params.append("tel1", this.tel1);
       params.append("tel2", this.tel2);
       axios

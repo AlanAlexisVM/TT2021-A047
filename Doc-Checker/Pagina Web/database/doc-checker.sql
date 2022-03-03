@@ -2,9 +2,9 @@ CREATE TABLE Unidad
 (
   Clave VARCHAR(20) NOT NULL,
   Nombre VARCHAR(60) NOT NULL,
-  Direccion VARCHAR(100) NOT NULL,
+  Direccion VARCHAR(150) NOT NULL,
   Telefono VARCHAR(10) NOT NULL,
-  CorreoE VARCHAR(50) NOT NULL,
+  CorreoE VARCHAR(100) NOT NULL,
   Especialidades VARCHAR(35) NOT NULL,
   Titular VARCHAR(50) NOT NULL,
   PRIMARY KEY (Clave)
@@ -15,7 +15,7 @@ CREATE TABLE Administrador
   IdAdmin INT NOT NULL AUTO_INCREMENT,
   Nombre VARCHAR(20) NOT NULL,
   Apellidos VARCHAR(30) NOT NULL,
-  CorreoE VARCHAR(50) NULL,
+  CorreoE VARCHAR(100) NULL,
   Contrasenia VARCHAR(255) NOT NULL,
   PRIMARY KEY (IdAdmin)
 );
@@ -32,7 +32,7 @@ CREATE TABLE DocCheckerH
 
 CREATE TABLE Locacion
 (
-  IdLoc INT NOT NULL AUTO_INCREMENT,
+  Estado VARCHAR(20) NOT NULL,
   ContaminacionAire INT NOT NULL,
   ContaminacionAgua INT NOT NULL,
   CalidadDeVida FLOAT NOT NULL,
@@ -42,12 +42,12 @@ CREATE TABLE Locacion
   Temperatura FLOAT NOT NULL,
   EsperanzaDeVida INT NOT NULL,
   Humedad INT NOT NULL,
-  PRIMARY KEY (IdLoc)
+  PRIMARY KEY (Estado)
 );
 
 CREATE TABLE SignosVitales
 (
-  IdSi INT NOT NULL,
+  IdSi INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (IdSi)
 );
 
@@ -79,14 +79,15 @@ CREATE TABLE Doctor
 (
   CedulaProf INT NOT NULL,
   Nombre VARCHAR(20) NOT NULL,
-  Apellidos VARCHAR(30) NOT NULL,
-  CorreoE VARCHAR(20) NOT NULL,
-  Contraseña VARCHAR(255) NOT NULL,
+  Apellidos VARCHAR(40) NOT NULL,
+  CorreoE VARCHAR(100) NOT NULL,
+  Contrasenia VARCHAR(255) NOT NULL,
   Sexo VARCHAR(10) NOT NULL,
   FechaNac DATE NOT NULL,
   Especialidad VARCHAR(20) NOT NULL,
-  Direccion VARCHAR(20) NOT NULL,
-  Telefono VARCHAR(10) NOT NULL,
+  Direccion VARCHAR(150) NOT NULL,
+  Telefono1 VARCHAR(10) NOT NULL,
+  Telefono2 VARCHAR(10) NOT NULL,
   IdAdmin INT NOT NULL,
   PRIMARY KEY (CedulaProf),
   FOREIGN KEY (IdAdmin) REFERENCES Administrador(IdAdmin)
@@ -101,13 +102,13 @@ CREATE TABLE Paciente
   Sexo VARCHAR(10) NOT NULL,
   Telefono1 VARCHAR(10) NOT NULL,
   Telefono2 VARCHAR(10) NOT NULL,
-  CorreoE VARCHAR(20) NOT NULL,
-  Direccion VARCHAR(20) NOT NULL,
-  IdLoc INT NOT NULL,
+  CorreoE VARCHAR(100) NOT NULL,
+  Direccion VARCHAR(150) NOT NULL,
+  Estado VARCHAR(20) NOT NULL,
   IdDCH VARCHAR(15) NOT NULL,
   IdSi INT NOT NULL,
   PRIMARY KEY (CURP),
-  FOREIGN KEY (IdLoc) REFERENCES Locacion(IdLoc),
+  FOREIGN KEY (Estado) REFERENCES Locacion(Estado),
   FOREIGN KEY (IdDCH) REFERENCES DocCheckerH(IdDCH),
   FOREIGN KEY (IdSi) REFERENCES SignosVitales(IdSi)
 );
@@ -179,3 +180,6 @@ CREATE TABLE InformePaciente_Adicciones
   PRIMARY KEY (Adicciones, IdInforme),
   FOREIGN KEY (IdInforme) REFERENCES InformePaciente(IdInforme)
 );
+
+INSERT INTO `Administrador`(`IdAdmin`, `Nombre`, `Apellidos`, `CorreoE`, `Contrasenia`) VALUES (1,'Alexis','Velasco','alexis@gmail.com','1234');
+INSERT INTO `Unidad`(`Clave`, `Nombre`, `Direccion`, `Telefono`, `CorreoE`, `Especialidades`, `Titular`) VALUES ('DFIST000073','Gustavo A. Madero','CDMX','5512345678','a@g.com','Muchas','Pedro');

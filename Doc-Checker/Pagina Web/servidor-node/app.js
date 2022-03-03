@@ -66,26 +66,32 @@ app.post('/registrar', async (req, res) => {
 	const CorreoE = req.body.correo;
 	const Contrasenia = req.body.contrasenia;
 	let ContraHaash = await bcryptjs.hash(Contrasenia, 8);
-	const Telefono = req.body.tel1;
+	const Sexo = req.body.sexo;
+	const FechaNacimiento = req.body.fechaNacimiento;
+	const Especialidad = req.body.especialidad;
+	const Direccion = req.body.direccion;
+	const Telefono1 = req.body.tel1;
+	const Telefono2 = req.body.tel2;
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
-	const sql = 'INSERT INTO Doctor(CedulaProf,Nombre,Apellidos,CorreoE,Contrasenia,Sexo,FechaNac,Especialidad,Direccion,Telefono,IdAdmin) VALUES (?)';
+	const sql = 'INSERT INTO Doctor(CedulaProf, Nombre, Apellidos, CorreoE, Contrasenia, Sexo, FechaNac, Especialidad, Direccion, Telefono1, Telefono2, IdAdmin) VALUES (?)';
 	const valores = [
 		Cedula,
 		Nombre,
 		Apellidos,
 		CorreoE,
 		ContraHaash,
-		'Masculino',
-		'1999-01-01',
-		'Doctor',
-		'Lugar en que reside',
-		Telefono,
+		Sexo,
+		FechaNacimiento,
+		Especialidad,
+		Direccion,
+		Telefono1,
+		Telefono2,
 		'1'];
 	//console.log(valores);
 	connection.query(sql, [valores], async (error, results) => {
-		//console.log(error)
+		console.log(error)
 		res.send("/");
 		res.end();
 	});
@@ -104,30 +110,35 @@ app.post('/registrarPaciente', async (req, res) => {
 	const Telefono2 = req.body.tel2;
 	const Direccion = req.body.direccion;
 	const Estado = req.body.estado;
+	let IdSi = "";
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	//let passwordHash = await bcrypt.hash(pass, 8);
-	const sql = 'INSERT INTO Paciente(Nombre,Apellidos,IdPac,FechaNac,Sexo,Telefono1,Telefono2,CorreoE,Direccion,IdLoc,IdDCH,IdSi) VALUES (?)';
-	const valores = [
-		Nombre,
-		Apellidos,
-		'NULL',
-		FechaNacimiento,
-		Sexo,
-		Telefono1,
-		Telefono2,
-		CorreoE,
-		Direccion,
-		"",
-		"",
-		""
-	];
-	console.log(req.session);
-	//console.log(valores);
-	connection.query(sql, [valores], async (error, results) => {
+	connection.query("INSERT INTO SignosVitales(IdSi) VALUES (NULL)", async (error, results) => {
 		console.log(error)
-		res.send("/");
-		res.end();
+		IdSi = results.insertId;
+		const sql = 'INSERT INTO Paciente(Nombre,Apellidos,CURP,FechaNac,Sexo,Telefono1,Telefono2,CorreoE,Direccion,Estado,IdDCH,IdSi) VALUES (?)';
+		const valores = [
+			Nombre,
+			Apellidos,
+			CURP,
+			FechaNacimiento,
+			Sexo,
+			Telefono1,
+			Telefono2,
+			CorreoE,
+			Direccion,
+			"CDMX",
+			"192.168.1.1",
+			IdSi
+		];
+		console.log(req.session);
+		//console.log(valores);
+		connection.query(sql, [valores], async (error, results) => {
+			console.log(error)
+			res.send("/");
+			res.end();
+		});
 	});
 });
 
