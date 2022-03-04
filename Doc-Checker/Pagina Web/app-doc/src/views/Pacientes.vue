@@ -34,18 +34,12 @@ export default {
         },
         solicitarPacientes: function(){
             axios.get('http://localhost:8081/solicitarPacientes', { withCredentials: true }).then((result) => {
-                //this.$router.push({ path: result.data })
-                console.log("Respuesta:")
-                //console.log(result.data)
                 for(var i=0;i<result.data.length;i++){
                     this.tuplas.push([result.data[i].Nombre + " " + result.data[i].Apellidos, result.data[i].CURP]);
                 }
-                console.log(this.tuplas)
-                console.log("Fin")
             });
         }
-    }
-    ,
+    },
     created: function(){
         this.solicitarPacientes()
     }

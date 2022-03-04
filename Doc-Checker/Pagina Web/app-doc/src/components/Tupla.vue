@@ -12,21 +12,21 @@
                 {{dato}}
             </td>
             <td v-if="informe === true" >
-                <router-link to="pacientes">
+                <router-link :to="informe2">
                     <img src="@/assets/notas.png"
                             v-bind:height="alto"
                             v-bind:width="ancho" />
                 </router-link>
             </td>
             <td v-if="signos === true" >
-                <router-link to="pacientes">
+                <router-link :to="signos2">
                     <img src="@/assets/latido-del-corazon.png"
                         v-bind:height="alto"
                         v-bind:width="ancho" />
                 </router-link>
             </td>
             <td v-if="edicion === true" >
-                <router-link to="pacientes">
+                <router-link :to="edicion2">
                     <img src="@/assets/editar.png"
                         v-bind:height="alto"
                         v-bind:width="ancho" />
@@ -69,14 +69,22 @@ export default {
         eliminar: Boolean,
         rechazar: Boolean,
         th: Boolean,
+        id: String
     },
     data: function(){
         return{
             ancho: 35,
-            alto: 35
+            alto: 35,
+            informe2: "",
+            signos2: "",
         }
     },
     setup() {
+    },
+    created: function(){
+        this.informe2 = "informe?curp="+this.id;
+        this.signos2 = "signos?curp="+this.id;
+        this.edicion2 = "registropacientes?curp="+this.id;
     }
 }
 </script>

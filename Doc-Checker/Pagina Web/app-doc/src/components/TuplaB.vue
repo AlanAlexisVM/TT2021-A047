@@ -6,7 +6,8 @@
                 v-bind:edicion="edicion"
                 v-bind:agregar="agregar"
                 v-bind:eliminar="eliminar"
-                v-bind:rechazar="rechazar"/>
+                v-bind:rechazar="rechazar"
+                v-bind:id="id" />
     </tbody>
 </template>
 
@@ -25,7 +26,8 @@ export default{
         edicion: Boolean,
         agregar: Boolean,
         eliminar: Boolean,
-        rechazar: Boolean
+        rechazar: Boolean,
+        id: String
     },
     setup() {
         

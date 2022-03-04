@@ -6,6 +6,7 @@
                 <TuplaB v-for="tupla in tuplas"
                         :key="tupla[0]"
                         :datos="tupla"
+                        :id="tupla[1]"
                         v-bind:informe="true"
                         v-bind:signos="true"
                         v-bind:edicion="true" />

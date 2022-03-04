@@ -6,7 +6,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text"  for="name">Actividad física:</label>
                     </div>
-                    <select v-model="selActividadFisica">
+                    <select v-model="selActividadFisica" >
                         <option disabled value=" ">Actividad física</option>
                         <option v-for="nivel in niveles" :key=nivel :label=nivel />
                     </select>
@@ -18,11 +18,17 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="name">Adicciones:</label>
                     </div>
-                    <select v-model="selAdicciones">
-                        <option disabled value=" ">Adicciones</option>
-                        <option v-for="adiccion in adicciones" :key=adiccion :label=adiccion />
+                    <select v-model="selAdicciones" v-on:click="agregar(selAdicciones2,selAdicciones)" >
+                        <option disabled value=" " >Adicciones</option>
+                        <option v-for="adiccion in adicciones" :key=adiccion :label=adiccion :value=adiccion />
                     </select>
                 </div>
+                <ul v-if="selAdicciones2.length">
+                    <li v-for="adiccion in selAdicciones2"
+                        v-bind:key="adiccion" >
+                        {{adiccion}} <div v-on:click="selAdicciones2 = eliminar(selAdicciones2,adiccion)"> Eliminar </div>
+                    </li>
+                </ul>
             </div>
 
             <div class="row mb-4">
@@ -30,11 +36,17 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="name">Antecedentes familiares:</label>
                     </div>
-                    <select v-model="selAntecedentes">
+                    <select v-model="selAntecedentes" v-on:click="agregar(selAntecedentes2,selAntecedentes)" >
                         <option disabled value=" ">Antecedentes familiares</option>
-                        <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad />
+                        <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad :value=enfermedad />
                     </select>
                 </div>
+                <ul v-if="selAntecedentes2.length">
+                    <li v-for="antecedente in selAntecedentes2"
+                        v-bind:key="antecedente" >
+                        {{antecedente}} <div v-on:click="selAntecedentes2 = eliminar(selAntecedentes2,antecedente)"> Eliminar </div>
+                    </li>
+                </ul>
             </div>
 
             <div class="row mb-4">
@@ -114,11 +126,17 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name">Padecimientos:</label>
                 </div>
-                <select v-model="selPadecimientos">
+                <select v-model="selPadecimientos" v-on:click="agregar(selPadecimientos2,selPadecimientos)" >
                     <option disabled value=" ">Padecimientos</option>
-                    <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad />
+                    <option v-for="enfermedad in enfermedades" :key=enfermedad :label=enfermedad :value=enfermedad />
                 </select>
                 </div>
+                <ul v-if="selPadecimientos2.length">
+                    <li v-for="padecimiento in selPadecimientos2"
+                        v-bind:key="padecimiento" >
+                        {{padecimiento}} <div v-on:click="selPadecimientos2 = eliminar(selPadecimientos2,padecimiento)"> Eliminar </div>
+                    </li>
+                </ul>
             </div>
 
             <div class="row mb-4">
@@ -183,7 +201,9 @@ export default {
         return{
             selActividadFisica: " ",
             selAdicciones: " ",
+            selAdicciones2: [],
             selAntecedentes: " ",
+            selAntecedentes2: [],
             selFarmacos: "No",
             selGrado: " ",
             selEstadoCivil: " ",
@@ -191,6 +211,7 @@ export default {
             selExposicionSolar: " ",
             selHorasSuenio: " ",
             selPadecimientos: " ",
+            selPadecimientos2: [],
             selPersonasDependientes: " ",
             selTrabajo: " ",
             selVariacionesHumedad: " ",
@@ -203,6 +224,16 @@ export default {
             estadosCiviles: ["Soltero", "Casado", "Divorciado", "Separación en proceso judicial", "Viudo", "Concubinato"],
             horariosSuenio: ["2-3 horas", "4-5 horas", "6-7 horas", "8+ horas"],
             trabajos: ["Obrero", "Futbolista"]
+        }
+    },
+    methods: {
+        agregar: function(v1,v2){
+            v1.push(v2);
+        },
+        eliminar: function(v1,v2){
+            return v1.filter(function(a) {
+                return a !== v2;
+            });
         }
     },
     setup() {
