@@ -3,9 +3,12 @@
         <table class="table table-striped table-bordered" >
             <template v-if="tipoTabla === 'pacientes'">
                 <TuplaH v-bind:datos="c1"/>
-                <TuplaB v-bind:datos="t1" v-bind:informe="true" v-bind:signos="true" v-bind:edicion="true" />
-                <TuplaB v-bind:datos="t1" v-bind:informe="true" v-bind:signos="true" v-bind:edicion="true" />
-                <TuplaB v-bind:datos="t1" v-bind:informe="true" v-bind:signos="true" v-bind:edicion="true" />
+                <TuplaB v-for="tupla in tuplas"
+                        :key="tupla[0]"
+                        :datos="tupla"
+                        v-bind:informe="true"
+                        v-bind:signos="true"
+                        v-bind:edicion="true" />
             </template>
             <template v-else-if="tipoTabla === 'buscadorPacientes'">
                 <TuplaH v-bind:datos="c2" />
@@ -42,7 +45,8 @@ export default {
         TuplaB
     },
     props: {
-        tipoTabla: String
+        tipoTabla: String,
+        tuplas: Object
     },
     data: function(){
         return{

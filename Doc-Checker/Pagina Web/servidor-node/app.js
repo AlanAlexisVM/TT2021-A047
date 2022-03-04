@@ -46,6 +46,7 @@ app.post('/auth', async (req, res) => {
 			} else {
 				req.session.loggedin = true;
 				req.session.name = results[0].CorreoE;
+				req.session.cedula = results[0].CedulaProf;
 				//console.log(req.session);
 				res.send("pacientes");
 			}
@@ -110,15 +111,16 @@ app.post('/registrarPaciente', async (req, res) => {
 	const Telefono2 = req.body.tel2;
 	const Direccion = req.body.direccion;
 	const Estado = req.body.estado;
+	const Placa = req.body.numPlaca;
 	let IdSi = "";
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	//let passwordHash = await bcrypt.hash(pass, 8);
 	connection.query("INSERT INTO SignosVitales(IdSi) VALUES (NULL)", async (error, results) => {
-		console.log(error)
+		//console.log(error)
 		IdSi = results.insertId;
-		const sql = 'INSERT INTO Paciente(Nombre,Apellidos,CURP,FechaNac,Sexo,Telefono1,Telefono2,CorreoE,Direccion,Estado,IdDCH,IdSi) VALUES (?)';
-		const valores = [
+		let sql = 'INSERT INTO Paciente(Nombre,Apellidos,CURP,FechaNac,Sexo,Telefono1,Telefono2,CorreoE,Direccion,Estado,IdDCH,IdSi) VALUES (?)';
+		let valores = [
 			Nombre,
 			Apellidos,
 			CURP,
@@ -128,16 +130,26 @@ app.post('/registrarPaciente', async (req, res) => {
 			Telefono2,
 			CorreoE,
 			Direccion,
-			"CDMX",
-			"192.168.1.1",
+			Estado,
+			Placa,
 			IdSi
 		];
-		console.log(req.session);
+		//console.log(req.session);
 		//console.log(valores);
 		connection.query(sql, [valores], async (error, results) => {
-			console.log(error)
-			res.send("/");
-			res.end();
+			//console.log(error)
+			sql = 'INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)';
+			valores = [
+				req.session.cedula,
+				CURP
+			];
+			//console.log(req.session);
+			//console.log(valores);
+			connection.query(sql, [valores], async (error, results) => {
+				//console.log(error)
+				res.send("/registrarpacientes2");
+				res.end();
+			});
 		});
 	});
 });
@@ -158,6 +170,24 @@ app.get('/validar', (req, res) => {
 		res.send("/");
 	}
 	res.end();
+});
+
+app.get('/solicitarPacientes', (req, res) => {
+	//console.log(req.session);
+	//console.log(dirigir);
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	if (req.session.loggedin) {
+		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Doctor INNER JOIN Atiende ON Doctor.CedulaProf=Atiende.CedulaProf INNER JOIN Paciente on Atiende.CURP=Paciente.CURP WHERE Doctor.CorreoE = ?";
+		//console.log(sql)
+		connection.query(sql, [req.session.name], async (error, results) => {
+			res.send(results);
+			res.end();
+		});
+	} else {
+		res.send("/");
+		res.end();
+	}
 });
 
 //función para limpiar la caché luego del logout
