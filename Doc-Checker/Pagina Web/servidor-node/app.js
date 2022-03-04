@@ -98,6 +98,31 @@ app.post('/registrar', async (req, res) => {
 	});
 });
 
+app.post('/agregarPaciente', async (req, res) => {
+	const Id = req.body.id;
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	if(req.session.cedula!=null){
+		//console.log("Existe");
+		const sql = 'INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)';
+		valores = [
+			req.session.cedula,
+			req.body.id
+		];
+		//console.log(valores);
+		connection.query(sql, [valores], async (error, results) => {
+			//console.log(error)
+			res.send("/");
+			res.end();
+		});
+	}else{
+		//console.log("No existe");
+		res.send("/buscador");
+		res.end();
+	}
+});
+
 app.post('/registrarPaciente', async (req, res) => {
 	const Nombre = req.body.nombre;
 	const ApellidoP = req.body.apellidoPaterno;
@@ -147,7 +172,7 @@ app.post('/registrarPaciente', async (req, res) => {
 			//console.log(valores);
 			connection.query(sql, [valores], async (error, results) => {
 				//console.log(error)
-				res.send("/registrarpacientes2");
+				res.send("registrarpacientes2");
 				res.end();
 			});
 		});
@@ -213,16 +238,17 @@ app.get('/logout', function (req, res) {
 app.get('/buscarPacientes', (req, res) => {
 	//console.log(req.session);
 	//console.log(dirigir);
+	var cadena = req.query.cad;
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
 		req.session.cedula
-		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=" + req.session.cedula + " AND (Paciente.Nombre LIKE '%a%' OR Paciente.Apellidos LIKE '%a%');";
+		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=" + req.session.cedula + " AND (Paciente.Nombre LIKE '%"+cadena+"%' OR Paciente.Apellidos LIKE '%"+cadena+"%');";
 		//console.log(sql)
 		//SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Paciente.Nombre LIKE '%R%';
 		//SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=18345 AND (Paciente.Nombre LIKE '%a%' OR Paciente.Apellidos LIKE '%a%');
 		connection.query(sql, [req.session.cedula], async (error, results) => {
-			console.log(results)
+			//console.log(results)
 			res.send(results);
 			res.end();
 		});

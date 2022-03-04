@@ -33,11 +33,12 @@
                 </router-link>
             </td>
             <td v-if="agregar === true" >
-                <router-link to="pacientes">
-                    <img src="@/assets/mas.png"
+                <!--<router-link to="pacientes">-->
+                    <img v-on:click="fagregar"
+                        src="@/assets/mas.png"
                         v-bind:height="alto"
                         v-bind:width="ancho" />
-                </router-link>
+                <!--</router-link>-->
             </td>
             <td v-if="eliminar === true" >
                 <router-link to="pacientes">
@@ -58,6 +59,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'Tupla',
     props: {
@@ -81,10 +83,24 @@ export default {
     },
     setup() {
     },
+    methods: {
+        fagregar: function(){
+            const params = new URLSearchParams();
+            params.append("id", this.id);
+            axios.post("http://localhost:8081/agregarPaciente", params, {
+                withCredentials: true,
+                })
+                .then((result) => {
+                    //console.log(result);
+                    this.$router.push({ path: result.data });
+                });
+        }
+    },
     created: function(){
         this.informe2 = "informe?curp="+this.id;
         this.signos2 = "signos?curp="+this.id;
         this.edicion2 = "registropacientes?curp="+this.id;
+        //Boton agregar con función de agregar paciente
     }
 }
 </script>

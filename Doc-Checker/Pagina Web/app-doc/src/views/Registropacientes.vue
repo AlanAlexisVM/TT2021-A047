@@ -250,7 +250,7 @@ export default {
           withCredentials: true,
         })
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           this.$router.push({ path: result.data });
         });
     },
