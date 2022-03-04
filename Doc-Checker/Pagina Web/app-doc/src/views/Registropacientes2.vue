@@ -6,7 +6,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text"  for="name">Actividad física:</label>
                     </div>
-                    <select v-model="selActividadFisica" >
+                    <select v-model="selActividadFisica">
                         <option disabled value=" ">Actividad física</option>
                         <option v-for="nivel in niveles" :key=nivel :label=nivel />
                     </select>
@@ -64,21 +64,21 @@
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="name">Máximo grado de estudios:</label>
+                        <label class="input-group-text" for="inputGroupSelect01">Máximo grado de estudios:</label>
                     </div>
-                    <select v-model="selGrado">
+                    <select class="form-select" id="inputGroupSelect01" v-model="selGrado" >
                         <option disabled value=" ">Máximo grado de estudios</option>
                         <option v-for="grado in grados" :key=grado :label=grado />
                     </select>
-                </div>
+                </div> 
             </div>
 
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="name">Estado civil:</label>
+                        <label class="input-group-text" for="inputGroupSelect02">Estado civil:</label>
                     </div>
-                    <select v-model="selEstadoCivil">
+                    <select class="form-select" id="inputGroupSelect02" v-model="selEstadoCivil">
                         <option disabled value=" ">Estado civil</option>
                         <option v-for="estadoCivil in estadosCiviles" :key=estadoCivil :label=estadoCivil />
                     </select>
@@ -88,7 +88,7 @@
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="name">Exposición al ruido:</label>
+                        <label class="input-group-text" for="name3">Exposición al ruido:</label>
                     </div>
                     <select v-model="selExposicionRuido">
                         <option disabled value=" ">Exposición al ruido</option>
@@ -100,7 +100,7 @@
             <div class="row mb-4">
             <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                <label class="input-group-text" for="name">Exposición solar:</label>
+                <label class="input-group-text" for="name4">Exposición solar:</label>
                 </div>
                 <select v-model="selExposicionSolar">
                     <option disabled value=" ">Exposición solar</option>
@@ -112,7 +112,7 @@
             <div class="row mb-4">
             <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                <label class="input-group-text" for="name">Horas de sueño:</label>
+                <label class="input-group-text" for="name5">Horas de sueño:</label>
                 </div>
                 <select v-model="selHorasSuenio">
                     <option disabled value=" ">Horas de sueño</option>

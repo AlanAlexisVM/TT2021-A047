@@ -27,7 +27,7 @@ const connection = require('./db/db');
 app.get('/', (req, res) => {
 	res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
 	res.send('HOLA MUNDO');
-	console.log('Cliente');
+	//console.log('Cliente');
 	res.end();
 })
 
@@ -92,7 +92,7 @@ app.post('/registrar', async (req, res) => {
 		'1'];
 	//console.log(valores);
 	connection.query(sql, [valores], async (error, results) => {
-		console.log(error)
+		//console.log(error)
 		res.send("/");
 		res.end();
 	});
@@ -209,6 +209,29 @@ app.get('/logout', function (req, res) {
 		res.end();
 	})
 });
+
+app.get('/buscarPacientes', (req, res) => {
+	//console.log(req.session);
+	//console.log(dirigir);
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	if (req.session.loggedin) {
+		req.session.cedula
+		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=" + req.session.cedula + " AND (Paciente.Nombre LIKE '%a%' OR Paciente.Apellidos LIKE '%a%');";
+		//console.log(sql)
+		//SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Paciente.Nombre LIKE '%R%';
+		//SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=18345 AND (Paciente.Nombre LIKE '%a%' OR Paciente.Apellidos LIKE '%a%');
+		connection.query(sql, [req.session.cedula], async (error, results) => {
+			console.log(results)
+			res.send(results);
+			res.end();
+		});
+	} else {
+		res.send("/");
+		res.end();
+	}
+});
+
 
 app.listen(8081, (req, res) => {
 	console.log('SERVER RUNNING IN http://localhost:8081');

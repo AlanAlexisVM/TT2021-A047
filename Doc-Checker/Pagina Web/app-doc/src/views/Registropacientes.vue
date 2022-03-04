@@ -185,19 +185,25 @@
           </div>
         </div>
 
-        <div class="d-flex justify-content-evenly">
-          <button type="reset" class="btn btn-primary btn-block mb-4">
-            Limpiar
-          </button>
-          <router-link to="/registropacientes2">
+        
+        <div class="row mb-4">
+          <div class="col">
+            <button type="reset" class="btn btn-primary btn-block mb-4">
+              Limpiar
+            </button>
+          </div>
+          <div class="col">
+            <router-link to="/registropacientes2">
             <input
               v-on:click="registrarPaciente"
               type="submit"
               class="btn btn-primary btn-block mb-4"
               value="Continuar"
             />
-          </router-link>
+            </router-link>
+          </div>
         </div>
+        
       </form>
     </div>
   </div>
