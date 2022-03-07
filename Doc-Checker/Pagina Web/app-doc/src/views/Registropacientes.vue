@@ -1,6 +1,6 @@
 <template>
   <div class="Registropaciientes">
-    <h1>Crear nuevo paciente</h1>
+    <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
       <form action="/my-handling-form-page" method="post">
         <!-- 2 column grid layout with text inputs for the first and last names -->
@@ -215,6 +215,7 @@ export default {
   name: "Registropacientes",
   data: function () {
     return {
+      titulo: "Crear nuevo paciente",
       nombre: "",
       apellidoPaterno: "",
       apellidoMaterno: "",
@@ -254,7 +255,31 @@ export default {
           this.$router.push({ path: result.data });
         });
     },
+    preLlenado: function(){
+      this.titulo = this.$route.params.titulo;
+      const Curp = this.$route.params.curp;
+      const params = new URLSearchParams();
+      params.append('curp', Curp);
+      axios.post('http://localhost:8081/obtenerPaciente', params, { withCredentials: true }).then((result) => {
+        this.nombre = result.data[0].Nombre
+        let ap = result.data[0].Apellidos.split(' ')
+        this.apellidoPaterno = ap[0]
+        this.apellidoMaterno = ap[1]
+        this.fechaNacimiento = result.data[0].FechaNac.substring(0,10)
+        this.selSexo = result.data[0].Sexo
+        this.curp = result.data[0].CURP
+        this.correo = result.data[0].CorreoE
+        this.tel1 = result.data[0].Telefono1
+        this.tel2 = result.data[0].Telefono2
+        this.direccion = result.data[0].Direccion
+        this.selEstado = result.data[0].Estado
+        this.numPlaca = result.data[0].IdDCH
+      });
+    }
   },
+  created: function(){
+    this.preLlenado()
+  }
 };
 </script>
 

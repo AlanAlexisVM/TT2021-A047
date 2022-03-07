@@ -26,11 +26,12 @@
                 </router-link>
             </td>
             <td v-if="edicion === true" >
-                <router-link :to="edicion2">
+                <!--<router-link :to="edicion2">-->
                     <img src="@/assets/editar.png"
                         v-bind:height="alto"
-                        v-bind:width="ancho" />
-                </router-link>
+                        v-bind:width="ancho"
+                        v-on:click="dirEdicion" />
+                <!--</router-link>-->
             </td>
             <td v-if="agregar === true" >
                 <!--<router-link to="pacientes">-->
@@ -94,6 +95,9 @@ export default {
                     //console.log(result);
                     this.$router.push({ path: result.data });
                 });
+        },
+        dirEdicion: function(){
+            this.$router.push({ name: "Registropacientes", params: { titulo: "Actualizar paciente", curp: this.id } });
         }
     },
     created: function(){

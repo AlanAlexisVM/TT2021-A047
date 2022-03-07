@@ -123,6 +123,26 @@ app.post('/agregarPaciente', async (req, res) => {
 	}
 });
 
+app.post('/obtenerPaciente', async (req, res) => {
+	const CURP = req.body.curp;
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	if(req.session.cedula!=null && req.session.loggedin){
+		//console.log("Existe");
+		const sql = "SELECT Nombre, Apellidos, CURP, FechaNac, Sexo, Telefono1, Telefono2, CorreoE, Direccion, Estado, IdDCH, IdSi FROM Paciente WHERE Paciente.CURP = (?)";
+		valores = [CURP]
+		connection.query(sql, [valores], async (error, results) => {
+			res.send(results);
+			res.end();
+		});
+	}else{
+		//console.log("No existe");
+		res.send("/");
+		res.end();
+	}
+});
+
 app.post('/registrarPaciente', async (req, res) => {
 	const Nombre = req.body.nombre;
 	const ApellidoP = req.body.apellidoPaterno;
