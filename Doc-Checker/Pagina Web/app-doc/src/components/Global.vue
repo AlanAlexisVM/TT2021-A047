@@ -1,0 +1,11 @@
+<script>
+//const server="192.168.1.101" //Funciona en el navegador de otro dispositivo
+const server="localhost";
+const port_node="8081";
+
+export default {
+    server,
+    port_node,
+    
+}
+ </script>

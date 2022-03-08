@@ -255,6 +255,7 @@
 
 <script>
 import axios from "axios";
+import global_ from "@/components/Global"
 export default {
   name: "Registro",
   components: {},
@@ -291,7 +292,7 @@ export default {
       params.append("tel1", this.tel1);
       params.append("tel2", this.tel2);
       axios
-        .post("http://localhost:8081/registrar", params, {
+        .post("http://" + global_.server + ":"+global_.port_node+"/registrar", params, {
           withCredentials: true,
         })
         .then((result) => {

@@ -8,6 +8,7 @@
 <script>
 import axios from 'axios'
 import Barradenavegacion from '../components/Barradenavegacion.vue'
+import global_ from "@/components/Global"
 
 export default {
     name: 'Home',
@@ -19,7 +20,7 @@ export default {
     methods:{
         validar: function(){
             //{withCredentials:true, credentials:'include'}
-            axios.get('http://localhost:8081/validar?ruta='+String(this.$route.name), { withCredentials: true }).then((result) => {
+            axios.get("http://"+global_.server+":"+global_.port_node+"/validar?ruta="+String(this.$route.name), { withCredentials: true }).then((result) => {
                 this.$router.push({ path: result.data })
             });
         }

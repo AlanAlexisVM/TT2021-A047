@@ -15,6 +15,7 @@
 <script>
 import axios from 'axios'
 import Tabla from '@/components/Tabla.vue'
+import global_ from "@/components/Global"
 
 export default {
     name: 'Pacientes',
@@ -33,7 +34,7 @@ export default {
             //const path = 'http://localhost:5000/api/v1'
         },
         solicitarPacientes: function(){
-            axios.get('http://localhost:8081/solicitarPacientes', { withCredentials: true }).then((result) => {
+            axios.get("http://"+global_.server+":"+global_.port_node+"/solicitarPacientes", { withCredentials: true }).then((result) => {
                 for(var i=0;i<result.data.length;i++){
                     this.tuplas.push([result.data[i].Nombre + " " + result.data[i].Apellidos, result.data[i].CURP]);
                 }

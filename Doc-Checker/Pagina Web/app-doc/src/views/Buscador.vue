@@ -11,6 +11,7 @@
 <script>
 import axios from 'axios'
 import Tabla from '@/components/Tabla.vue'
+import global_ from "@/components/Global"
 
 export default {
     name: 'Buscador',
@@ -29,7 +30,7 @@ export default {
     methods:{
         buscar: function(){
             //{withCredentials:true, credentials:'include'}
-            axios.get('http://localhost:8081/buscarPacientes?cad='+String(this.cadena), { withCredentials: true }).then((result) => {
+            axios.get("http://"+global_.server+":"+global_.port_node+"/buscarPacientes?cad="+String(this.cadena), { withCredentials: true }).then((result) => {
                 this.tuplas = []
                 for(var i=0;i<result.data.length;i++){
                     this.tuplas.push([result.data[i].CURP, result.data[i].Nombre + " " + result.data[i].Apellidos]);

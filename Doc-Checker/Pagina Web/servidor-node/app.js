@@ -1,6 +1,9 @@
 // 1 - Invocamos a Express
 const express = require('express');
 const app = express();
+//Const ip = "192.168.1.101"; //Funciona en el navegador de otro dispositivo
+const ip = "localhost";
+const port = "8080";
 
 //2 - Para poder capturar los datos del formulario (sin urlencoded nos devuelve "undefined")
 app.use(express.urlencoded({ extended: false }));
@@ -25,9 +28,9 @@ app.use(session({
 const connection = require('./db/db');
 
 app.get('/', (req, res) => {
-	res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-	res.send('HOLA MUNDO');
+	res.header('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	//console.log('Cliente');
+	res.send("Hola mundo");
 	res.end();
 })
 
@@ -35,7 +38,8 @@ app.get('/', (req, res) => {
 app.post('/auth', async (req, res) => {
 	const user = req.body.user;
 	const pass = req.body.pass;
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	//console.log(req.body)
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (user && pass) {
 		connection.query('SELECT * FROM Doctor WHERE CorreoE = ?', [user], async (error, results, fields) => {
@@ -73,7 +77,7 @@ app.post('/registrar', async (req, res) => {
 	const Direccion = req.body.direccion;
 	const Telefono1 = req.body.tel1;
 	const Telefono2 = req.body.tel2;
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
 	const sql = 'INSERT INTO Doctor(CedulaProf, Nombre, Apellidos, CorreoE, Contrasenia, Sexo, FechaNac, Especialidad, Direccion, Telefono1, Telefono2, IdAdmin) VALUES (?)';
@@ -98,9 +102,39 @@ app.post('/registrar', async (req, res) => {
 	});
 });
 
+app.post('/cambiarcontra', async (req, res) => {
+	const user = req.session.name;
+	const Contrasenia = req.body.contrasenia;
+	const newContrasenia = req.body.newcontrasenia;
+	const newContrasenia2 = req.body.newcontrasenia2;
+	if(newContrasenia == newContrasenia2){
+		connection.query('SELECT * FROM Doctor WHERE CorreoE = ?', [user], async (error, results, fields) => {
+		if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
+			//console.log(results[0]);
+			//Contrasenia incorrecta
+			//alert("Contraseña incorrecta");
+			res.send("configuracion");
+		}else{
+			let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
+
+			const sql = 'UPDATE Doctor SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
+			//console.log(sql);
+			connection.query(sql, async (error, results) => {
+				//console.log(error)
+				res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+				res.setHeader('Access-Control-Allow-Credentials', true);
+				res.send("configuracion");
+				//res.alert("Good");
+				res.end();
+			});
+		}
+	});
+}
+});
+
 app.post('/agregarPaciente', async (req, res) => {
 	const Id = req.body.id;
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
 	if(req.session.cedula!=null){
@@ -125,7 +159,7 @@ app.post('/agregarPaciente', async (req, res) => {
 
 app.post('/obtenerPaciente', async (req, res) => {
 	const CURP = req.body.curp;
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 
 	if(req.session.cedula!=null && req.session.loggedin){
@@ -158,7 +192,7 @@ app.post('/registrarPaciente', async (req, res) => {
 	const Estado = req.body.estado;
 	const Placa = req.body.numPlaca;
 	let IdSi = "";
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	//let passwordHash = await bcrypt.hash(pass, 8);
 	connection.query("INSERT INTO SignosVitales(IdSi) VALUES (NULL)", async (error, results) => {
@@ -204,7 +238,7 @@ app.get('/validar', (req, res) => {
 	//console.log(req.session);
 	var dirigir = req.query.ruta.toLowerCase();
 	//console.log(dirigir);
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
 		if (dirigir == 'undefined')
@@ -220,7 +254,7 @@ app.get('/validar', (req, res) => {
 app.get('/solicitarPacientes', (req, res) => {
 	//console.log(req.session);
 	//console.log(dirigir);
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
 		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Doctor INNER JOIN Atiende ON Doctor.CedulaProf=Atiende.CedulaProf INNER JOIN Paciente on Atiende.CURP=Paciente.CURP WHERE Doctor.CorreoE = ?";
@@ -246,7 +280,7 @@ app.use(function (req, res, next) {
 //Destruye la sesión.
 app.get('/logout', function (req, res) {
 	req.session.destroy(() => {
-		res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+		res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 		res.setHeader('Access-Control-Allow-Credentials', true);
 		//res.setHeader('credentials', 'include');
 		//res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -259,7 +293,7 @@ app.get('/buscarPacientes', (req, res) => {
 	//console.log(req.session);
 	//console.log(dirigir);
 	var cadena = req.query.cad;
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
 		req.session.cedula

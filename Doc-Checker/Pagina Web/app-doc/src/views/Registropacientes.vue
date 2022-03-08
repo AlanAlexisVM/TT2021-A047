@@ -211,6 +211,7 @@
 
 <script>
 import axios from "axios";
+import global_ from "@/components/Global"
 export default {
   name: "Registropacientes",
   data: function () {
@@ -247,7 +248,7 @@ export default {
       params.append("estado", this.selEstado);
       params.append("numPlaca", this.numPlaca);
       axios
-        .post("http://localhost:8081/registrarPaciente", params, {
+        .post("http://"+global_.sever+":"+global_.port_node+"/registrarPaciente", params, {
           withCredentials: true,
         })
         .then((result) => {
@@ -260,7 +261,7 @@ export default {
       const Curp = this.$route.params.curp;
       const params = new URLSearchParams();
       params.append('curp', Curp);
-      axios.post('http://localhost:8081/obtenerPaciente', params, { withCredentials: true }).then((result) => {
+      axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente", params, { withCredentials: true }).then((result) => {
         this.nombre = result.data[0].Nombre
         let ap = result.data[0].Apellidos.split(' ')
         this.apellidoPaterno = ap[0]
@@ -279,6 +280,7 @@ export default {
   },
   created: function(){
     this.preLlenado()
+    console.log(global_.server)
   }
 };
 </script>

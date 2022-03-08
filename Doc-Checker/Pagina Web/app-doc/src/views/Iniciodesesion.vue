@@ -31,6 +31,7 @@
 
 <script>
 import axios from 'axios'
+import global_ from "@/components/Global"
 export default {
   name: 'Iniciodesesion',
   components: {
@@ -49,12 +50,12 @@ export default {
       const params = new URLSearchParams();
       params.append('user', this.usuario);
       params.append('pass', this.contraseña);
-      axios.post('http://localhost:8081/auth', params, { withCredentials: true }).then((result) => {
+      axios.post("http://"+global_.server+":"+global_.port_node+"/auth", params, { withCredentials: true }).then((result) => {
         this.$router.push({ path: result.data })
       });
     },
     validar: function(){
-      axios.get('http://localhost:8081/validar?ruta=pacientes', { withCredentials: true }).then((result) => {
+      axios.get("http://"+global_.server+":"+global_.port_node+"/validar?ruta=pacientes", { withCredentials: true }).then((result) => {
         this.$router.push({ path: result.data })
       });
     }

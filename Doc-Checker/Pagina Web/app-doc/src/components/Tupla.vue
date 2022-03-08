@@ -61,6 +61,7 @@
 
 <script>
 import axios from 'axios'
+import global_ from "@/components/Global"
 export default {
     name: 'Tupla',
     props: {
@@ -88,7 +89,7 @@ export default {
         fagregar: function(){
             const params = new URLSearchParams();
             params.append("id", this.id);
-            axios.post("http://localhost:8081/agregarPaciente", params, {
+            axios.post("http://"+ global_.server +":"+global_.port_node+"/agregarPaciente", params, {
                 withCredentials: true,
                 })
                 .then((result) => {
