@@ -191,7 +191,7 @@ app.post('/registrarPaciente', async (req, res) => {
 	const Direccion = req.body.direccion;
 	const Estado = req.body.estado;
 	const Placa = req.body.numPlaca;
-	let IdSi = "";
+	let IdSi = req.session.id;
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	//let passwordHash = await bcrypt.hash(pass, 8);
@@ -226,11 +226,100 @@ app.post('/registrarPaciente', async (req, res) => {
 			//console.log(valores);
 			connection.query(sql, [valores], async (error, results) => {
 				//console.log(error)
-				res.send("registrarpacientes2");
+				res.send("Registropacientes2");
 				res.end();
 			});
 		});
 	});
+});
+
+app.post('/actualizarPaciente', async (req, res) => {
+	const Nombre = req.body.nombre;
+	const ApellidoP = req.body.apellidoPaterno;
+	const ApellidoM = req.body.apellidoMaterno;
+	const Apellidos = ApellidoP + " " + ApellidoM;
+	const FechaNacimiento = req.body.fechaNacimiento;
+	const Sexo = req.body.sexo;
+	const CURP = req.body.curp;
+	const CorreoE = req.body.correo;
+	const Telefono1 = req.body.tel1;
+	const Telefono2 = req.body.tel2;
+	const Direccion = req.body.direccion;
+	const Estado = req.body.estado;
+	const Placa = req.body.numPlaca;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+		//console.log(error)
+		let sql = "UPDATE Paciente SET Nombre = '"+Nombre+"', Apellidos = '"+Apellidos+"', FechaNac = '"+FechaNacimiento+"', Sexo = '"+Sexo+"', Telefono1 = '"+Telefono1+"', Telefono2 = '"+Telefono2+"', CorreoE = '"+ CorreoE +"', Direccion = '"+ Direccion + "', Estado = '"+Estado+"', IdDCH = '"+ Placa +"' WHERE CURP = '"+ CURP + "'";
+		
+		//console.log(req.session);
+		//console.log(valores);
+		connection.query(sql, async (error, results) => {
+			//console.log(error)
+			res.send("Registropacientes2");
+			res.end();
+		});
+	
+});
+
+app.post('/registrarPaciente2', async (req, res) => {
+	const CURP = req.body.curp;
+	const ActividadFisica = req.body.actividadFisica;
+	const Adicciones = req.body.adicciones;
+	const Antecedentes = req.body.antecedentes;
+	const GradoEstudios = req.body.gradoEstudios;
+	const EstadoCivil = req.body.estadoCivil;
+	const ExpRuido = req.body.expRuido;
+	const ExpSolar = req.body.ExpSolar;
+	const HorasSuenio = req.body.horasSuenio;
+	const Padecimientos = req.body.padecimientos;
+	const PersonasDependientes = req.body.personasDependientes;
+	const Trabajo = req.body.trabajo;
+	const VarHumedad = req.body.varHumedad;
+	const VarTemperatura = req.body.varTemperatura;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	res.send("/");
+	res.end();
+	/*res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	//let passwordHash = await bcrypt.hash(pass, 8);
+	connection.query("INSERT INTO SignosVitales(IdSi) VALUES (NULL)", async (error, results) => {
+		//console.log(error)
+		IdSi = results.insertId;
+		let sql = 'INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES (5,5,5,5,1,5,Primaria,8,Casado,3,5,DORJ991107HMCMYS00)'
+		let valores = [
+			Nombre,
+			Apellidos,
+			CURP,
+			FechaNacimiento,
+			Sexo,
+			Telefono1,
+			Telefono2,
+			CorreoE,
+			Direccion,
+			Estado,
+			Placa,
+			IdSi
+		];
+		//console.log(req.session);
+		//console.log(valores);
+		connection.query(sql, [valores], async (error, results) => {
+			//console.log(error)
+			sql = 'INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)';
+			valores = [
+				req.session.cedula,
+				CURP
+			];
+			//console.log(req.session);
+			//console.log(valores);
+			connection.query(sql, [valores], async (error, results) => {
+				//console.log(error)
+				res.send("registrarpacientes2");
+				res.end();
+			});
+		});
+	});*/
 });
 
 //12 - Método para controlar que está auth en todas las páginas

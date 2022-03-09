@@ -2,7 +2,8 @@
   <div class="Registropaciientes">
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
-      <form action="/my-handling-form-page" method="post">
+      <!--<form action="/my-handling-form-page" method="post">-->
+      <form>
         <!-- 2 column grid layout with text inputs for the first and last names -->
         <div class="row mb-4">
           <div class="col">
@@ -193,14 +194,14 @@
             </button>
           </div>
           <div class="col">
-            <router-link to="/registropacientes2">
+            <!--<router-link to="/registropacientes2">-->
             <input
               v-on:click="registrarPaciente"
-              type="submit"
+              name="submit"
               class="btn btn-primary btn-block mb-4"
               value="Continuar"
             />
-            </router-link>
+            <!--</router-link>-->
           </div>
         </div>
         
@@ -234,60 +235,68 @@ export default {
   setup() {},
   methods: {
     registrarPaciente: function () {
-      const params = new URLSearchParams();
-      params.append("nombre", this.nombre);
-      params.append("apellidoPaterno", this.apellidoPaterno);
-      params.append("apellidoMaterno", this.apellidoMaterno);
-      params.append("fechaNacimiento", this.fechaNacimiento);
-      params.append("sexo", this.selSexo);
-      params.append("curp", this.curp);
-      params.append("correo", this.correo);
-      params.append("tel1", this.tel1);
-      params.append("tel2", this.tel2);
-      params.append("direccion", this.direccion);
-      params.append("estado", this.selEstado);
-      params.append("numPlaca", this.numPlaca);
-      axios
-        .post("http://"+global_.sever+":"+global_.port_node+"/registrarPaciente", params, {
-          withCredentials: true,
-        })
-        .then((result) => {
-          //console.log(result);
-          this.$router.push({ path: result.data });
-        });
+      const param = new URLSearchParams();
+      param.append("nombre", this.nombre);
+      param.append("apellidoPaterno", this.apellidoPaterno);
+      param.append("apellidoMaterno", this.apellidoMaterno);
+      param.append("fechaNacimiento", this.fechaNacimiento);
+      param.append("sexo", this.selSexo);
+      param.append("curp", this.curp);
+      param.append("correo", this.correo);
+      param.append("tel1", this.tel1);
+      param.append("tel2", this.tel2);
+      param.append("direccion", this.direccion);
+      param.append("estado", this.selEstado);
+      param.append("numPlaca", this.numPlaca);
+      if(this.$route.params.titulo==undefined){
+        axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente", param, {
+            withCredentials: true,
+          })         
+          .then((result) => {
+            this.$router.push({ name: result.data, params: { curp: this.curp } });
+          });
+      }else{
+        axios.post("http://"+global_.server+":"+global_.port_node+"/actualizarPaciente", param, {
+            withCredentials: true,
+          })
+          .then((result) => {
+            this.$router.push({ name: result.data, params: { curp: this.curp } });
+          });
+      }
     },
     preLlenado: function(){
-      this.titulo = this.$route.params.titulo;
-      const Curp = this.$route.params.curp;
-      const params = new URLSearchParams();
-      params.append('curp', Curp);
-      axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente", params, { withCredentials: true }).then((result) => {
-        this.nombre = result.data[0].Nombre
-        let ap = result.data[0].Apellidos.split(' ')
-        this.apellidoPaterno = ap[0]
-        this.apellidoMaterno = ap[1]
-        this.fechaNacimiento = result.data[0].FechaNac.substring(0,10)
-        this.selSexo = result.data[0].Sexo
-        this.curp = result.data[0].CURP
-        this.correo = result.data[0].CorreoE
-        this.tel1 = result.data[0].Telefono1
-        this.tel2 = result.data[0].Telefono2
-        this.direccion = result.data[0].Direccion
-        this.selEstado = result.data[0].Estado
-        this.numPlaca = result.data[0].IdDCH
-      });
+      if(this.$route.params.titulo!=undefined){
+        this.titulo = this.$route.params.titulo;
+        const Curp = this.$route.params.curp;
+        const params = new URLSearchParams();
+        params.append('curp', Curp);
+        axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente", params, { withCredentials: true }).then((result) => {
+          this.nombre = result.data[0].Nombre
+          let ap = result.data[0].Apellidos.split(' ')
+          this.apellidoPaterno = ap[0]
+          this.apellidoMaterno = ap[1]
+          this.fechaNacimiento = result.data[0].FechaNac.substring(0,10)
+          this.selSexo = result.data[0].Sexo
+          this.curp = result.data[0].CURP
+          this.correo = result.data[0].CorreoE
+          this.tel1 = result.data[0].Telefono1
+          this.tel2 = result.data[0].Telefono2
+          this.direccion = result.data[0].Direccion
+          this.selEstado = result.data[0].Estado
+          this.numPlaca = result.data[0].IdDCH
+        });
+      }
     }
   },
   created: function(){
     this.preLlenado()
-    console.log(global_.server)
   }
 };
 </script>
 
 <style scoped>
 .button,
-input[type="submit"] {
+input[name="submit"] {
   background-color: #56baed;
   border: none;
   color: white;

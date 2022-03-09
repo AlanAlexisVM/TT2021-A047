@@ -1,14 +1,15 @@
 <template>
     <div id="Registropacientes2" class="d-flex justify-content-around">
-        <form action="/my-handling-form-page" method="post">
+        <!--<form action="/my-handling-form-page" method="post">-->
+        <form>
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <label class="input-group-text"  for="name">Actividad física:</label>
                     </div>
-                    <select v-model="selActividadFisica">
+                    <select v-model="selActividadFisica" >
                         <option disabled value=" ">Actividad física</option>
-                        <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                        <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                     </select>
                 </div>
             </div>
@@ -55,8 +56,9 @@
                         <label class="input-group-text" for="name">¿Consume farmacos?: </label>
                     </div>
                     <select v-model="selFarmacos">
-                        <option>Si</option>
-                        <option>No</option>
+                        <option disabled value=" ">Seleccione una opción</option>
+                        <option value="1" >Si</option>
+                        <option value="0" >No</option>
                     </select>
                 </div>
             </div>
@@ -92,7 +94,7 @@
                     </div>
                     <select v-model="selExposicionRuido">
                         <option disabled value=" ">Exposición al ruido</option>
-                        <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                        <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                     </select>
                 </div>
             </div>
@@ -104,7 +106,7 @@
                 </div>
                 <select v-model="selExposicionSolar">
                     <option disabled value=" ">Exposición solar</option>
-                    <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                    <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
                 </div>
             </div>
@@ -156,11 +158,17 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name">Trabajo:</label>
                 </div>
-                <select v-model="selTrabajo">
+                <select v-model="selTrabajo" v-on:click="agregar(selTrabajo2,selTrabajo)" >
                     <option disabled value=" ">Trabajo</option>
-                    <option v-for="trabajo in trabajos" :key=trabajo :label=trabajo />
+                    <option v-for="trabajo in trabajos" :key=trabajo :label=trabajo :value=trabajo />
                 </select>
                 </div>
+                <ul v-if="selTrabajo2.length">
+                    <li v-for="trabajo in selTrabajo2"
+                        v-bind:key="trabajo" >
+                        {{trabajo}} <div v-on:click="selTrabajo2 = eliminar(selTrabajo2,trabajo)"> Eliminar </div>
+                    </li>
+                </ul>
             </div>
 
             <div class="row mb-4">
@@ -170,7 +178,7 @@
                 </div>
                 <select v-model="selVariacionesHumedad">
                     <option disabled value=" ">Variaciones de humedad</option>
-                    <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                    <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
                 </div>
             </div>
@@ -182,19 +190,21 @@
                 </div>
                 <select v-model="selVariacionesTemperatura">
                     <option disabled value=" ">Variaciones de Temperatura</option>
-                    <option v-for="nivel in niveles" :key=nivel :label=nivel />
+                    <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
                 </div>
             </div>
 
-            <router-link to="/pacientes">
-                <input type="submit" class="btn btn-primary btn-block mb-4" value="Crear paciente">
-            </router-link>
+            <!--<router-link to="/pacientes">-->
+                <input v-on:click="registrarPaciente" name="submit" class="btn btn-primary btn-block mb-4" value="Crear paciente">
+            <!--</router-link>-->
         </form>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import global_ from "@/components/Global"
 export default {
     name: 'Registropacientes2',
     data: function(){
@@ -204,7 +214,7 @@ export default {
             selAdicciones2: [],
             selAntecedentes: " ",
             selAntecedentes2: [],
-            selFarmacos: "No",
+            selFarmacos: " ",
             selGrado: " ",
             selEstadoCivil: " ",
             selExposicionRuido: " ",
@@ -214,6 +224,7 @@ export default {
             selPadecimientos2: [],
             selPersonasDependientes: " ",
             selTrabajo: " ",
+            selTrabajo2: [],
             selVariacionesHumedad: " ",
             selVariacionesTemperatura: " ",
             niveles: ["1 - Nula", "2 - Poca", "3 - Media", "4 - Mucha"],
@@ -222,7 +233,8 @@ export default {
             adicciones: ["Alcoholismo", "Tabaquismo", "A las drogas", "Juegos de azar", "A la comida", "A los videojuegos"],
             grados: ["Sin estudios", "Primaria", "Secundaria", "Bachillerato", "Licenciatura", "Maestria", "Doctorado"],
             estadosCiviles: ["Soltero", "Casado", "Divorciado", "Separación en proceso judicial", "Viudo", "Concubinato"],
-            horariosSuenio: ["2-3 horas", "4-5 horas", "6-7 horas", "8+ horas"],
+            horariosSuenio: ["1 hora", "2 horas", "3 horas", "4 horas", "5 horas", "6 horas", "7 horas", "8 horas", "9 horas", "10 horas", "11 horas", "12 horas"],
+            num: [1,2,3,4,5,6,7,8,9,10,11,12],
             trabajos: ["Obrero", "Futbolista"]
         }
     },
@@ -234,9 +246,33 @@ export default {
             return v1.filter(function(a) {
                 return a !== v2;
             });
+        },
+        registrarPaciente: function () {
+            const params = new URLSearchParams();
+            console.log(this.$route.params.curp)
+            params.append("curp",this.$route.params.curp);
+            params.append("actividadFisica", this.selActividadFisica);
+            params.append("adicciones", this.selAdicciones2);
+            params.append("antecedentes", this.selAntecedentes2);
+            params.append("gradoEstudios", this.selGrado);
+            params.append("estadoCivil", this.selEstadoCivil);
+            params.append("expRuido", this.selExposicionRuido);
+            params.append("expSolar", this.selExposicionSolar);
+            params.append("horasSuenio", this.selHorasSuenio);
+            params.append("padecimientos", this.selPadecimientos2);
+            params.append("personasDependientes", this.selPersonasDependientes);
+            params.append("trabajo", this.selTrabajo2);
+            params.append("varHumedad", this.selVariacionesHumedad);
+            params.append("varTemperatura", this.selVariacionesTemperatura);
+            axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente2", params, { withCredentials: true, }).then((result) => {
+                this.$router.push({ path: result.data });
+            });
         }
     },
     setup() {
     },
+    created: function(){
+        console.log(this.$route.params)
+    }
 }
 </script>
