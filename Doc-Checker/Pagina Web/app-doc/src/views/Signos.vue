@@ -17,6 +17,7 @@
         </div>
         <div class="row mb-4">
           <div class="col">
+            <img src="@/assets/Heart.png" height="30" width="30" />
             BPM
           </div>
         </div>
@@ -27,6 +28,7 @@
         </div>
         <div class="row mb-4">
           <div class="col">
+            <img src="@/assets/Temp.png" height="30" width="30" />
             °C
           </div>
         </div>
@@ -37,6 +39,7 @@
         </div>
         <div class="row mb-4">
           <div class="col">
+            <img src="@/assets/Persona.png" height="30" width="20" />
             %
           </div>
         </div>

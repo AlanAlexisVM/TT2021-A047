@@ -177,6 +177,27 @@ app.post('/obtenerPaciente', async (req, res) => {
 	}
 });
 
+app.post('/obtenerPaciente2', async (req, res) => {
+	const CURP = req.body.curp;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	if(req.session.cedula!=null && req.session.loggedin){
+		//console.log("Existe");
+		const sql1 = "SELECT Nombre, Apellidos, CURP, FechaNac, Sexo, Telefono1, Telefono2, CorreoE, Direccion, Estado, IdDCH, IdSi FROM Paciente WHERE Paciente.CURP = (?)";
+		const sql = "SELECT ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos FROM InformePaciente WHERE InformePaciente.CURP = (?)";
+		valores = [CURP]
+		connection.query(sql, [valores], async (error, results) => {
+			res.send(results);
+			res.end();
+		});
+	}else{
+		//console.log("No existe");
+		res.send("/");
+		res.end();
+	}
+});
+
 app.post('/registrarPaciente', async (req, res) => {
 	const Nombre = req.body.nombre;
 	const ApellidoP = req.body.apellidoPaterno;
@@ -267,10 +288,11 @@ app.post('/registrarPaciente2', async (req, res) => {
 	const ActividadFisica = req.body.actividadFisica;
 	const Adicciones = req.body.adicciones;
 	const Antecedentes = req.body.antecedentes;
+	const Farmacos = req.body.farmacos;
 	const GradoEstudios = req.body.gradoEstudios;
 	const EstadoCivil = req.body.estadoCivil;
 	const ExpRuido = req.body.expRuido;
-	const ExpSolar = req.body.ExpSolar;
+	const ExpSolar = req.body.expSolar;
 	const HorasSuenio = req.body.horasSuenio;
 	const Padecimientos = req.body.padecimientos;
 	const PersonasDependientes = req.body.personasDependientes;
@@ -279,47 +301,64 @@ app.post('/registrarPaciente2', async (req, res) => {
 	const VarTemperatura = req.body.varTemperatura;
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
-	res.send("/");
-	res.end();
-	/*res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	//let passwordHash = await bcrypt.hash(pass, 8);
-	connection.query("INSERT INTO SignosVitales(IdSi) VALUES (NULL)", async (error, results) => {
-		//console.log(error)
-		IdSi = results.insertId;
-		let sql = 'INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES (5,5,5,5,1,5,Primaria,8,Casado,3,5,DORJ991107HMCMYS00)'
-		let valores = [
-			Nombre,
-			Apellidos,
-			CURP,
-			FechaNacimiento,
-			Sexo,
-			Telefono1,
-			Telefono2,
-			CorreoE,
-			Direccion,
-			Estado,
-			Placa,
-			IdSi
-		];
-		//console.log(req.session);
-		//console.log(valores);
-		connection.query(sql, [valores], async (error, results) => {
-			//console.log(error)
-			sql = 'INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)';
-			valores = [
-				req.session.cedula,
-				CURP
-			];
-			//console.log(req.session);
-			//console.log(valores);
-			connection.query(sql, [valores], async (error, results) => {
-				//console.log(error)
-				res.send("registrarpacientes2");
-				res.end();
-			});
+	let IdPac;
+	let sql = 'INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES (?)'
+	let valores = [
+		ExpSolar,
+		VarTemperatura,
+		VarHumedad,
+		ExpRuido,
+		null,
+		ActividadFisica,
+		GradoEstudios,
+		HorasSuenio,
+		EstadoCivil,
+		PersonasDependientes,
+		Farmacos,
+		CURP
+	];
+	connection.query(sql, [valores], async (error, results) => {
+		IdPac = results.insertId;
+		//INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
+		sqlAdic = 'INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?';
+		sqlAnt = 'INSERT INTO InformePaciente_AntecedentesFam(AntecedentesFam,IdInforme) VALUES ?';
+		sqlPad = 'INSERT INTO InformePaciente_Padecimientos(Padecimientos,IdInforme) VALUES ?';
+		sqlTrab = 'INSERT INTO InformePaciente_Trabajo(Trabajo,IdInforme) VALUES ?';
+		valAdic = [];
+		valAnt = [];
+		valPad = [];
+		valTrab = [];
+		if(Adicciones.length>1){
+			for (const adic of Adicciones.split(",")) {
+				valAdic.push([adic,IdPac])
+			}
+		}
+		if(Antecedentes.length>1){
+			for (const ant of Antecedentes.split(",")) {
+				valAnt.push([ant,String(IdPac)])
+			}
+		}
+		if(Padecimientos.length>1){
+			for (const pad of Padecimientos.split(",")) {
+				valPad.push([pad,String(IdPac)])
+			}
+		}
+		if(Trabajo.length>1){
+			for (const trab of Trabajo.split(",")) {
+				valTrab.push([trab,String(IdPac)])
+			}
+		}
+		connection.query(sqlAdic, [valAdic], function (error, results, fields) {
+			connection.query(sqlAnt, [valAnt], function (error, results, fields) {
+				connection.query(sqlPad, [valPad], function (error, results, fields) {
+					connection.query(sqlTrab, [valTrab], function (error, results, fields) {
+						res.send("/");
+						res.end();
+					})
+				})
+			})
 		});
-	});*/
+	});
 });
 
 //12 - Método para controlar que está auth en todas las páginas

@@ -12,6 +12,7 @@
                 id="form6Example1"
                 class="form-control"
                 v-model="nombre"
+                required
               />
               <label class="form-label" for="form6Example1">Nombre(s)</label>
             </div>
@@ -23,6 +24,7 @@
                 id="form6Example2"
                 class="form-control"
                 v-model="apellidoPaterno"
+                required
               />
               <label class="form-label" for="form6Example2"
                 >Apellido Paterno</label
@@ -36,6 +38,7 @@
                 id="form6Example3"
                 class="form-control"
                 v-model="apellidoMaterno"
+                required
               />
               <label class="form-label" for="form6Example3"
                 >Apellido Materno</label
@@ -53,7 +56,7 @@
                   Sexo
                 </label>
               </div>
-              <select v-model="sexo" class="custom-select" id="inputGroupSelect01">
+              <select v-model="sexo" class="custom-select" id="inputGroupSelect01" required>
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
@@ -68,6 +71,7 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="fechaNacimiento"
+                required
               />
               <label class="form-label" for="form6Example4"
                 >Fecha de Nacimiento</label
@@ -85,6 +89,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="direccion"
+                required
               />
               <label class="form-label" for="form6Example6">Dirección</label>
             </div>
@@ -100,6 +105,7 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="correo"
+                required
               />
               <label class="form-label" for="form6Example4">Correo</label>
             </div>
@@ -109,15 +115,17 @@
             <div class="form-outline">
               <input
                 type="password"
+                alt="strongPass"
                 id="form6Example4"
                 class="form-control"
                 v-model="contrasenia"
+                required
               />
               <label class="form-label" for="form6Example4">Contraseña</label>
             </div>
           </div>
         </div>
-
+<!--
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">
@@ -149,7 +157,8 @@
               </label>
             </div>
           </div>
-        </div>
+        </div> 
+-->
 
         <!-- Text input -->
         <div class="row mb-4">
@@ -157,9 +166,12 @@
             <div class="form-outline">
               <input
                 type="text"
+                minlength="7" maxlength="8"
+                alt="number"
                 id="form6Example6"
                 class="form-control"
                 v-model="cedula"
+                required
               />
               <label class="form-label" for="form6Example6">
                 Cédula Profesional
@@ -175,7 +187,7 @@
                   Especialidad
                 </label>
               </div>
-              <select v-model="especialidad" class="custom-select" id="inputGroupSelect01">
+              <select v-model="especialidad" class="custom-select" id="inputGroupSelect01" required>
                 <option selected>Opciones...</option>
                 <option value="Medicina Familiar">Medicina Familiar</option>
                 <option value="Medicina Intera">Medicina Interna</option>
@@ -211,9 +223,12 @@
             <div class="form-outline">
               <input
                 type="text"
+                alt="number"
+                minlength="10" maxlength="10"
                 id="form6Example13"
                 class="form-control"
                 v-model="tel1"
+                required
               />
               <label class="form-label" for="form6Example13">Telefono 1</label>
             </div>
@@ -222,6 +237,8 @@
             <div class="form-outline">
               <input
                 type="text"
+                alt="number"
+                minlength="10" maxlength="10"
                 id="form6Example14"
                 class="form-control"
                 v-model="tel2"
@@ -239,11 +256,18 @@
             </button>
           </div>
           <div class="col">
+          
             <button
               v-on:click="registrar"
               type="submit"
               class="btn btn-primary btn-block mb-4"
             >
+            <!--
+            <button
+              type="submit"
+              class="btn btn-primary btn-block mb-4"
+            >
+            -->
               Registrarse
             </button>
           </div>

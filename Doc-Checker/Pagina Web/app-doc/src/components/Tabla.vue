@@ -55,8 +55,8 @@ export default {
     },
     data: function(){
         return{
-            c1: ["Id", "Nombre", "Informe", "Signos vitales", "Editar"],
-            c2: ["Id", "Nombre", "Agregar Paciente"],
+            c1: ["Nombre", "CURP", "Informe", "Signos vitales", "Editar"],
+            c2: ["CURP", "Nombre", "Agregar Paciente"],
             c3: ["Nombre", "Cédula profesional", "Agregar doctor", "Rechazar doctor"],
             c4: ["Id", "Nombre", "Agregar paciente"],
             c5: ["Id", "Nombre", "Cédula profesional", "Eliminar doctor"],

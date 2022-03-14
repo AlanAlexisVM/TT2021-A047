@@ -2,9 +2,11 @@
     <div class="Configuracion">
         <img src="@/assets/doc.png" height="100" width="100" />
         <!--<form action="/my-handling-form-page" method="post">-->
+        <div class='change-pass'>
         <h2>Cambiar contraseña</h2>
             <ul>
             <li>
+                <div class='form-group'>
                 <label for="contrasenia">Escribe tu contraseña actual:</label>
                 <input
                 type="password"
@@ -12,8 +14,10 @@
                 class="form-control"
                 v-model="contrasenia"
               />
+              </div>
             </li>
             <li>
+                <div class='form-group'>
                 <label for="newcontrasenia">Escribe tu nueva contraseña:</label>
                 <input
                 type="password"
@@ -21,8 +25,10 @@
                 class="form-control"
                 v-model="newcontrasenia"
               />
+                </div>
             </li>
             <li>
+                <div class='form-group'>
                 <label for="newcontrasenia2">Vuelve a escribir tu nueva constraseña:</label>
                 <input
                 type="password"
@@ -30,11 +36,14 @@
                 class="form-control"
                 v-model="newcontrasenia2"
               />
+                </div>
             </li>
             <!--<router-link to="/configuracion">-->
-                <input v-on:click="cambio" type="submit" class="fadeIn fourth" value="Restablecer">
+                <input v-on:click="cambio" type="submit" class="fadeIn fourth btn btn-primary" value="Restablecer">
             <!--</router-link>-->
             </ul>
+        </div>
+        <div>
             <h2>Información</h2>
             <ul>
             <li>
@@ -46,9 +55,10 @@
             <li>
                 <label for="name">Terminos del servicio</label>
             </li>
-                <input v-on:click="cerrarSesion" type="submit" class="fadeIn fourth" value="Cerrar sesión">
+                <input v-on:click="cerrarSesion" type="submit" class="fadeIn fourth btn btn-primary" value="Cerrar sesión">
             </ul>
         <!--</form>-->
+        </div>
     </div>    
 </template>
 
@@ -83,3 +93,18 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.Configuracion {
+    display: inline-block;
+}
+
+.change-pass {
+    padding-bottom: 1em;
+}
+
+ul {
+    list-style-type: none;
+    display: inline;
+}
+</style>

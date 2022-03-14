@@ -52,3 +52,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.Barradenavegacion {
+    padding-bottom: 10px;
+}
+</style>

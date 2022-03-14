@@ -1,5 +1,5 @@
 <template>
-  <div class="Registropaciientes">
+  <div class="Registropacientes">
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
       <!--<form action="/my-handling-form-page" method="post">-->

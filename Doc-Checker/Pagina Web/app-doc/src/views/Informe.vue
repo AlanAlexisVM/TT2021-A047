@@ -1,16 +1,16 @@
 <template>
     <div class="Informe" >
         <!--Fuente: https://programmerclick.com/article/17441571952/-->
-        <input type="checkbox" v-model="show">
+        <!-- <input type="checkbox" v-model="show"> -->
 		<select v-model="src" style="width: 30em">
 			<option v-for="item in pdfList" :label="item" :key="item" v-text="item"></option>
 		</select>
-		<input v-model.number="page" type="number" style="width: 5em"> /{{numPages}}
+		<input v-model.number="page" type="number" style="width: 5em"/> /{{numPages}}
 		<button @click="rotate += 90">&#x27F3;</button>
 		<button @click="rotate -= 90">&#x27F2;</button>
 		<button @click="$refs.pdf.print()">print</button>
-		<div style="width: 50%" >
-			<div v-if="loadedRatio > 0 && loadedRatio < 1" style="background-color: green; color: white; text-align: center" :style="{ width: loadedRatio * 100 + '%' }">{{ Math.floor(loadedRatio * 100) }}%</div>
+		<div style="padding: 3% 20%">
+			<div v-if="loadedRatio > 0 && loadedRatio < 1" style="background-color: green; color: white; text-align: center; padding: 3em;" :style="{ width: loadedRatio * 100 + '%' }">{{ Math.floor(loadedRatio * 100) }}%</div>
 			<pdf v-if="show" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @password="password" @progress="loadedRatio = $event" @error="error" @num-pages="numPages = $event" @link-clicked="page = $event"></pdf>
 		</div>
     </div>

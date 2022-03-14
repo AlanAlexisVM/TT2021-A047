@@ -70,7 +70,7 @@
                     </div>
                     <select class="form-select" id="inputGroupSelect01" v-model="selGrado" >
                         <option disabled value=" ">Máximo grado de estudios</option>
-                        <option v-for="grado in grados" :key=grado :label=grado />
+                        <option v-for="grado in grados" :key=grado :label=grado :value=grado />
                     </select>
                 </div> 
             </div>
@@ -82,7 +82,7 @@
                     </div>
                     <select class="form-select" id="inputGroupSelect02" v-model="selEstadoCivil">
                         <option disabled value=" ">Estado civil</option>
-                        <option v-for="estadoCivil in estadosCiviles" :key=estadoCivil :label=estadoCivil />
+                        <option v-for="estadoCivil in estadosCiviles" :key=estadoCivil :label=estadoCivil :value=estadoCivil />
                     </select>
                 </div>
             </div>
@@ -118,7 +118,7 @@
                 </div>
                 <select v-model="selHorasSuenio">
                     <option disabled value=" ">Horas de sueño</option>
-                    <option v-for="horasSuenio in horariosSuenio" :key=horasSuenio :label=horasSuenio />
+                    <option v-for="(horasSuenio,i) in horariosSuenio" :key=horasSuenio :label=horasSuenio :value=num[i] />
                 </select>
                 </div>
             </div>
@@ -142,14 +142,14 @@
             </div>
 
             <div class="row mb-4">
-            <div class="input-group mb-3">
+                <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                <label class="input-group-text" for="name">Personas dependientes:</label>
-                </div>
-                <select v-model="selPersonasDependientes">
-                    <option disabled value=" ">Personas dependientes</option>
-                    <option v-for="numero in numeros" :key=numero :label=numero />
-                </select>
+                        <label class="input-group-text" for="name">Personas dependientes:</label>
+                    </div>
+                    <select v-model="selPersonasDependientes">
+                        <option disabled value=" ">Personas dependientes</option>
+                        <option v-for="(numero,i) in numeros" :key=numero :label=numero :value=num[i] />
+                    </select>
                 </div>
             </div>
 
@@ -194,11 +194,10 @@
                 </select>
                 </div>
             </div>
-
-            <!--<router-link to="/pacientes">-->
-                <input v-on:click="registrarPaciente" name="submit" class="btn btn-primary btn-block mb-4" value="Crear paciente">
-            <!--</router-link>-->
-        </form>
+            <button v-on:click="registrarPaciente" name="submit" class="btn btn-success btn-block mb-4" value="Crear paciente" >
+                Crear paciente
+            </button>
+        </form>    
     </div>
 </template>
 
@@ -240,20 +239,42 @@ export default {
     },
     methods: {
         agregar: function(v1,v2){
-            v1.push(v2);
+            if(v2!=" " && !v1.includes(v2)){
+                v1.push(v2);
+            }
         },
         eliminar: function(v1,v2){
             return v1.filter(function(a) {
                 return a !== v2;
             });
         },
+        preLlenado: function(){
+        if(this.$route.params.titulo!=undefined){
+            this.titulo = this.$route.params.titulo;
+            const Curp = this.$route.params.curp;
+            const params = new URLSearchParams();
+            params.append('curp', Curp);
+            axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente2", params, { withCredentials: true }).then((result) => {
+                this.exposicionsolar = result.data[0].ExposicionSolar
+                this.fechaNacimiento = result.data[0].FechaNac.substring(0,10)
+                this.selSexo = result.data[0].Sexo
+                this.curp = result.data[0].CURP
+                this.correo = result.data[0].CorreoE
+                this.tel1 = result.data[0].Telefono1
+                this.tel2 = result.data[0].Telefono2
+                this.direccion = result.data[0].Direccion
+                this.selEstado = result.data[0].Estado
+                this.numPlaca = result.data[0].IdDCH
+            });
+        }
+    },
         registrarPaciente: function () {
             const params = new URLSearchParams();
-            console.log(this.$route.params.curp)
             params.append("curp",this.$route.params.curp);
             params.append("actividadFisica", this.selActividadFisica);
             params.append("adicciones", this.selAdicciones2);
             params.append("antecedentes", this.selAntecedentes2);
+            params.append("farmacos", this.selFarmacos);
             params.append("gradoEstudios", this.selGrado);
             params.append("estadoCivil", this.selEstadoCivil);
             params.append("expRuido", this.selExposicionRuido);
