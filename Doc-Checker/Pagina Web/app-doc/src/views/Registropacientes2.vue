@@ -255,16 +255,20 @@ export default {
             const params = new URLSearchParams();
             params.append('curp', Curp);
             axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente2", params, { withCredentials: true }).then((result) => {
-                this.exposicionsolar = result.data[0].ExposicionSolar
-                this.fechaNacimiento = result.data[0].FechaNac.substring(0,10)
-                this.selSexo = result.data[0].Sexo
-                this.curp = result.data[0].CURP
-                this.correo = result.data[0].CorreoE
-                this.tel1 = result.data[0].Telefono1
-                this.tel2 = result.data[0].Telefono2
-                this.direccion = result.data[0].Direccion
-                this.selEstado = result.data[0].Estado
-                this.numPlaca = result.data[0].IdDCH
+                this.selActividadFisica = result.data[0].ActividadFisica
+                //this.selAdicciones = result.data[0].FechaNac.substring(0,10)
+                //this.selAntecedentes = result.data[0].Sexo
+                this.selFarmacos = result.data[0].Farmacos
+                this.selGrado = result.data[0].Grado
+                this.selEstadoCivil = result.data[0].EstadoCivil
+                this.selExposicionRuido = result.data[0].ExposicionRuido
+                this.selExposicionSolar = result.data[0].ExposicionSolar
+                this.selHorasSuenio = result.data[0].HorasSuenio
+                //this.selPadecimientos = result.data[0].IdDCH
+                this.selPersonasDependientes = result.data[0].PersonasDependientes
+                //this.selTrabajo = result.data[0].Direccion
+                this.selVariacionesHumedad = result.data[0].VariacionesHumedad
+                this.selVariacionesTemperatura = result.data[0].VariacionesTemperatura
             });
         }
     },
