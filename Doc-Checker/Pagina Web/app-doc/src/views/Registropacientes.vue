@@ -13,6 +13,7 @@
                 id="form6Example1"
                 class="form-control"
                 v-model="nombre"
+                required
               />
               <label class="form-label" for="form6Example1">Nombre(s)</label>
             </div>
@@ -24,6 +25,7 @@
                 id="form6Example2"
                 class="form-control"
                 v-model="apellidoPaterno"
+                required
               />
               <label class="form-label" for="form6Example2"
                 >Apellido Paterno</label
@@ -37,6 +39,7 @@
                 id="form6Example3"
                 class="form-control"
                 v-model="apellidoMaterno"
+                required
               />
               <label class="form-label" for="form6Example3"
                 >Apellido Materno</label
@@ -54,6 +57,7 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="fechaNacimiento"
+                required
               />
               <label class="form-label" for="form6Example4"
                 >Fecha de Naciminento</label
@@ -72,6 +76,7 @@
                 v-model="selSexo"
                 class="custom-select"
                 id="inputGroupSelect01"
+                required
               >
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
@@ -86,9 +91,11 @@
             <div class="form-outline">
               <input
                 type="text"
+                minlength="18" maxlength="18"
                 id="form6Example4"
                 class="form-control"
                 v-model="curp"
+                required
               />
               <label class="form-label" for="form6Example4">CURP</label>
             </div>
@@ -104,6 +111,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="correo"
+                required
               />
               <label class="form-label" for="form6Example6"
                 >Correo Electronico</label
@@ -118,9 +126,11 @@
             <div class="form-outline">
               <input
                 type="text"
+                minlength="10" maxlength="10"
                 id="form6Example13"
                 class="form-control"
                 v-model="tel1"
+                required
               />
               <label class="form-label" for="form6Example13">Telefono 1</label>
             </div>
@@ -129,9 +139,11 @@
             <div class="form-outline">
               <input
                 type="text"
+                minlength="10" maxlength="10"
                 id="form6Example14"
                 class="form-control"
                 v-model="tel2"
+                required
               />
               <label class="form-label" for="form6Example14">Telefono 2</label>
             </div>
@@ -147,6 +159,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="direccion"
+                required
               />
               <label class="form-label" for="form6Example6">Direccion</label>
             </div>
@@ -162,10 +175,41 @@
                 v-model="selEstado"
                 class="custom-select"
                 id="inputGroupSelect01"
+                required
               >
                 <option selected>Opciones...</option>
-                <option value="CDMX">CDMX</option>
-                <option value="Estado de Mexico">Estado de México</option>
+                <option value="Aguascalientes">Aguascalientes</option>
+                <option value="Baja California">Baja California</option>
+                <option value="Baja California Sur">Baja California Sur</option>
+                <option value="Campeche">Campeche</option>
+                <option value="Chiapas">Chiapas</option>
+                <option value="Chihuahua">Chihuahua</option>
+                <option value="CDMX">Ciudad de México</option>
+                <option value="Coahuila">Coahuila</option>
+                <option value="Colima">Colima</option>
+                <option value="Durango">Durango</option>
+                <option value="Estado de México">Estado de México</option>
+                <option value="Guanajuato">Guanajuato</option>
+                <option value="Guerrero">Guerrero</option>
+                <option value="Hidalgo">Hidalgo</option>
+                <option value="Jalisco">Jalisco</option>
+                <option value="Michoacán">Michoacán</option>
+                <option value="Morelos">Morelos</option>
+                <option value="Nayarit">Nayarit</option>
+                <option value="Nuevo León">Nuevo León</option>
+                <option value="Oaxaca">Oaxaca</option>
+                <option value="Puebla">Puebla</option>
+                <option value="Querétaro">Querétaro</option>
+                <option value="Quintana Roo">Quintana Roo</option>
+                <option value="San Luis Potosí">San Luis Potosí</option>
+                <option value="Sinaloa">Sinaloa</option>
+                <option value="Sonora">Sonora</option>
+                <option value="Tabasco">Tabasco</option>
+                <option value="Tamaulipas">Tamaulipas</option>
+                <option value="Tlaxcala">Tlaxcala</option>
+                <option value="Veracruz">Veracruz</option>
+                <option value="Yucatán">Yucatán</option>
+                <option value="Zacatecas">Zacatecas</option>
               </select>
             </div>
           </div>
@@ -180,6 +224,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="numPlaca"
+                required
               />
               <label class="form-label" for="form6Example6">N° Placa</label>
             </div>

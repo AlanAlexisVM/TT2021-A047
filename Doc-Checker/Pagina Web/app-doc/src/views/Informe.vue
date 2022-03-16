@@ -5,7 +5,10 @@
 		<select v-model="src" style="width: 30em">
 			<option v-for="item in pdfList" :label="item" :key="item" v-text="item"></option>
 		</select>
-		<input v-model.number="page" type="number" style="width: 5em"/> /{{numPages}}
+		<p><b>{{page}}/{{numPages}}</b></p>
+		<button @click="decrease">▲</button>
+		<button @click="increase">▼</button> 
+	
 		<button @click="rotate += 90">&#x27F3;</button>
 		<button @click="rotate -= 90">&#x27F2;</button>
 		<button @click="$refs.pdf.print()">print</button>
@@ -27,7 +30,6 @@ export default {
 		return {
 			show: true,
 			pdfList: [
-				'',
 				'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf',
 				'https://cdn.rawgit.com/mozilla/pdf.js/c6e8ca86/test/pdfs/freeculture.pdf',
 				'https://cdn.rawgit.com/mozilla/pdf.js/c6e8ca86/test/pdfs/annotation-link-text-popup.pdf',
@@ -52,6 +54,14 @@ export default {
 		error: function(err) {
 
 			console.log(err);
+		},
+		increase(){
+			if(this.page>=this.numPages) return
+			this.page++ 
+		},
+		decrease(){
+			if(this.page<=1) return
+			this.page--
 		}
 	}
 }

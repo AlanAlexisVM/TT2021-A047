@@ -7,7 +7,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text"  for="name">Actividad física:</label>
                     </div>
-                    <select v-model="selActividadFisica" >
+                    <select v-model="selActividadFisica" required>
                         <option disabled value=" ">Actividad física</option>
                         <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                     </select>
@@ -55,7 +55,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="name">¿Consume farmacos?: </label>
                     </div>
-                    <select v-model="selFarmacos">
+                    <select v-model="selFarmacos" required>
                         <option disabled value=" ">Seleccione una opción</option>
                         <option value="1" >Si</option>
                         <option value="0" >No</option>
@@ -68,7 +68,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Máximo grado de estudios:</label>
                     </div>
-                    <select class="form-select" id="inputGroupSelect01" v-model="selGrado" >
+                    <select class="form-select" id="inputGroupSelect01" v-model="selGrado" required >
                         <option disabled value=" ">Máximo grado de estudios</option>
                         <option v-for="grado in grados" :key=grado :label=grado :value=grado />
                     </select>
@@ -80,7 +80,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect02">Estado civil:</label>
                     </div>
-                    <select class="form-select" id="inputGroupSelect02" v-model="selEstadoCivil">
+                    <select class="form-select" id="inputGroupSelect02" v-model="selEstadoCivil" required>
                         <option disabled value=" ">Estado civil</option>
                         <option v-for="estadoCivil in estadosCiviles" :key=estadoCivil :label=estadoCivil :value=estadoCivil />
                     </select>
@@ -92,7 +92,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="name3">Exposición al ruido:</label>
                     </div>
-                    <select v-model="selExposicionRuido">
+                    <select v-model="selExposicionRuido" required>
                         <option disabled value=" ">Exposición al ruido</option>
                         <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                     </select>
@@ -104,7 +104,7 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name4">Exposición solar:</label>
                 </div>
-                <select v-model="selExposicionSolar">
+                <select v-model="selExposicionSolar" required>
                     <option disabled value=" ">Exposición solar</option>
                     <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
@@ -116,7 +116,7 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name5">Horas de sueño:</label>
                 </div>
-                <select v-model="selHorasSuenio">
+                <select v-model="selHorasSuenio" required>
                     <option disabled value=" ">Horas de sueño</option>
                     <option v-for="(horasSuenio,i) in horariosSuenio" :key=horasSuenio :label=horasSuenio :value=num[i] />
                 </select>
@@ -146,7 +146,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="name">Personas dependientes:</label>
                     </div>
-                    <select v-model="selPersonasDependientes">
+                    <select v-model="selPersonasDependientes" required>
                         <option disabled value=" ">Personas dependientes</option>
                         <option v-for="(numero,i) in numeros" :key=numero :label=numero :value=num[i] />
                     </select>
@@ -156,7 +156,7 @@
             <div class="row mb-4">
             <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                <label class="input-group-text" for="name">Trabajo:</label>
+                <label class="input-group-text" for="name" required>Trabajo:</label>
                 </div>
                 <select v-model="selTrabajo" v-on:click="agregar(selTrabajo2,selTrabajo)" >
                     <option disabled value=" ">Trabajo</option>
@@ -176,7 +176,7 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name">Variaciones de humedad:</label>
                 </div>
-                <select v-model="selVariacionesHumedad">
+                <select v-model="selVariacionesHumedad" required>
                     <option disabled value=" ">Variaciones de humedad</option>
                     <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
@@ -188,7 +188,7 @@
                     <div class="input-group-prepend">
                 <label class="input-group-text" for="name">Variaciones de temperatura:</label>
                 </div>
-                <select v-model="selVariacionesTemperatura">
+                <select v-model="selVariacionesTemperatura" required>
                     <option disabled value=" ">Variaciones de Temperatura</option>
                     <option v-for="(nivel,i) in niveles" :key=nivel :label=nivel :value="num[i]" />
                 </select>
@@ -234,7 +234,7 @@ export default {
             estadosCiviles: ["Soltero", "Casado", "Divorciado", "Separación en proceso judicial", "Viudo", "Concubinato"],
             horariosSuenio: ["1 hora", "2 horas", "3 horas", "4 horas", "5 horas", "6 horas", "7 horas", "8 horas", "9 horas", "10 horas", "11 horas", "12 horas"],
             num: [1,2,3,4,5,6,7,8,9,10,11,12],
-            trabajos: ["Obrero", "Futbolista"]
+            trabajos: ["Obrero", "Futbolista"],
         }
     },
     methods: {
@@ -248,30 +248,54 @@ export default {
                 return a !== v2;
             });
         },
-        preLlenado: function(){
-        if(this.$route.params.titulo!=undefined){
-            this.titulo = this.$route.params.titulo;
+        validarExistencia: function(){
             const Curp = this.$route.params.curp;
+            let params = new URLSearchParams();
+            params.append("curp",Curp);
+            axios.post("http://"+global_.server+":"+global_.port_node+"/existeRegistro", params, { withCredentials: true, }).then((result) => {
+                if(result.data)
+                    this.preLlenado(Curp)
+            });
+        },
+        preLlenado: function(Curp){
             const params = new URLSearchParams();
             params.append('curp', Curp);
             axios.post("http://"+global_.server+":"+global_.port_node+"/obtenerPaciente2", params, { withCredentials: true }).then((result) => {
                 this.selActividadFisica = result.data[0].ActividadFisica
                 //this.selAdicciones = result.data[0].FechaNac.substring(0,10)
+                this.obtener('Adicciones',Curp)
                 //this.selAntecedentes = result.data[0].Sexo
-                this.selFarmacos = result.data[0].Farmacos
-                this.selGrado = result.data[0].Grado
+                this.obtener('AntecedentesFam',Curp)
+                this.selFarmacos = result.data[0].ConsumoDeFarmacos
+                this.selGrado = result.data[0].Educacion
                 this.selEstadoCivil = result.data[0].EstadoCivil
                 this.selExposicionRuido = result.data[0].ExposicionRuido
                 this.selExposicionSolar = result.data[0].ExposicionSolar
-                this.selHorasSuenio = result.data[0].HorasSuenio
+                this.selHorasSuenio = result.data[0].HorasDeSuenio
                 //this.selPadecimientos = result.data[0].IdDCH
+                this.obtener('Padecimientos',Curp)
                 this.selPersonasDependientes = result.data[0].PersonasDependientes
                 //this.selTrabajo = result.data[0].Direccion
-                this.selVariacionesHumedad = result.data[0].VariacionesHumedad
-                this.selVariacionesTemperatura = result.data[0].VariacionesTemperatura
+                this.obtener('Trabajo',Curp)
+                this.selVariacionesHumedad = result.data[0].VariacionesdeHumedad
+                this.selVariacionesTemperatura = result.data[0].VariacionesdeTemperatura
             });
-        }
-    },
+        },
+        obtener: function(valor, curp){
+            const params = new URLSearchParams();
+            params.append('valor', valor);
+            params.append('curp', curp);
+            axios.post("http://"+global_.server+":"+global_.port_node+"/obtener", params, { withCredentials: true }).then((result) => {
+                if(valor=="Adicciones")
+                    this.selAdicciones2 = result.data
+                else if(valor=="AntecedentesFam")
+                    this.selAntecedentes2 = result.data
+                else if(valor=="Padecimientos")
+                    this.selPadecimientos2 = result.data
+                else if(valor=="Trabajo")
+                    this.selTrabajo2 = result.data
+            });
+        },
         registrarPaciente: function () {
             const params = new URLSearchParams();
             params.append("curp",this.$route.params.curp);
@@ -297,7 +321,7 @@ export default {
     setup() {
     },
     created: function(){
-        console.log(this.$route.params)
+        this.validarExistencia()
     }
 }
 </script>

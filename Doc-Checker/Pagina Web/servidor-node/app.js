@@ -302,63 +302,98 @@ app.post('/registrarPaciente2', async (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	let IdPac;
-	let sql = 'INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES (?)'
-	let valores = [
-		ExpSolar,
-		VarTemperatura,
-		VarHumedad,
-		ExpRuido,
-		null,
-		ActividadFisica,
-		GradoEstudios,
-		HorasSuenio,
-		EstadoCivil,
-		PersonasDependientes,
-		Farmacos,
-		CURP
-	];
-	connection.query(sql, [valores], async (error, results) => {
-		IdPac = results.insertId;
-		//INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
-		sqlAdic = 'INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?';
-		sqlAnt = 'INSERT INTO InformePaciente_AntecedentesFam(AntecedentesFam,IdInforme) VALUES ?';
-		sqlPad = 'INSERT INTO InformePaciente_Padecimientos(Padecimientos,IdInforme) VALUES ?';
-		sqlTrab = 'INSERT INTO InformePaciente_Trabajo(Trabajo,IdInforme) VALUES ?';
-		valAdic = [];
-		valAnt = [];
-		valPad = [];
-		valTrab = [];
-		if(Adicciones.length>1){
-			for (const adic of Adicciones.split(",")) {
-				valAdic.push([adic,IdPac])
+	let sql = "SELECT * FROM InformePaciente WHERE CURP = '"+CURP+"'"
+	connection.query(sql, async (error, results) => {
+		let existeRegistro = results.length
+		if(existeRegistro>0){
+			IdPac = results[0].IdInforme;
+			console.log(results[0]);
+			sql = 'UPDATE InformePaciente SET ExposicionSolar = ' + ExpSolar  + ', VariacionesdeTemperatura = ' + VarTemperatura  + ', VariacionesdeHumedad = ' + VarHumedad  + ', ExposicionRuido = ' + ExpRuido  + ', ActividadFisica = ' + ActividadFisica  + ', Educacion = ' + GradoEstudios  + ', HorasDeSuenio = ' + HorasSuenio  + ', EstadoCivil = ' + EstadoCivil  + ', PersonasDependientes = ' + PersonasDependientes  + ', ConsumoDeFarmacos = ' + Farmacos  + ''
+		}else
+			sql = "INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES ('"+ExpSolar+"','"+VarTemperatura+"','"+VarHumedad+"','"+ExpRuido+"','"+null+"','"+ActividadFisica+"','"+GradoEstudios+"','"+HorasSuenio+"','"+EstadoCivil+"','"+PersonasDependientes+"','"+Farmacos+"','"+CURP+"')"
+		connection.query(sql, async (error, results) => {
+			//INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
+			if(existeRegistro>0){
+				sqlAdic = 'UPDATE InformePaciente_Adicciones SET Adicciones=? WHERE IdInforme =?';
+				sqlAnt = 'UPDATE InformePaciente_AntecedentesFam SET AntecedentesFam=? WHERE IdInforme=?';
+				sqlPad = 'UPDATE InformePaciente_Padecimientos SET Padecimientos=? IdInforme=?';
+				sqlTrab = 'UPDATE InformePaciente_Trabajo SET Trabajo=? WHERE IdInforme=?';
+			}else{
+				IdPac = results.insertId;
+				sqlAdic = 'INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?';
+				sqlAnt = 'INSERT INTO InformePaciente_AntecedentesFam(AntecedentesFam,IdInforme) VALUES ?';
+				sqlPad = 'INSERT INTO InformePaciente_Padecimientos(Padecimientos,IdInforme) VALUES ?';
+				sqlTrab = 'INSERT INTO InformePaciente_Trabajo(Trabajo,IdInforme) VALUES ?';
 			}
-		}
-		if(Antecedentes.length>1){
-			for (const ant of Antecedentes.split(",")) {
-				valAnt.push([ant,String(IdPac)])
+			valAdic = [];
+			valAnt = [];
+			valPad = [];
+			valTrab = [];
+			if(Adicciones.length>1){
+				for (const adic of Adicciones.split(",")) {
+					valAdic.push([adic,IdPac])
+				}
 			}
-		}
-		if(Padecimientos.length>1){
-			for (const pad of Padecimientos.split(",")) {
-				valPad.push([pad,String(IdPac)])
+			if(Antecedentes.length>1){
+				for (const ant of Antecedentes.split(",")) {
+					valAnt.push([ant,String(IdPac)])
+				}
 			}
-		}
-		if(Trabajo.length>1){
-			for (const trab of Trabajo.split(",")) {
-				valTrab.push([trab,String(IdPac)])
+			if(Padecimientos.length>1){
+				for (const pad of Padecimientos.split(",")) {
+					valPad.push([pad,String(IdPac)])
+				}
 			}
-		}
-		connection.query(sqlAdic, [valAdic], function (error, results, fields) {
-			connection.query(sqlAnt, [valAnt], function (error, results, fields) {
-				connection.query(sqlPad, [valPad], function (error, results, fields) {
-					connection.query(sqlTrab, [valTrab], function (error, results, fields) {
-						res.send("/");
-						res.end();
+			if(Trabajo.length>1){
+				for (const trab of Trabajo.split(",")) {
+					valTrab.push([trab,String(IdPac)])
+				}
+			}
+			connection.query(sqlAdic, [valAdic], function (error, results, fields) {
+				connection.query(sqlAnt, [valAnt], function (error, results, fields) {
+					connection.query(sqlPad, [valPad], function (error, results, fields) {
+						connection.query(sqlTrab, [valTrab], function (error, results, fields) {
+							res.send("/");
+							res.end();
+						})
 					})
 				})
-			})
+			});
 		});
 	});
+});
+
+app.post('/existeRegistro', async (req, res) => {
+	const CURP = req.body.curp;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	let sql = "SELECT * FROM InformePaciente WHERE CURP = '"+CURP+"'"
+	connection.query(sql, async (error, results) => {
+		if(results.length>0)
+			res.send(true);
+		else
+			res.send(false);
+		res.end();
+	});
+	
+});
+
+app.post('/obtener', async (req, res) => {
+	const valor = req.body.valor;
+	const CURP = req.body.curp;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true); 
+	let sql = "SELECT "+valor+" FROM InformePaciente_"+valor+" INNER JOIN InformePaciente ON InformePaciente.IdInforme=InformePaciente_"+valor+".IdInforme WHERE InformePaciente.CURP='"+CURP+"'"
+	//SELECT Adicciones FROM InformePaciente_Adicciones INNER JOIN InformePaciente ON InformePaciente.IdInforme=InformePaciente_Adicciones.IdInforme WHERE InformePaciente.CURP=ANDFKHQEROHQWOI"
+	connection.query(sql, async (error, results) => {
+		ret = []
+		for(const result in results){
+			ret.push(results[result][valor])
+		}
+		res.send(ret);
+		res.end();
+	});
+	
 });
 
 //12 - Método para controlar que está auth en todas las páginas

@@ -2,7 +2,7 @@
   <div class="Registro">
     <img src="@/assets/doc.png" height="200" width="200" />
     <div id="cuerpo" class="d-flex justify-content-around">
-      <form action="/">
+      <form action="/" id="formulario">
         <!-- 2 column grid layout with text inputs for the first and last names -->
         <div class="row mb-4">
           <div class="col">
@@ -115,7 +115,6 @@
             <div class="form-outline">
               <input
                 type="password"
-                alt="strongPass"
                 id="form6Example4"
                 class="form-control"
                 v-model="contrasenia"
@@ -125,40 +124,6 @@
             </div>
           </div>
         </div>
-<!--
-        <div class="row mb-4">
-          <div class="col">
-            <div class="form-outline">
-              <label class="form-label" for="form6Example2">Eres Médico?</label>
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="Peticion"
-                id="flexRadioDefault4"
-              />
-              <label class="form-check-label" for="flexRadioDefault4">
-                Si
-              </label>
-            </div>
-
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="Peticion"
-                id="flexRadioDefault5"
-              />
-              <label class="form-check-label" for="flexRadioDefault5">
-                No
-              </label>
-            </div>
-          </div>
-        </div> 
--->
 
         <!-- Text input -->
         <div class="row mb-4">
@@ -167,7 +132,6 @@
               <input
                 type="text"
                 minlength="7" maxlength="8"
-                alt="number"
                 id="form6Example6"
                 class="form-control"
                 v-model="cedula"
@@ -223,7 +187,6 @@
             <div class="form-outline">
               <input
                 type="text"
-                alt="number"
                 minlength="10" maxlength="10"
                 id="form6Example13"
                 class="form-control"
@@ -237,11 +200,11 @@
             <div class="form-outline">
               <input
                 type="text"
-                alt="number"
                 minlength="10" maxlength="10"
                 id="form6Example14"
                 class="form-control"
                 v-model="tel2"
+                required
               />
               <label class="form-label" for="form6Example14">Telefono 2</label>
             </div>
@@ -256,20 +219,15 @@
             </button>
           </div>
           <div class="col">
-          
+            
             <button
+              type="submit"
+              class="btn btn-primary btn-block mb-4"
               v-on:click="registrar"
-              type="submit"
-              class="btn btn-primary btn-block mb-4"
             >
-            <!--
-            <button
-              type="submit"
-              class="btn btn-primary btn-block mb-4"
-            >
-            -->
               Registrarse
             </button>
+            
           </div>
         </div>
       </form>
@@ -278,6 +236,7 @@
 </template>
 
 <script>
+var formulario = document.getElementById('formulario');
 import axios from "axios";
 import global_ from "@/components/Global"
 export default {
@@ -302,6 +261,7 @@ export default {
   setup() {},
   methods: {
     registrar: function () {
+      if(formulario.checkValidity()){
       const params = new URLSearchParams();
       params.append("cedula", this.cedula);
       params.append("nombre", this.nombre);
@@ -323,6 +283,7 @@ export default {
           console.log(result);
           this.$router.push({ path: result.data });
         });
+      }
     },
   },
 };
