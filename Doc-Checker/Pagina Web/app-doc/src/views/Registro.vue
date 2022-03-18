@@ -2,7 +2,7 @@
   <div class="Registro">
     <img src="@/assets/doc.png" height="200" width="200" />
     <div id="cuerpo" class="d-flex justify-content-around">
-      <form action="/" id="formulario">
+      <form action="/" id="formulario" >
         <!-- 2 column grid layout with text inputs for the first and last names -->
         <div class="row mb-4">
           <div class="col">
@@ -56,7 +56,7 @@
                   Sexo
                 </label>
               </div>
-              <select v-model="sexo" class="custom-select" id="inputGroupSelect01" required>
+              <select v-model="sexo" class="custom-select p-2 flex-fill" id="inputGroupSelect01" required>
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
@@ -147,11 +147,11 @@
           <div class="col">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">
+                <label class="input-group-text" for="inputGroupSelect02">
                   Especialidad
                 </label>
               </div>
-              <select v-model="especialidad" class="custom-select" id="inputGroupSelect01" required>
+              <select v-model="especialidad" class="custom-select p-2 flex-fill" id="inputGroupSelect02" required>
                 <option selected>Opciones...</option>
                 <option value="Medicina Familiar">Medicina Familiar</option>
                 <option value="Medicina Intera">Medicina Interna</option>
@@ -174,7 +174,7 @@
                 <option value="Oncologia">Oncologia</option>
                 <option value="Patologia">Patologia</option>
                 <option value="Urologia">Urologia</option>
-                <option value="Medicina física y rehabilitación">Medicina física y rehabilitación</option>
+                <option value="Medicina física y rehabilitación">Med.física y rehabilitación</option>
                 <option value="Medicina Intensiva">Medicina Intensiva</option>
               </select>
             </div>
@@ -236,7 +236,6 @@
 </template>
 
 <script>
-var formulario = document.getElementById('formulario');
 import axios from "axios";
 import global_ from "@/components/Global"
 export default {
@@ -255,37 +254,39 @@ export default {
       cedula: "",
       especialidad: "",
       tel1: "",
-      tel2: "",
+      tel2: ""
     };
   },
   setup() {},
   methods: {
     registrar: function () {
-      if(formulario.checkValidity()){
-      const params = new URLSearchParams();
-      params.append("cedula", this.cedula);
-      params.append("nombre", this.nombre);
-      params.append("apellidoPaterno", this.apellidoPaterno);
-      params.append("apellidoMaterno", this.apellidoMaterno);
-      params.append("correo", this.correo);
-      params.append("contrasenia", this.contrasenia);
-      params.append("sexo", this.sexo);
-      params.append("fechaNacimiento", this.fechaNacimiento);
-      params.append("especialidad", this.especialidad);
-      params.append("direccion", this.direccion);
-      params.append("tel1", this.tel1);
-      params.append("tel2", this.tel2);
-      axios
-        .post("http://" + global_.server + ":"+global_.port_node+"/registrar", params, {
-          withCredentials: true,
-        })
-        .then((result) => {
-          console.log(result);
-          this.$router.push({ path: result.data });
-        });
+      if(document.getElementById('formulario').checkValidity()){
+        const params = new URLSearchParams();
+        params.append("cedula", this.cedula);
+        params.append("nombre", this.nombre);
+        params.append("apellidoPaterno", this.apellidoPaterno);
+        params.append("apellidoMaterno", this.apellidoMaterno);
+        params.append("correo", this.correo);
+        params.append("contrasenia", this.contrasenia);
+        params.append("sexo", this.sexo);
+        params.append("fechaNacimiento", this.fechaNacimiento);
+        params.append("especialidad", this.especialidad);
+        params.append("direccion", this.direccion);
+        params.append("tel1", this.tel1);
+        params.append("tel2", this.tel2);
+        axios
+          .post("http://" + global_.server + ":"+global_.port_node+"/registrar", params, {
+            withCredentials: true,
+          })
+          .then((result) => {
+            console.log(result);
+            this.$router.push({ path: result.data });
+          });
       }
     },
   },
+  created: function(){
+  }
 };
 </script>
 

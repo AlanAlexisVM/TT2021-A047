@@ -1,7 +1,7 @@
 <template>
     <div id="Registropacientes2" class="d-flex justify-content-around">
         <!--<form action="/my-handling-form-page" method="post">-->
-        <form>
+        <form id="formulario2">
             <div class="row mb-4">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -194,7 +194,7 @@
                 </select>
                 </div>
             </div>
-            <button v-on:click="registrarPaciente" name="submit" class="btn btn-success btn-block mb-4" value="Crear paciente" >
+            <button v-on:click="registrarPaciente" type="button" name="submit" class="btn btn-success btn-block mb-4">
                 Crear paciente
             </button>
         </form>    
@@ -297,25 +297,27 @@ export default {
             });
         },
         registrarPaciente: function () {
-            const params = new URLSearchParams();
-            params.append("curp",this.$route.params.curp);
-            params.append("actividadFisica", this.selActividadFisica);
-            params.append("adicciones", this.selAdicciones2);
-            params.append("antecedentes", this.selAntecedentes2);
-            params.append("farmacos", this.selFarmacos);
-            params.append("gradoEstudios", this.selGrado);
-            params.append("estadoCivil", this.selEstadoCivil);
-            params.append("expRuido", this.selExposicionRuido);
-            params.append("expSolar", this.selExposicionSolar);
-            params.append("horasSuenio", this.selHorasSuenio);
-            params.append("padecimientos", this.selPadecimientos2);
-            params.append("personasDependientes", this.selPersonasDependientes);
-            params.append("trabajo", this.selTrabajo2);
-            params.append("varHumedad", this.selVariacionesHumedad);
-            params.append("varTemperatura", this.selVariacionesTemperatura);
-            axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente2", params, { withCredentials: true, }).then((result) => {
-                this.$router.push({ path: result.data });
-            });
+            if(document.getElementById('formulario2').checkValidity()){
+                const params = new URLSearchParams();
+                params.append("curp",this.$route.params.curp);
+                params.append("actividadFisica", this.selActividadFisica);
+                params.append("adicciones", this.selAdicciones2);
+                params.append("antecedentes", this.selAntecedentes2);
+                params.append("farmacos", this.selFarmacos);
+                params.append("gradoEstudios", this.selGrado);
+                params.append("estadoCivil", this.selEstadoCivil);
+                params.append("expRuido", this.selExposicionRuido);
+                params.append("expSolar", this.selExposicionSolar);
+                params.append("horasSuenio", this.selHorasSuenio);
+                params.append("padecimientos", this.selPadecimientos2);
+                params.append("personasDependientes", this.selPersonasDependientes);
+                params.append("trabajo", this.selTrabajo2);
+                params.append("varHumedad", this.selVariacionesHumedad);
+                params.append("varTemperatura", this.selVariacionesTemperatura);
+                axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente2", params, { withCredentials: true, }).then((result) => {
+                    this.$router.push({ path: result.data });
+                });
+            }
         }
     },
     setup() {

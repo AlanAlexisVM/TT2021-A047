@@ -3,7 +3,7 @@
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
       <!--<form action="/my-handling-form-page" method="post">-->
-      <form>
+      <form id="formulario1" >
         <!-- 2 column grid layout with text inputs for the first and last names -->
         <div class="row mb-4">
           <div class="col">
@@ -240,13 +240,23 @@
           </div>
           <div class="col">
             <!--<router-link to="/registropacientes2">-->
-            <input
+            <!--
+            <button
               v-on:click="registrarPaciente"
               name="submit"
               class="btn btn-primary btn-block mb-4"
-              value="Continuar"
-            />
-            <!--</router-link>-->
+            >
+            Continuar
+            </button>
+            -->
+            <button
+              v-on:click="registrarPaciente"
+              type="button"
+              name="submit"
+              class="btn btn-primary btn-block mb-4"
+            >
+            Continuar
+            </button>
           </div>
         </div>
         
@@ -280,33 +290,37 @@ export default {
   setup() {},
   methods: {
     registrarPaciente: function () {
-      const param = new URLSearchParams();
-      param.append("nombre", this.nombre);
-      param.append("apellidoPaterno", this.apellidoPaterno);
-      param.append("apellidoMaterno", this.apellidoMaterno);
-      param.append("fechaNacimiento", this.fechaNacimiento);
-      param.append("sexo", this.selSexo);
-      param.append("curp", this.curp);
-      param.append("correo", this.correo);
-      param.append("tel1", this.tel1);
-      param.append("tel2", this.tel2);
-      param.append("direccion", this.direccion);
-      param.append("estado", this.selEstado);
-      param.append("numPlaca", this.numPlaca);
-      if(this.$route.params.titulo==undefined){
-        axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente", param, {
-            withCredentials: true,
-          })         
-          .then((result) => {
-            this.$router.push({ name: result.data, params: { curp: this.curp } });
-          });
-      }else{
-        axios.post("http://"+global_.server+":"+global_.port_node+"/actualizarPaciente", param, {
-            withCredentials: true,
-          })
-          .then((result) => {
-            this.$router.push({ name: result.data, params: { curp: this.curp } });
-          });
+      if(document.getElementById('formulario1').checkValidity()){
+        const param = new URLSearchParams();
+        param.append("nombre", this.nombre);
+        param.append("apellidoPaterno", this.apellidoPaterno);
+        param.append("apellidoMaterno", this.apellidoMaterno);
+        param.append("fechaNacimiento", this.fechaNacimiento);
+        param.append("sexo", this.selSexo);
+        param.append("curp", this.curp);
+        param.append("correo", this.correo);
+        param.append("tel1", this.tel1);
+        param.append("tel2", this.tel2);
+        param.append("direccion", this.direccion);
+        param.append("estado", this.selEstado);
+        param.append("numPlaca", this.numPlaca);
+        if(this.$route.params.titulo==undefined){
+          axios.post("http://"+global_.server+":"+global_.port_node+"/registrarPaciente", param, {
+              withCredentials: true,
+            })         
+            .then((result) => {
+              console.log(result)
+              this.$router.push({ name: result.data, params: { curp: this.curp } });
+            });
+        }else{
+          axios.post("http://"+global_.server+":"+global_.port_node+"/actualizarPaciente", param, {
+              withCredentials: true,
+            })
+            .then((result) => {
+              console.log(result)
+              this.$router.push({ name: result.data, params: { curp: this.curp } });
+            });
+        }
       }
     },
     preLlenado: function(){
@@ -341,7 +355,7 @@ export default {
 
 <style scoped>
 .button,
-input[name="submit"] {
+input[type="button"] {
   background-color: #56baed;
   border: none;
   color: white;

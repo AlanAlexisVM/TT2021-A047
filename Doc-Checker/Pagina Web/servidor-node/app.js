@@ -94,9 +94,9 @@ app.post('/registrar', async (req, res) => {
 		Telefono1,
 		Telefono2,
 		'1'];
-	//console.log(valores);
+	console.log(valores);
 	connection.query(sql, [valores], async (error, results) => {
-		//console.log(error)
+		console.log(error)
 		res.send("/");
 		res.end();
 	});
@@ -308,23 +308,18 @@ app.post('/registrarPaciente2', async (req, res) => {
 		if(existeRegistro>0){
 			IdPac = results[0].IdInforme;
 			console.log(results[0]);
-			sql = 'UPDATE InformePaciente SET ExposicionSolar = ' + ExpSolar  + ', VariacionesdeTemperatura = ' + VarTemperatura  + ', VariacionesdeHumedad = ' + VarHumedad  + ', ExposicionRuido = ' + ExpRuido  + ', ActividadFisica = ' + ActividadFisica  + ', Educacion = ' + GradoEstudios  + ', HorasDeSuenio = ' + HorasSuenio  + ', EstadoCivil = ' + EstadoCivil  + ', PersonasDependientes = ' + PersonasDependientes  + ', ConsumoDeFarmacos = ' + Farmacos  + ''
+			sql = "UPDATE InformePaciente SET ExposicionSolar = '" + ExpSolar  + "', VariacionesdeTemperatura = '"+ VarTemperatura  +"', VariacionesdeHumedad = '" + VarHumedad  + "', ExposicionRuido = '" + ExpRuido  + "', ActividadFisica = '" + ActividadFisica  + "', Educacion = '" + GradoEstudios  + "', HorasDeSuenio = '" + HorasSuenio  + "', EstadoCivil = '" + EstadoCivil  + "', PersonasDependientes = '" + PersonasDependientes  + "', ConsumoDeFarmacos = '" + Farmacos  + "' WHERE IdInforme ='" + IdPac + "'"
 		}else
 			sql = "INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES ('"+ExpSolar+"','"+VarTemperatura+"','"+VarHumedad+"','"+ExpRuido+"','"+null+"','"+ActividadFisica+"','"+GradoEstudios+"','"+HorasSuenio+"','"+EstadoCivil+"','"+PersonasDependientes+"','"+Farmacos+"','"+CURP+"')"
 		connection.query(sql, async (error, results) => {
 			//INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
-			if(existeRegistro>0){
-				sqlAdic = 'UPDATE InformePaciente_Adicciones SET Adicciones=? WHERE IdInforme =?';
-				sqlAnt = 'UPDATE InformePaciente_AntecedentesFam SET AntecedentesFam=? WHERE IdInforme=?';
-				sqlPad = 'UPDATE InformePaciente_Padecimientos SET Padecimientos=? IdInforme=?';
-				sqlTrab = 'UPDATE InformePaciente_Trabajo SET Trabajo=? WHERE IdInforme=?';
-			}else{
+			if(existeRegistro<=0)
 				IdPac = results.insertId;
-				sqlAdic = 'INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?';
-				sqlAnt = 'INSERT INTO InformePaciente_AntecedentesFam(AntecedentesFam,IdInforme) VALUES ?';
-				sqlPad = 'INSERT INTO InformePaciente_Padecimientos(Padecimientos,IdInforme) VALUES ?';
-				sqlTrab = 'INSERT INTO InformePaciente_Trabajo(Trabajo,IdInforme) VALUES ?';
-			}
+			sqlAdic = 'INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?';
+			sqlAnt = 'INSERT INTO InformePaciente_AntecedentesFam(AntecedentesFam,IdInforme) VALUES ?';
+			sqlPad = 'INSERT INTO InformePaciente_Padecimientos(Padecimientos,IdInforme) VALUES ?';
+			sqlTrab = 'INSERT INTO InformePaciente_Trabajo(Trabajo,IdInforme) VALUES ?';
+
 			valAdic = [];
 			valAnt = [];
 			valPad = [];
@@ -349,15 +344,27 @@ app.post('/registrarPaciente2', async (req, res) => {
 					valTrab.push([trab,String(IdPac)])
 				}
 			}
-			connection.query(sqlAdic, [valAdic], function (error, results, fields) {
-				connection.query(sqlAnt, [valAnt], function (error, results, fields) {
-					connection.query(sqlPad, [valPad], function (error, results, fields) {
-						connection.query(sqlTrab, [valTrab], function (error, results, fields) {
-							res.send("/");
-							res.end();
-						})
-					})
-				})
+			borrar = "DELETE FROM informepaciente_adicciones WHERE IdInforme="+IdPac
+			connection.query(borrar, function (error, results, fields) {
+				borrar = "DELETE FROM informepaciente_antecedentesfam WHERE IdInforme='"+IdPac+"'"
+				connection.query(borrar, function (error, results, fields) {
+					borrar = "DELETE FROM informepaciente_padecimientos WHERE IdInforme="+IdPac
+					connection.query(borrar, function (error, results, fields) {
+						borrar = "DELETE FROM informepaciente_trabajo WHERE IdInforme="+IdPac
+						connection.query(borrar, function (error, results, fields) {
+							connection.query(sqlAdic, [valAdic], function (error, results, fields) {
+								connection.query(sqlAnt, [valAnt], function (error, results, fields) {
+									connection.query(sqlPad, [valPad], function (error, results, fields) {
+										connection.query(sqlTrab, [valTrab], function (error, results, fields) {
+											res.send("/");
+											res.end();
+										})
+									})
+								})
+							});
+						});
+					});
+				});
 			});
 		});
 	});
