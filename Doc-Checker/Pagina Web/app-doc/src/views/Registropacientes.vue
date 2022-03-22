@@ -3,7 +3,7 @@
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
       <!--<form action="/my-handling-form-page" method="post">-->
-      <form id="formulario1" >
+      <form action class="form" id="formulario1" @submit.prevent="registrarPaciente">
         <!-- 2 column grid layout with text inputs for the first and last names -->
         <div class="row mb-4">
           <div class="col">
@@ -25,7 +25,6 @@
                 id="form6Example2"
                 class="form-control"
                 v-model="apellidoPaterno"
-                required
               />
               <label class="form-label" for="form6Example2"
                 >Apellido Paterno</label
@@ -39,7 +38,6 @@
                 id="form6Example3"
                 class="form-control"
                 v-model="apellidoMaterno"
-                required
               />
               <label class="form-label" for="form6Example3"
                 >Apellido Materno</label
@@ -57,7 +55,6 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="fechaNacimiento"
-                required
               />
               <label class="form-label" for="form6Example4"
                 >Fecha de Naciminento</label
@@ -76,7 +73,6 @@
                 v-model="selSexo"
                 class="custom-select"
                 id="inputGroupSelect01"
-                required
               >
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
@@ -95,7 +91,6 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="curp"
-                required
               />
               <label class="form-label" for="form6Example4">CURP</label>
             </div>
@@ -111,7 +106,6 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="correo"
-                required
               />
               <label class="form-label" for="form6Example6"
                 >Correo Electronico</label
@@ -130,7 +124,6 @@
                 id="form6Example13"
                 class="form-control"
                 v-model="tel1"
-                required
               />
               <label class="form-label" for="form6Example13">Telefono 1</label>
             </div>
@@ -143,7 +136,6 @@
                 id="form6Example14"
                 class="form-control"
                 v-model="tel2"
-                required
               />
               <label class="form-label" for="form6Example14">Telefono 2</label>
             </div>
@@ -159,7 +151,6 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="direccion"
-                required
               />
               <label class="form-label" for="form6Example6">Direccion</label>
             </div>
@@ -175,7 +166,6 @@
                 v-model="selEstado"
                 class="custom-select"
                 id="inputGroupSelect01"
-                required
               >
                 <option selected>Opciones...</option>
                 <option value="Aguascalientes">Aguascalientes</option>
@@ -224,7 +214,6 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="numPlaca"
-                required
               />
               <label class="form-label" for="form6Example6">N° Placa</label>
             </div>
@@ -239,15 +228,18 @@
             </button>
           </div>
           <div class="col">
-            <!--<router-link to="/registropacientes2">-->
             <!--
-            <button
+            <input
+              type="button"
+              value="Continuar"
               v-on:click="registrarPaciente"
-              name="submit"
               class="btn btn-primary btn-block mb-4"
-            >
-            Continuar
-            </button>
+            />
+            <input 
+              class="form-submit" 
+              type="submit" 
+              value="Continuar"
+              class="btn btn-primary btn-block mb-4" >
             -->
             <button
               v-on:click="registrarPaciente"
@@ -290,7 +282,7 @@ export default {
   setup() {},
   methods: {
     registrarPaciente: function () {
-      if(document.getElementById('formulario1').checkValidity()){
+      //if(document.getElementById('formulario1').checkValidity()){
         const param = new URLSearchParams();
         param.append("nombre", this.nombre);
         param.append("apellidoPaterno", this.apellidoPaterno);
@@ -321,7 +313,7 @@ export default {
               this.$router.push({ name: result.data, params: { curp: this.curp } });
             });
         }
-      }
+      //}
     },
     preLlenado: function(){
       if(this.$route.params.titulo!=undefined){

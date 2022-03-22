@@ -1,6 +1,6 @@
 <template>
 
-    <div class="Barradenavegacion">
+    <div class="Barradenavegacionadmin">
     
     <nav class="navbar navbar-light bg-light">
         <Pestania v-for="image in images"
@@ -22,6 +22,9 @@
             <a class="navbar-brand" href="#">
                 <Pestania imagen="../assets/configuracion.png" />
             </a>
+            <a class="navbar-brand" href="#">
+                <Pestania imagen="../assets/administrar.png" />
+            </a>
         </nav> -->
     </div>
 </template>
@@ -30,13 +33,12 @@
 import Pestania from '@/components/Pestania.vue'
 
 export default {
-    name: 'Barradenavegacion',
+    name: 'Barradenavegacionadmin',
     components: {
         Pestania
     },
     props: {
-        sel: String,
-        administrador: Boolean
+        sel: String
     },
     data: function(){
         return {
@@ -44,6 +46,7 @@ export default {
                 { name: "pacientes", url: require("@/assets/paciente.png") },
                 { name: "informe", url: require("@/assets/informe-medico.png") },
                 { name: "buscador", url: require("@/assets/seguir.png") },
+                { name: "administrador", url: require("@/assets/administrar.png") },
                 { name: "configuracion", url: require("@/assets/configuracion.png") }
             ]
         }
@@ -55,7 +58,7 @@ export default {
 </script>
 
 <style scoped>
-.Barradenavegacion {
+.Barradenavegacionadmin {
     padding-bottom: 10px;
 }
 </style>

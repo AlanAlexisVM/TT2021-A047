@@ -46,15 +46,26 @@ app.post('/auth', async (req, res) => {
 			if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].Contrasenia))) {
 				//console.log(results[0]);
 				//Contrasenia incorrecta
-				res.send("/");
+				connection.query('SELECT * FROM Administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
+					if (results.length == 0 || pass!=results[0].Contrasenia) {
+						res.send("/");
+					}else{
+						req.session.loggedin = true;
+						req.session.name = results[0].CorreoE;
+						req.session.admin = true;
+						//console.log(req.session);
+						res.send("pacientes");
+					}
+					res.end();
+				});
 			} else {
 				req.session.loggedin = true;
 				req.session.name = results[0].CorreoE;
 				req.session.cedula = results[0].CedulaProf;
 				//console.log(req.session);
 				res.send("pacientes");
+				res.end();
 			}
-			res.end();
 		});
 	} else {
 		res.send('/');
@@ -94,9 +105,7 @@ app.post('/registrar', async (req, res) => {
 		Telefono1,
 		Telefono2,
 		'1'];
-	console.log(valores);
 	connection.query(sql, [valores], async (error, results) => {
-		console.log(error)
 		res.send("/");
 		res.end();
 	});
@@ -307,10 +316,9 @@ app.post('/registrarPaciente2', async (req, res) => {
 		let existeRegistro = results.length
 		if(existeRegistro>0){
 			IdPac = results[0].IdInforme;
-			console.log(results[0]);
 			sql = "UPDATE InformePaciente SET ExposicionSolar = '" + ExpSolar  + "', VariacionesdeTemperatura = '"+ VarTemperatura  +"', VariacionesdeHumedad = '" + VarHumedad  + "', ExposicionRuido = '" + ExpRuido  + "', ActividadFisica = '" + ActividadFisica  + "', Educacion = '" + GradoEstudios  + "', HorasDeSuenio = '" + HorasSuenio  + "', EstadoCivil = '" + EstadoCivil  + "', PersonasDependientes = '" + PersonasDependientes  + "', ConsumoDeFarmacos = '" + Farmacos  + "' WHERE IdInforme ='" + IdPac + "'"
 		}else
-			sql = "INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES ('"+ExpSolar+"','"+VarTemperatura+"','"+VarHumedad+"','"+ExpRuido+"','"+null+"','"+ActividadFisica+"','"+GradoEstudios+"','"+HorasSuenio+"','"+EstadoCivil+"','"+PersonasDependientes+"','"+Farmacos+"','"+CURP+"')"
+			sql = "INSERT INTO InformePaciente(ExposicionSolar, VariacionesdeTemperatura, VariacionesdeHumedad, ExposicionRuido, IdInforme, ActividadFisica, Educacion, HorasDeSuenio, EstadoCivil, PersonasDependientes, ConsumoDeFarmacos, CURP) VALUES ('"+ExpSolar+"','"+VarTemperatura+"','"+VarHumedad+"','"+ExpRuido+"',null,'"+ActividadFisica+"','"+GradoEstudios+"','"+HorasSuenio+"','"+EstadoCivil+"','"+PersonasDependientes+"','"+Farmacos+"','"+CURP+"')"
 		connection.query(sql, async (error, results) => {
 			//INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
 			if(existeRegistro<=0)
@@ -344,13 +352,13 @@ app.post('/registrarPaciente2', async (req, res) => {
 					valTrab.push([trab,String(IdPac)])
 				}
 			}
-			borrar = "DELETE FROM informepaciente_adicciones WHERE IdInforme="+IdPac
+			borrar = "DELETE FROM InformePaciente_Adicciones WHERE IdInforme="+IdPac
 			connection.query(borrar, function (error, results, fields) {
-				borrar = "DELETE FROM informepaciente_antecedentesfam WHERE IdInforme='"+IdPac+"'"
+				borrar = "DELETE FROM InformePaciente_AntecedentesFam WHERE IdInforme='"+IdPac+"'"
 				connection.query(borrar, function (error, results, fields) {
-					borrar = "DELETE FROM informepaciente_padecimientos WHERE IdInforme="+IdPac
+					borrar = "DELETE FROM InformePaciente_Padecimientos WHERE IdInforme="+IdPac
 					connection.query(borrar, function (error, results, fields) {
-						borrar = "DELETE FROM informepaciente_trabajo WHERE IdInforme="+IdPac
+						borrar = "DELETE FROM InformePaciente_Trabajo WHERE IdInforme="+IdPac
 						connection.query(borrar, function (error, results, fields) {
 							connection.query(sqlAdic, [valAdic], function (error, results, fields) {
 								connection.query(sqlAnt, [valAnt], function (error, results, fields) {
@@ -411,10 +419,10 @@ app.get('/validar', (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
-		if (dirigir == 'undefined')
-			res.send('/');
-		else
-			res.send(dirigir);
+		if (dirigir == 'undefined'){
+			res.send([req.session.admin,'/']);}
+		else{
+			res.send([req.session.admin,dirigir]);}
 	} else {
 		res.send("/");
 	}
@@ -427,12 +435,21 @@ app.get('/solicitarPacientes', (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
-		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Doctor INNER JOIN Atiende ON Doctor.CedulaProf=Atiende.CedulaProf INNER JOIN Paciente on Atiende.CURP=Paciente.CURP WHERE Doctor.CorreoE = ?";
-		//console.log(sql)
-		connection.query(sql, [req.session.name], async (error, results) => {
-			res.send(results);
-			res.end();
-		});
+		if(req.session.admin){
+			let sql = "SELECT DISTINCTROW Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Administrador INNER JOIN Doctor ON Administrador.IdAdmin=Doctor.IdAdmin INNER JOIN Atiende on Atiende.CedulaProf=Doctor.CedulaProf INNER JOIN Paciente ON Atiende.CURP=Paciente.CURP WHERE Administrador.CorreoE = ?";
+			//console.log(sql)
+			connection.query(sql, [req.session.name], async (error, results) => {
+				res.send(results);
+				res.end();
+			});
+		}else{
+			let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Doctor INNER JOIN Atiende ON Doctor.CedulaProf=Atiende.CedulaProf INNER JOIN Paciente on Atiende.CURP=Paciente.CURP WHERE Doctor.CorreoE = ?";
+			//console.log(sql)
+			connection.query(sql, [req.session.name], async (error, results) => {
+				res.send(results);
+				res.end();
+			});
+		}
 	} else {
 		res.send("/");
 		res.end();
