@@ -2,9 +2,8 @@
   <div class="Registropacientes">
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
-      <!--<form action="/my-handling-form-page" method="post">-->
       <form action class="form" id="formulario1" @submit.prevent="registrarPaciente">
-        <!-- 2 column grid layout with text inputs for the first and last names -->
+        <!-- Begin form -->
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">
@@ -25,6 +24,7 @@
                 id="form6Example2"
                 class="form-control"
                 v-model="apellidoPaterno"
+                required
               />
               <label class="form-label" for="form6Example2"
                 >Apellido Paterno</label
@@ -38,6 +38,7 @@
                 id="form6Example3"
                 class="form-control"
                 v-model="apellidoMaterno"
+                required
               />
               <label class="form-label" for="form6Example3"
                 >Apellido Materno</label
@@ -55,6 +56,7 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="fechaNacimiento"
+                required
               />
               <label class="form-label" for="form6Example4"
                 >Fecha de Naciminento</label
@@ -73,6 +75,7 @@
                 v-model="selSexo"
                 class="custom-select"
                 id="inputGroupSelect01"
+                required
               >
                 <option selected>Opciones...</option>
                 <option value="Masculino">Masculino</option>
@@ -91,6 +94,7 @@
                 id="form6Example4"
                 class="form-control"
                 v-model="curp"
+                required
               />
               <label class="form-label" for="form6Example4">CURP</label>
             </div>
@@ -106,6 +110,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="correo"
+                required
               />
               <label class="form-label" for="form6Example6"
                 >Correo Electronico</label
@@ -124,6 +129,7 @@
                 id="form6Example13"
                 class="form-control"
                 v-model="tel1"
+                required
               />
               <label class="form-label" for="form6Example13">Telefono 1</label>
             </div>
@@ -136,6 +142,7 @@
                 id="form6Example14"
                 class="form-control"
                 v-model="tel2"
+                required
               />
               <label class="form-label" for="form6Example14">Telefono 2</label>
             </div>
@@ -151,6 +158,7 @@
                 id="form6Example6"
                 class="form-control"
                 v-model="direccion"
+                required
               />
               <label class="form-label" for="form6Example6">Direccion</label>
             </div>
@@ -166,6 +174,7 @@
                 v-model="selEstado"
                 class="custom-select"
                 id="inputGroupSelect01"
+                required
               >
                 <option selected>Opciones...</option>
                 <option value="Aguascalientes">Aguascalientes</option>
@@ -205,51 +214,44 @@
           </div>
         </div>
 
-        <!-- Text input -->
-        <div class="row mb-4">
-          <div class="col">
-            <div class="form-outline">
-              <input
-                type="text"
-                id="form6Example6"
-                class="form-control"
+      <div class="row mb-4">
+        <div class="col">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  N° Placa
+                </label>
+              </div>
+              <select
                 v-model="numPlaca"
-              />
-              <label class="form-label" for="form6Example6">N° Placa</label>
+                class="custom-select"
+                id="inputGroupSelect01"
+                required
+              >
+                <option selected>Opciones...</option>
+                <option v-for="placa in placas" :key=placa.IdDCH :label=placa.IdDCH :value="placa.IdDCH" />
+              </select>
             </div>
           </div>
-        </div>
+      </div>
 
         
         <div class="row mb-4">
+        
           <div class="col">
             <button type="reset" class="btn btn-primary btn-block mb-4">
               Limpiar
             </button>
           </div>
+
           <div class="col">
-            <!--
-            <input
-              type="button"
-              value="Continuar"
-              v-on:click="registrarPaciente"
-              class="btn btn-primary btn-block mb-4"
-            />
             <input 
-              class="form-submit" 
+              class="form-submit btn btn-primary btn-block mb-4" 
               type="submit" 
               value="Continuar"
-              class="btn btn-primary btn-block mb-4" >
-            -->
-            <button
-              v-on:click="registrarPaciente"
-              type="button"
-              name="submit"
-              class="btn btn-primary btn-block mb-4"
             >
-            Continuar
-            </button>
           </div>
+          
         </div>
         
       </form>
@@ -277,12 +279,12 @@ export default {
       direccion: "",
       selEstado: " ",
       numPlaca: "",
+      placas: []
     };
   },
   setup() {},
   methods: {
     registrarPaciente: function () {
-      //if(document.getElementById('formulario1').checkValidity()){
         const param = new URLSearchParams();
         param.append("nombre", this.nombre);
         param.append("apellidoPaterno", this.apellidoPaterno);
@@ -313,7 +315,6 @@ export default {
               this.$router.push({ name: result.data, params: { curp: this.curp } });
             });
         }
-      //}
     },
     preLlenado: function(){
       if(this.$route.params.titulo!=undefined){
@@ -337,9 +338,16 @@ export default {
           this.numPlaca = result.data[0].IdDCH
         });
       }
+    },
+    obtenerPlacas: function(){
+      axios.get("http://"+global_.server+":"+global_.port_node+"/obtenerPlacas", { withCredentials: true }).then((result) => {
+        console.log(result)
+        this.placas = result.data
+      });
     }
   },
   created: function(){
+    this.obtenerPlacas()
     this.preLlenado()
   }
 };

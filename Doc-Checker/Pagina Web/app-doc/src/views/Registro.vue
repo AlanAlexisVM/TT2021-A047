@@ -2,8 +2,8 @@
   <div class="Registro">
     <img src="@/assets/doc.png" height="200" width="200" />
     <div id="cuerpo" class="d-flex justify-content-around">
-      <form action="/" id="formulario" >
-        <!-- 2 column grid layout with text inputs for the first and last names -->
+      <form action class="form" id="formulario" @submit.prevent="registrar" >
+        <!-- Begin form -->
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">
@@ -213,22 +213,21 @@
 
         <!-- <div class="d-flex justify-content-evenly"> -->
         <div class="row mb-4">
+
           <div class="col">
             <button type="reset" class="btn btn-primary btn-block mb-4">
               Limpiar
             </button>
           </div>
-          <div class="col">
-            
-            <button
-              type="submit"
-              class="btn btn-primary btn-block mb-4"
-              v-on:click="registrar"
+
+          <div class="col">  
+            <input 
+              class="form-submit btn btn-primary btn-block mb-4" 
+              type="submit" 
+              value="Registrarse"
             >
-              Registrarse
-            </button>
-            
           </div>
+
         </div>
       </form>
     </div>
@@ -260,7 +259,6 @@ export default {
   setup() {},
   methods: {
     registrar: function () {
-      if(document.getElementById('formulario').checkValidity()){
         const params = new URLSearchParams();
         params.append("cedula", this.cedula);
         params.append("nombre", this.nombre);
@@ -282,7 +280,6 @@ export default {
             console.log(result);
             this.$router.push({ path: result.data });
           });
-      }
     },
   },
   created: function(){

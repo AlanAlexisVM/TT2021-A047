@@ -11,6 +11,9 @@ import Configuracion from '../views/Configuracion.vue'
 import Pacientes from '../views/Pacientes.vue'
 import Signos from '../views/Signos.vue'
 import Mineria from '../views/Mineria.vue'
+import Administrador from '../views/Administrador.vue'
+import Aceptardoc from '../views/Aceptardoc.vue'
+import Ingresarplaca from '../views/IngresarPlaca.vue'
 
 Vue.use(VueRouter)
 
@@ -68,6 +71,21 @@ const routes = [
         path: '/mineria',
         name: 'Mineria',
         component: Mineria
+      },
+      {
+        path: '/administrador',
+        name: 'Administrador',
+        component: Administrador
+      },
+      {
+        path: '/aceptardoc',
+        name: 'Aceptardoc',
+        component: Aceptardoc
+      },
+      {
+        path: '/ingresarplaca',
+        name: 'Ingresarplaca',
+        component: Ingresarplaca
       }
     ]
   },

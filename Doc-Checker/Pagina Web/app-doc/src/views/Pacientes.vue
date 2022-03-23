@@ -38,7 +38,7 @@ export default {
                 for(var i=0;i<result.data.length;i++){
                     this.tuplas.push([result.data[i].Nombre + " " + result.data[i].Apellidos, result.data[i].CURP]);
                 }
-            });
+            }); 
         }
     },
     created: function(){

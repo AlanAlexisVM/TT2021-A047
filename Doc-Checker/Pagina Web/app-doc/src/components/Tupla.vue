@@ -65,7 +65,7 @@ import global_ from "@/components/Global"
 export default {
     name: 'Tupla',
     props: {
-        datos: Object,
+        datos: Array,
         informe: Boolean,
         signos: Boolean,
         edicion: Boolean,

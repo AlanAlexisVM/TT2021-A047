@@ -51,7 +51,7 @@ export default {
     },
     props: {
         tipoTabla: String,
-        tuplas: Object
+        tuplas: Array
     },
     data: function(){
         return{

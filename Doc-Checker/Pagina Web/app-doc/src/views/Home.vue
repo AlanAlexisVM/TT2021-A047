@@ -34,7 +34,7 @@ export default {
             //{withCredentials:true, credentials:'include'}
             axios.get("http://"+global_.server+":"+global_.port_node+"/validar?ruta="+String(this.$route.name), { withCredentials: true }).then((result) => {
                 this.administrador = result.data[0]
-                this.$router.push({ path: result.data[1] })
+                this.$router.push({ path: result.data[1] }).catch(err => console.log(err))
             });
         }
     },

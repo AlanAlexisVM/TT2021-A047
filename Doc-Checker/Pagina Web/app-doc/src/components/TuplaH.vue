@@ -14,7 +14,7 @@ export default{
         Tupla
     },
     props: {
-        datos: Object
+        datos: Array
     },
     setup() {
     }

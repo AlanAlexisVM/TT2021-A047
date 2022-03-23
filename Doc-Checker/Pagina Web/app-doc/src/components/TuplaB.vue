@@ -20,7 +20,7 @@ export default{
         Tupla
     },
     props: {
-        datos: Object,
+        datos: Array,
         informe: Boolean,
         signos: Boolean,
         edicion: Boolean,

@@ -456,6 +456,26 @@ app.get('/solicitarPacientes', (req, res) => {
 	}
 });
 
+app.get('/obtenerPlacas', async (req, res) => {
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	const numMax = 3;
+	if(req.session.cedula!=null && req.session.loggedin){
+		//console.log("Existe");
+		//SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
+		let sql = "SELECT DISTINCTROW DocCheckerH.IdDCH FROM DocCheckerH INNER JOIN Tiene ON DocCheckerH.Clave=Tiene.Clave WHERE Tiene.CedulaProf = ?";
+		valores = [req.session.cedula]
+		connection.query(sql, [valores], async (error, results) => {
+			res.send(results);
+			res.end();
+		});
+	}else{
+		//console.log("No existe");
+		res.send("/");
+		res.end();
+	}
+});
+
 //función para limpiar la caché luego del logout
 app.use(function (req, res, next) {
 	if (!req.user)

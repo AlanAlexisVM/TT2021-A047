@@ -1,11 +1,11 @@
 <template>
     <div>
-    <img src="@/assets/doctor.png"
-        v-bind:height="alto"
-        v-bind:width="ancho" />
-    <img src="@/assets/placa.png"
-        v-bind:height="alto"
-        v-bind:width="ancho" />
+        <router-link to="/Aceptardoc" >
+            <img src="@/assets/doctor.png"/>
+        </router-link>
+        <router-link to ="/Ingresarplaca">
+            <img src="@/assets/placa.png"/>
+        </router-link>
     </div>
 </template>
 
