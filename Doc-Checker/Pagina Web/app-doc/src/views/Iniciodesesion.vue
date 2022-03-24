@@ -8,7 +8,12 @@
     <div class="fadeIn first">
       <img src="@/assets/doc.png" id="icon" alt="User Icon" />
     </div>
-
+    <!-- Alert -->
+    <div>
+      <b-alert v-model='error' variant='warning' fade in dismissible>
+      <strong>¡Advertencia!</strong> Usuario o constraseña incorrectos
+      </b-alert> 
+    </div>
     <!-- Login Form -->
     <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="usuario">
     <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
@@ -56,7 +61,7 @@ export default {
     },
     validar: function(){
       axios.get("http://"+global_.server+":"+global_.port_node+"/validar?ruta=pacientes", { withCredentials: true }).then((result) => {
-        this.$router.push({ path: result.data })
+        this.$router.push({ path: result.data[1] })
       });
     }
   },

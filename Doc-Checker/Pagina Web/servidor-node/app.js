@@ -141,7 +141,7 @@ app.post('/cambiarcontra', async (req, res) => {
 }
 });
 
-app.post('/agregarPaciente', async (req, res) => {
+app.post('/agregar', async (req, res) => {
 	const Id = req.body.id;
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
@@ -151,13 +151,26 @@ app.post('/agregarPaciente', async (req, res) => {
 		const sql = 'INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)';
 		valores = [
 			req.session.cedula,
-			req.body.id
+			Id
 		];
 		//console.log(valores);
 		connection.query(sql, [valores], async (error, results) => {
 			//console.log(error)
 			res.send("/");
 			res.end();
+		});
+	}else if(req.session.admin){
+		let sql = 'SELECT * FROM Administrador WHERE CorreoE = "'+ req.session.name +'"';
+		connection.query(sql, async (error, results) => {
+			console.log(error)
+			console.log(results);
+			sql = 'UPDATE Doctor SET IdAdmin = "'+ results[0].IdAdmin +'" WHERE CedulaProf = "'+ Id +'"';
+			connection.query(sql, async (error, results) => {
+				console.log(error)
+				console.log(results);
+				res.send("aceptardoc");
+				res.end();
+			});
 		});
 	}else{
 		//console.log("No existe");
@@ -419,13 +432,12 @@ app.get('/validar', (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
-		if (dirigir == 'undefined'){
-			res.send([req.session.admin,'/']);}
-		else{
-			res.send([req.session.admin,dirigir]);}
-	} else {
+		if (dirigir == 'undefined')
+			res.send([req.session.admin,'/']);
+		else
+			res.send([req.session.admin,dirigir]);
+	} else
 		res.send("/");
-	}
 	res.end();
 });
 
@@ -476,6 +488,26 @@ app.get('/obtenerPlacas', async (req, res) => {
 	}
 });
 
+app.get('/doctoresSolicitantes', (req, res) => {
+	//console.log(req.session);
+	//console.log(dirigir);
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	if (req.session.loggedin) {
+		if(req.session.admin){
+			let sql = "SELECT DISTINCTROW Doctor.Nombre, Doctor.Apellidos, Doctor.CedulaProf FROM Doctor WHERE Doctor.IdAdmin = 1";
+			//console.log(sql)
+			connection.query(sql, async (error, results) => {
+				res.send(results);
+				res.end();
+			});
+		}
+	} else {
+		res.send("/");
+		res.end();
+	}
+});
+
 //función para limpiar la caché luego del logout
 app.use(function (req, res, next) {
 	if (!req.user)
@@ -517,6 +549,38 @@ app.get('/buscarPacientes', (req, res) => {
 		res.send("/");
 		res.end();
 	}
+});
+
+app.post('/registrarplaca', async (req, res) => {
+	const IP = req.body.ip;
+	const Clave = req.body.clave;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	const sqls = 'SELECT IdAdmin FROM Administrador WHERE CorreoE = "' + req.session.name + '"';
+	connection.query(sqls, async (error, results) => {
+		const id = results[0].IdAdmin;
+		//res.end();
+		const sql = 'INSERT INTO DocCheckerH(IP, Clave, IdAdmin) VALUES (?)';
+	const valores = [
+		IP,
+		Clave,
+		id];
+	connection.query(sql, [valores], async (error, results) => {
+		res.send("/pacientes");
+		res.end();
+	});
+	});
+
+	/*const sql = 'INSERT INTO DocCheckerH(IP, Clave, IdAdmin) VALUES (?)';
+	const valores = [
+		IP,
+		Clave,
+		results];
+	connection.query(sql, [valores], async (error, results) => {
+		res.send("/pacientes");
+		res.end();
+	});*/
 });
 
 

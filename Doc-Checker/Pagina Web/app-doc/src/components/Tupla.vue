@@ -89,12 +89,14 @@ export default {
         fagregar: function(){
             const params = new URLSearchParams();
             params.append("id", this.id);
-            axios.post("http://"+ global_.server +":"+global_.port_node+"/agregarPaciente", params, {
+            axios.post("http://"+ global_.server +":"+global_.port_node+"/agregar", params, {
                 withCredentials: true,
                 })
                 .then((result) => {
-                    //console.log(result);
-                    this.$router.push({ path: result.data });
+                    if(result.data=="aceptardoc")
+                        location.reload()
+                    else
+                        this.$router.push({ path: result.data });
                 });
         },
         dirEdicion: function(){

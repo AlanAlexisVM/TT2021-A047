@@ -21,7 +21,12 @@
             </template>
             <template v-else-if="tipoTabla === 'solicitudesDoctores'">
                 <TuplaH v-bind:datos="c3" />
-                <TuplaB v-bind:datos="t2" v-bind:agregar="true" v-bind:rechazar="true" />
+                <TuplaB v-for="tupla in tuplas"
+                        :key="tupla[0]"
+                        :datos="tupla"
+                        :id="tupla[1]"
+                        v-bind:agregar="true"
+                        v-bind:rechazar="true" />
             </template>
             <template v-else-if="tipoTabla === 'administradorPacientes'">
                 <TuplaH v-bind:datos="c4" />

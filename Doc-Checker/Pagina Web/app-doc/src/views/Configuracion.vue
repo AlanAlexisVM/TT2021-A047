@@ -13,7 +13,7 @@
                     <label for="contrasenia">Escribe tu contraseña actual:</label>
                     <input
                     type="password"
-                    id="form6Example4"
+                    id="form6Example4-1"
                     class="form-control"
                     v-model="contrasenia"
                     />
@@ -24,7 +24,7 @@
                     <label for="newcontrasenia">Escribe tu nueva contraseña:</label>
                     <input
                     type="password"
-                    id="form6Example4"
+                    id="form6Example4-2"
                     class="form-control"
                     v-model="newcontrasenia"
                     />
@@ -37,7 +37,7 @@
                     >
                     <input
                     type="password"
-                    id="form6Example4"
+                    id="form6Example4-3"
                     class="form-control"
                     v-model="newcontrasenia2"
                     />
@@ -88,6 +88,13 @@ import global_ from "@/components/Global";
 export default {
   name: "Configuracion",
   setup() {},
+  data (){
+    return {
+      contrasenia: '',
+      newcontrasenia: '',
+      newcontrasenia2: '' 
+    }
+  },
   methods: {
     cerrarSesion: function () {
       axios
