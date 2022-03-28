@@ -68,7 +68,7 @@ app.post('/auth', async (req, res) => {
 			}
 		});
 	} else {
-		res.send('/');
+		res.send("/");
 		res.end();
 	}
 });
@@ -122,7 +122,7 @@ app.post('/cambiarcontra', async (req, res) => {
 			//console.log(results[0]);
 			//Contrasenia incorrecta
 			//alert("Contraseña incorrecta");
-			res.send("configuracion");
+			res.send(false);
 		}else{
 			let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
 
@@ -132,7 +132,7 @@ app.post('/cambiarcontra', async (req, res) => {
 				//console.log(error)
 				res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 				res.setHeader('Access-Control-Allow-Credentials', true);
-				res.send("configuracion");
+				res.send(true);
 				//res.alert("Good");
 				res.end();
 			});
@@ -174,6 +174,26 @@ app.post('/agregar', async (req, res) => {
 		});
 	}else{
 		//console.log("No existe");
+		res.send("/buscador");
+		res.end();
+	}
+});
+
+app.post('/rechazarardoc', async (req, res) => {
+	const Id = req.body.id;
+	console.log(req.body.id);
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true)
+	if(req.session.admin){
+		let sql = 'DELETE FROM Doctor WHERE CedulaProf = "'+ Id +'"';
+		connection.query(sql, async (error, results) => {
+			console.log(error)
+			console.log(results);
+				res.send("rechazardocs");
+				res.end();
+		});
+	}else{
+		console.log("No existe");
 		res.send("/buscador");
 		res.end();
 	}

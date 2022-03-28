@@ -49,11 +49,12 @@
                 </router-link>
             </td>
             <td v-if="rechazar === true" >
-                <router-link to="pacientes">
-                    <img src="@/assets/eliminar.png"
+                <!--<router-link to="pacientes">-->
+                    <img v-on:click="frechazar" 
+                        src="@/assets/eliminar.png"
                         v-bind:height="alto"
                         v-bind:width="ancho" />
-                </router-link>
+                <!--</router-link>-->
             </td>
         </template>
     </tr>
@@ -101,6 +102,19 @@ export default {
         },
         dirEdicion: function(){
             this.$router.push({ name: "Registropacientes", params: { titulo: "Actualizar paciente", curp: this.id } });
+        },
+        frechazar: function(){
+            const params = new URLSearchParams();
+            params.append("id", this.id);
+            axios.post("http://"+ global_.server +":"+global_.port_node+"/rechazardoc", params, {
+                withCredentials: true,
+                })
+                .then((result) => {
+                    if(result.data=="rechazardocs")
+                        location.reload()
+                    else
+                        this.$router.push({ path: result.data });
+                });
         }
     },
     created: function(){

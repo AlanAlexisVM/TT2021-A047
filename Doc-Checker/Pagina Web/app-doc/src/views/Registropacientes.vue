@@ -3,7 +3,7 @@
     <h1>{{titulo}}</h1>
     <div id="cuerpo" class="d-flex justify-content-around">
       <form action class="form" id="formulario1" @submit.prevent="registrarPaciente">
-        <!-- Begin form -->
+        <!-- Begin form --> 
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">

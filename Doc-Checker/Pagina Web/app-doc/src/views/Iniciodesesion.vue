@@ -11,9 +11,9 @@
     <!-- Alert -->
     <div>
       <b-alert v-model='error' variant='warning' fade in dismissible>
-      <strong>¡Advertencia!</strong> Usuario o constraseña incorrectos
-      </b-alert> 
-    </div>
+      <strong>¡Advertencia!</strong> Usuario o contraseña incorrectos
+      </b-alert>
+    </div> 
     <!-- Login Form -->
     <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" v-model="usuario">
     <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="contraseña">
@@ -56,7 +56,10 @@ export default {
       params.append('user', this.usuario);
       params.append('pass', this.contraseña);
       axios.post("http://"+global_.server+":"+global_.port_node+"/auth", params, { withCredentials: true }).then((result) => {
-        this.$router.push({ path: result.data })
+        if(result.data==="/")
+          this.error = true
+        else
+          this.$router.push({ path: result.data })
       });
     },
     validar: function(){

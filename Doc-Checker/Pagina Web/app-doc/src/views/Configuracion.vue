@@ -1,6 +1,19 @@
 <template>
     <div class="Configuracion">
         <img src="@/assets/doc.png" height="100" width="100" />
+                <!-- Success Alert -->
+                <div>
+                  <b-alert v-model='exito' variant='success' fade in dismissible>
+                  Se cambió la contraseña satisfactoriamente
+                  </b-alert>                     
+                </div>
+                <!-- Warning Alert -->
+                <div>
+                  <b-alert v-model='error' variant='warning' fade in dismissible>
+                  <strong>¡Advertencia!</strong> Por favor, verifique los campos
+                  </b-alert>
+                </div> 
+        
         <div class="d-flex justify-content-around">
             <div class="col">
                 <div class="row mb-4">
@@ -33,7 +46,7 @@
                 <div class="row mb-4">
                 <div class="form-group">
                     <label for="newcontrasenia2"
-                    >Vuelve a escribir tu nueva constraseña:</label
+                    >Vuelve a escribir tu nueva contraseña:</label
                     >
                     <input
                     type="password"
@@ -92,7 +105,9 @@ export default {
     return {
       contrasenia: '',
       newcontrasenia: '',
-      newcontrasenia2: '' 
+      newcontrasenia2: '',
+      error: false,
+      exito: false 
     }
   },
   methods: {
@@ -125,7 +140,11 @@ export default {
         )
         .then((result) => {
           console.log(result);
-          this.$router.push({ path: result.data });
+          if(result.data)
+            this.exito = true
+            //location.reload()
+          else
+            this.error = true 
         });
     },
   },
