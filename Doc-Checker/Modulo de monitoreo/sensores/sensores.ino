@@ -38,7 +38,7 @@ void setup() {
 
   tempSensor.begin();   // set continuos mode, active mode
 
-  while (!Serial);
+  //while (!Serial);
 
   //Serial.println("Adafruit MLX90614 test");
 

@@ -116,29 +116,56 @@ app.post('/cambiarcontra', async (req, res) => {
 	const Contrasenia = req.body.contrasenia;
 	const newContrasenia = req.body.newcontrasenia;
 	const newContrasenia2 = req.body.newcontrasenia2;
-	if(newContrasenia == newContrasenia2){
-		connection.query('SELECT * FROM Doctor WHERE CorreoE = ?', [user], async (error, results, fields) => {
-		if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
-			//console.log(results[0]);
-			//Contrasenia incorrecta
-			//alert("Contraseña incorrecta");
-			res.send(false);
-		}else{
-			let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
+	console.log(req.session.admin)
+	if(req.session.admin){
+		if(newContrasenia == newContrasenia2){
+			connection.query('SELECT * FROM Administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
+			if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
+				//console.log(results[0]);
+				//Contrasenia incorrecta
+				//alert("Contraseña incorrecta");
+				res.send(false);
+			}else{
+				let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
 
-			const sql = 'UPDATE Doctor SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
-			//console.log(sql);
-			connection.query(sql, async (error, results) => {
-				//console.log(error)
-				res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
-				res.setHeader('Access-Control-Allow-Credentials', true);
-				res.send(true);
-				//res.alert("Good");
-				res.end();
+				const sql = 'UPDATE Administrador SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
+				//console.log(sql);
+				connection.query(sql, async (error, results) => {
+					//console.log(error)
+					res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+					res.setHeader('Access-Control-Allow-Credentials', true);
+					res.send(true);
+					//res.alert("Good");
+					res.end();
+				});
+			}
 			});
 		}
-	});
-}
+	}else{
+		if(newContrasenia == newContrasenia2){
+			connection.query('SELECT * FROM Doctor WHERE CorreoE = ?', [user], async (error, results, fields) => {
+			if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
+				//console.log(results[0]);
+				//Contrasenia incorrecta
+				//alert("Contraseña incorrecta");
+				res.send(false);
+			}else{
+				let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
+
+				const sql = 'UPDATE Doctor SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
+				//console.log(sql);
+				connection.query(sql, async (error, results) => {
+					//console.log(error)
+					res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+					res.setHeader('Access-Control-Allow-Credentials', true);
+					res.send(true);
+					//res.alert("Good");
+					res.end();
+				});
+			}
+			});
+		}
+	}
 });
 
 app.post('/agregar', async (req, res) => {
