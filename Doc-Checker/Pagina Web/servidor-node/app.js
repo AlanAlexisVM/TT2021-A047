@@ -119,7 +119,7 @@ app.post('/cambiarcontra', async (req, res) => {
 	console.log(req.session.admin)
 	if(req.session.admin){
 		if(newContrasenia == newContrasenia2){
-			connection.query('SELECT * FROM Administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
+			connection.query('SELECT * FROM administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
 			if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
 				//console.log(results[0]);
 				//Contrasenia incorrecta
@@ -128,7 +128,7 @@ app.post('/cambiarcontra', async (req, res) => {
 			}else{
 				let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
 
-				const sql = 'UPDATE Administrador SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
+				const sql = 'UPDATE administrador SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
 				//console.log(sql);
 				connection.query(sql, async (error, results) => {
 					//console.log(error)
