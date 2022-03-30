@@ -47,7 +47,7 @@ app.post('/auth', async (req, res) => {
 				//console.log(results[0]);
 				//Contrasenia incorrecta
 				connection.query('SELECT * FROM Administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
-					if (results.length == 0 || pass!=results[0].Contrasenia) {
+					if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].Contrasenia))) {
 						res.send("/");
 					}else{
 						req.session.loggedin = true;
@@ -116,19 +116,18 @@ app.post('/cambiarcontra', async (req, res) => {
 	const Contrasenia = req.body.contrasenia;
 	const newContrasenia = req.body.newcontrasenia;
 	const newContrasenia2 = req.body.newcontrasenia2;
-	console.log(req.session.admin)
 	if(req.session.admin){
 		if(newContrasenia == newContrasenia2){
-			connection.query('SELECT * FROM Administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
+			connection.query('SELECT * FROM administrador WHERE CorreoE = ?', [user], async (error, results, fields) => {
 			if (results.length == 0 || !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))) {
 				//console.log(results[0]);
 				//Contrasenia incorrecta
-				//alert("Contraseña incorrecta");
+				console.log("Contraseña incorrecta");
 				res.send(false);
 			}else{
 				let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
 
-				const sql = 'UPDATE Administrador SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
+				const sql = 'UPDATE administrador SET Contrasenia = "'+ ContraHaash +'" WHERE CorreoE = "'+ user +'"';
 				//console.log(sql);
 				connection.query(sql, async (error, results) => {
 					//console.log(error)
@@ -484,7 +483,7 @@ app.get('/validar', (req, res) => {
 		else
 			res.send([req.session.admin,dirigir]);
 	} else
-		res.send("/");
+		res.send([req.session.admin,'/']);
 	res.end();
 });
 
@@ -525,6 +524,26 @@ app.get('/obtenerPlacas', async (req, res) => {
 		let sql = "SELECT DISTINCTROW DocCheckerH.IdDCH FROM DocCheckerH INNER JOIN Tiene ON DocCheckerH.Clave=Tiene.Clave WHERE Tiene.CedulaProf = ?";
 		valores = [req.session.cedula]
 		connection.query(sql, [valores], async (error, results) => {
+			res.send(results);
+			res.end();
+		});
+	}else{
+		//console.log("No existe");
+		res.send("/");
+		res.end();
+	}
+});
+
+app.get('/obtenerClaves', async (req, res) => {
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	if(req.session.cedula!=null && req.session.loggedin){
+		//console.log("Existe");
+		//SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
+		let sql = "SELECT Clave FROM Unidad";
+		//valores = [req.session.cedula]
+		connection.query(sql, async (error, results) => {
+			console.log(results)
 			res.send(results);
 			res.end();
 		});

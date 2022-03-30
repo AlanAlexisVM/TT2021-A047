@@ -30,6 +30,7 @@
     "npm-check-updates": "^12.4.0",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
+    "vue-nav-tabs": "^0.5.7",
     "vue-pdf": "^4.3.0",
     "vue-router": "^3.2.0"
   },

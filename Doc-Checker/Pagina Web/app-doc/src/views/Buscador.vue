@@ -4,10 +4,30 @@
             Búsqueda de pacientes: <input v-model="cadena" type="search" name="busqueda" placeholder="Nombre del paciente">
             <input v-on:click="buscar" type="submit" value="Buscar">
         </p>
-        <Tabla tipoTabla="buscadorPacientes" v-bind:tuplas="tuplas" />
-    </div>
-</template>
+        <template v-if="admin">
+            <div>
+                <b-card no-body>
+                    <b-tabs pills card vertical> 
+                        <b-tab title="Doctores">    
+                            <Tabla tipoTabla="administradorDoctores" v-bind:tuplas="tuplas" />
+                        </b-tab>
+                        <b-tab title="Pacientes">
+                            <Tabla tipoTabla="eliminarPacientes" v-bind:tuplas="tuplas" />
+                        </b-tab>
+                        <b-tab title="Placas">
+                            <Tabla tipoTabla="Placas" v-bind:tuplas="tuplas" />
+                        </b-tab>
+                    </b-tabs>
+                </b-card>
+            </div>
+        </template>
+        <template v-else>
+            <Tabla tipoTabla="buscadorPacientes" v-bind:tuplas="tuplas" />
+        </template>
+    </div>     
 
+</template>
+        
 <script>
 import axios from 'axios'
 import Tabla from '@/components/Tabla.vue'
@@ -17,6 +37,9 @@ export default {
     name: 'Buscador',
     components: {
         Tabla
+    },
+    props: {
+        admin: Boolean
     },
     data: function(){
         return{
@@ -40,3 +63,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+/*
+.tab{
+    background: red !important;
+}
+*/
+</style>

@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Text input -->
-                <div class="row mb-4">
+                <!--<div class="row mb-4">
                     <div class="col">
                         <div class="form-outline">
                             <input
@@ -32,7 +32,27 @@
                             <label class="form-label" for="form6Example4">Clave Hospital</label>
                         </div>
                     </div> 
+                </div>-->
+                <div class="row mb-4">
+                <div class="col">
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">
+                      Clave
+                    </label>
                 </div>
+                <select
+                v-model="Nclave"
+                class="custom-select"
+                id="inputGroupSelect01"
+                required
+                >
+                <option selected>Opciones...</option>
+                <option v-for="clave in claves" :key=clave :label=clave :value="clave" />
+              </select>
+            </div>
+          </div>
+      </div>
                 <div class="col">  
                     <input 
                     class="form-submit btn btn-primary btn-block mb-4" 
@@ -54,7 +74,8 @@ export default {
   data: function () {
     return {
       ip: "",
-      clave: ""
+      Nclave: "",
+      claves: []
     };
   },
   setup() {},
@@ -71,9 +92,16 @@ export default {
             console.log(result);
             this.$router.push({ path: result.data });
           });
+    },obtenerClaves: function(){
+      axios.get("http://"+global_.server+":"+global_.port_node+"/obtenerClaves", { withCredentials: true }).then((result) => {
+        console.log(result)
+        this.claves = result.data
+        console.log(this.claves)
+      });
     },
   },
   created: function(){
+    this.obtenerClaves()
   }
 };
 </script>

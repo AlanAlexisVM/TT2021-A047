@@ -6,7 +6,7 @@
         <template v-else>
             <Barradenavegacion> </Barradenavegacion>
         </template>
-        <router-view />
+        <router-view v-bind:admin="this.administrador" />
     </div>
 </template>
 

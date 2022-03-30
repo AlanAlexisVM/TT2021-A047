@@ -36,6 +36,14 @@
                 <TuplaH v-bind:datos="c5" />
                 <TuplaB v-bind:datos="t3" v-bind:eliminar="true" />
             </template>
+            <template v-else-if="tipoTabla === 'eliminarPacientes'">
+                <TuplaH v-bind:datos="c7" />
+                <TuplaB v-for="tupla in tuplas"
+                        :key="tupla[0]"
+                        :datos="tupla"
+                        :id="tupla[0]"
+                        v-bind:eliminar="true" />
+            </template>
             <template v-else>
                 <TuplaH v-bind:datos="c6" />
                 <TuplaB v-bind:datos="t4" v-bind:eliminar="true" />
@@ -66,6 +74,7 @@ export default {
             c4: ["Id", "Nombre", "Agregar paciente"],
             c5: ["Id", "Nombre", "Cédula profesional", "Eliminar doctor"],
             c6: ["Id", "Hospital", "Eliminar placa"],
+            c7: ["CURP", "Nombre", "Eliminar Paciente"],
             t1: ["01", "Jesus"],
             t2: ["Jesus Dominguez", "123456789"],
             t3: ["A1", "Jesus Dominguez", "123456789"],
