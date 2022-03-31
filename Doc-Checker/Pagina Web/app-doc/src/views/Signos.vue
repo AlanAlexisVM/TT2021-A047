@@ -47,9 +47,36 @@
 </template>
 
 <script>
+import axios from "axios";
+import global_ from "@/components/Global"
 export default({
     setup() {
     },
+    methods: {
+        leerSignos: function(){
+          let curp = this.$route.params.curp;
+          const params = new URLSearchParams();
+          params.append("curp", curp);
+          axios
+            .post("http://" + global_.server + ":"+global_.port_node+"/placa", params, {
+              withCredentials: true,
+            })
+            .then((result) => {
+              const params = new URLSearchParams();
+              params.append("seg", "5");
+              axios
+              .post("http://" + result.data, params, {
+                withCredentials: true,
+              })
+              .then((result) => {
+                console.log(result.data);
+              });
+            });
+        }
+    },
+    created: function(){
+      this.leerSignos();
+    }
 })
 </script>
 

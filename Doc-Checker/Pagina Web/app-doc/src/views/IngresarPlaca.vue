@@ -42,13 +42,13 @@
                     </label>
                 </div>
                 <select
-                v-model="Nclave"
+                v-model="clave"
                 class="custom-select"
                 id="inputGroupSelect01"
                 required
                 >
                 <option selected>Opciones...</option>
-                <option v-for="clave in claves" :key=clave :label=clave :value="clave" />
+                <option v-for="clave in claves" :key=clave.Clave :label=clave.Clave :value="clave.Clave" />
               </select>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default {
   data: function () {
     return {
       ip: "",
-      Nclave: "",
+      clave: "",
       claves: []
     };
   },
@@ -94,9 +94,7 @@ export default {
           });
     },obtenerClaves: function(){
       axios.get("http://"+global_.server+":"+global_.port_node+"/obtenerClaves", { withCredentials: true }).then((result) => {
-        console.log(result)
         this.claves = result.data
-        console.log(this.claves)
       });
     },
   },

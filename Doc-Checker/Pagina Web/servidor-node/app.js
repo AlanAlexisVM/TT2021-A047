@@ -537,21 +537,15 @@ app.get('/obtenerPlacas', async (req, res) => {
 app.get('/obtenerClaves', async (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
 	res.setHeader('Access-Control-Allow-Credentials', true);
-	if(req.session.cedula!=null && req.session.loggedin){
 		//console.log("Existe");
 		//SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
 		let sql = "SELECT Clave FROM Unidad";
 		//valores = [req.session.cedula]
 		connection.query(sql, async (error, results) => {
-			console.log(results)
 			res.send(results);
 			res.end();
 		});
-	}else{
-		//console.log("No existe");
-		res.send("/");
-		res.end();
-	}
+	
 });
 
 app.get('/doctoresSolicitantes', (req, res) => {
@@ -602,6 +596,9 @@ app.get('/buscarPacientes', (req, res) => {
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	if (req.session.loggedin) {
 		req.session.cedula
+		//SELECT Nombre, CedulaProf FROM Doctor;
+		//SELECT Curp, Nombre FROM Paciente;
+		//SELECT IdDCH, Clave FROM doccheckerh;
 		let sql = "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=" + req.session.cedula + " AND (Paciente.Nombre LIKE '%"+cadena+"%' OR Paciente.Apellidos LIKE '%"+cadena+"%');";
 		//console.log(sql)
 		//SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Paciente.Nombre LIKE '%R%';
@@ -647,6 +644,17 @@ app.post('/registrarplaca', async (req, res) => {
 		res.send("/pacientes");
 		res.end();
 	});*/
+});
+
+app.post('/placa', async (req, res) => {
+	const CURP = req.body.curp;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	const sql = 'SELECT doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON paciente.IdDCH=doccheckerh.IdDCH WHERE  paciente.CURP = "' + CURP + '"';
+	connection.query(sql, async (error, results) => {
+		res.send(results[0].IP);
+		res.end();
+	});
 });
 
 

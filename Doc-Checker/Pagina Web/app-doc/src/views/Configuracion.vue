@@ -13,6 +13,13 @@
         <strong>¡Advertencia!</strong> Por favor, verifique los campos
       </b-alert>
     </div>
+    <!-- Error Alert -->
+    <div>
+      <b-alert v-model="iguales" variant="error" fade in>
+        La contraseña nueva debe coincidir
+      </b-alert>
+    </div>
+
 
     <div class="d-flex justify-content-around">
       <div class="col">
@@ -50,7 +57,7 @@
               type="password"
               id="form6Example4-3"
               class="form-control"
-              v-model="newcontrasenia2"
+              v-model="newcontrasenia2"    
             />
           </div>
         </div>
@@ -105,6 +112,7 @@ export default {
       newcontrasenia2: "",
       error: false,
       exito: false,
+      iguales: true
     };
   },
   methods: {
@@ -142,6 +150,13 @@ export default {
           else this.error = true;
         });
     },
+    watch: {
+      newcontrasenia2(value){
+        this.iguales = false
+        if(value!==this.newcontrasenia) return
+        this.iguales = true
+      }
+    }
   },
 };
 </script>

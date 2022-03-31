@@ -6,6 +6,5 @@ const port_node="8081";
 export default {
     server,
     port_node,
-    
 }
  </script>

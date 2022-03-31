@@ -19,11 +19,12 @@
                 </router-link>
             </td>
             <td v-if="signos === true" >
-                <router-link :to="signos2">
+                <!--<router-link :to="signos2">-->
                     <img src="@/assets/latido-del-corazon.png"
                         v-bind:height="alto"
-                        v-bind:width="ancho" />
-                </router-link>
+                        v-bind:width="ancho"
+                        v-on:click="fsignos" />
+                <!--</router-link>-->
             </td>
             <td v-if="edicion === true" >
                 <!--<router-link :to="edicion2">-->
@@ -115,11 +116,14 @@ export default {
                     else
                         this.$router.push({ path: result.data });
                 });
+        },
+        fsignos: function(){
+            this.$router.push({ name: "Signos", params: { curp: this.id } });
         }
     },
     created: function(){
         this.informe2 = "informe?curp="+this.id;
-        this.signos2 = "signos?curp="+this.id;
+        //this.signos2 = "signos?curp="+this.id;
         this.edicion2 = "registropacientes?curp="+this.id;
         //Boton agregar con función de agregar paciente
     }

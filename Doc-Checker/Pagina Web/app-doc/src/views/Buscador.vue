@@ -5,20 +5,18 @@
             <input v-on:click="buscar" type="submit" value="Buscar">
         </p>
         <template v-if="admin">
-            <div>
-                <b-card no-body>
-                    <b-tabs pills card vertical> 
-                        <b-tab title="Doctores">    
-                            <Tabla tipoTabla="administradorDoctores" v-bind:tuplas="tuplas" />
-                        </b-tab>
-                        <b-tab title="Pacientes">
-                            <Tabla tipoTabla="eliminarPacientes" v-bind:tuplas="tuplas" />
-                        </b-tab>
-                        <b-tab title="Placas">
-                            <Tabla tipoTabla="Placas" v-bind:tuplas="tuplas" />
-                        </b-tab>
-                    </b-tabs>
-                </b-card>
+            <div class="p-4">
+                <b-tabs card vertical content-class="mt-3" lazy> 
+                    <b-tab title="Doctores">
+                        <Tabla tipoTabla="administradorDoctores" v-bind:tuplas="tuplas" />
+                    </b-tab> 
+                    <b-tab title="Pacientes">
+                        <Tabla tipoTabla="eliminarPacientes" v-bind:tuplas="tuplas" />
+                    </b-tab>
+                    <b-tab title="Placas">
+                        <Tabla tipoTabla="Placas" v-bind:tuplas="tuplas" />
+                    </b-tab>
+                </b-tabs>
             </div>
         </template>
         <template v-else>
