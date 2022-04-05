@@ -64,7 +64,7 @@ export default {
     },
     validar: function(){
       axios.get("http://"+global_.server+":"+global_.port_node+"/validar?ruta=pacientes", { withCredentials: true }).then((result) => {
-        this.$router.push({ path: result.data[1] })
+          this.$router.push({ path: result.data[1] })
       });
     }
   },

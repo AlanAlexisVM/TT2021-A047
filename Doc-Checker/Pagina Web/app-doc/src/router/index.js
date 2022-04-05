@@ -14,6 +14,7 @@ import Mineria from '../views/Mineria.vue'
 import Administrador from '../views/Administrador.vue'
 import Aceptardoc from '../views/Aceptardoc.vue'
 import Ingresarplaca from '../views/IngresarPlaca.vue'
+import Gestion from '../views/Gestion.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const routes = [
         path:'/pacientes',
         name:'Pacientes',
         component: Pacientes
+      },
+      {
+        path:'/gestion',
+        name:'Gestion',
+        component: Gestion
       },
       {
         path: '/informe',

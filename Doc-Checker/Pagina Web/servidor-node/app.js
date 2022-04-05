@@ -54,7 +54,7 @@ app.post('/auth', async (req, res) => {
 						req.session.name = results[0].CorreoE;
 						req.session.admin = true;
 						//console.log(req.session);
-						res.send("pacientes");
+						res.send("gestion");
 					}
 					res.end();
 				});
@@ -655,6 +655,10 @@ app.post('/placa', async (req, res) => {
 		res.send(results[0].IP);
 		res.end();
 	});
+});
+
+app.use("*", (req, res) =>{
+    return res.status(404).json({"error": "No se encontro"})
 });
 
 

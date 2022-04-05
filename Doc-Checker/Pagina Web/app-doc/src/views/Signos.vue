@@ -18,6 +18,7 @@
         <div class="row mb-4">
           <div class="col">
             <img src="@/assets/Heart.png" height="30" width="30" />
+            {{frec}}
             BPM
           </div>
         </div>
@@ -29,7 +30,7 @@
         <div class="row mb-4">
           <div class="col">
             <img src="@/assets/Temp.png" height="30" width="30" />
-            °C
+            {{temp}} °C
           </div>
         </div>
         <div class="row mb-4">
@@ -40,6 +41,7 @@
         <div class="row mb-4">
           <div class="col">
             <img src="@/assets/Persona.png" height="30" width="20" />
+            {{ox}}
             %
           </div>
         </div>
@@ -52,7 +54,14 @@ import global_ from "@/components/Global"
 export default({
     setup() {
     },
-    methods: {
+    data(){
+        return {
+          temp: "0",
+          frec: "0",
+          ox: "0"
+        }
+    }
+    ,methods: {
         leerSignos: function(){
           let curp = this.$route.params.curp;
           const params = new URLSearchParams();
@@ -62,16 +71,26 @@ export default({
               withCredentials: true,
             })
             .then((result) => {
-              const params = new URLSearchParams();
-              params.append("seg", "5");
-              axios
-              .post("http://" + result.data, params, {
-                withCredentials: true,
-              })
-              .then((result) => {
-                console.log(result.data);
-              });
+              this.pedirSignos(result.data);
             });
+        },
+        pedirSignos: function(direccion){
+          const params = new URLSearchParams();
+          params.append("seg", "5");
+          axios
+          .post("http://" + direccion, params, {
+            withCredentials: true,
+          })
+          .then((result) => {
+            const lect = result.data.split('"')
+            //Posicion 1
+            this.temp = lect[1];
+            //Posicion 3
+            this.frec = lect[3];
+            //Posicion 5
+            this.ox = lect[5];
+            this.pedirSignos(direccion);
+          });
         }
     },
     created: function(){
