@@ -35,7 +35,7 @@ export default {
         },
         solicitarPacientes: function(){
             axios.get("http://"+global_.server+":"+global_.port_node+"/solicitarPacientes", { withCredentials: true }).then((result) => {
-                for(var i=0;i<result.data.length;i++){
+                for(let i=0;i<result.data.length;i++){
                     this.tuplas.push([result.data[i].Nombre + " " + result.data[i].Apellidos, result.data[i].CURP]);
                 }
             }); 

@@ -75,7 +75,8 @@ export default {
         eliminar: Boolean,
         rechazar: Boolean,
         th: Boolean,
-        id: String
+        id: String,
+        name: String,
     },
     data: function(){
         return{
@@ -118,7 +119,7 @@ export default {
                 });
         },
         fsignos: function(){
-            this.$router.push({ name: "Signos", params: { curp: this.id } });
+            this.$router.push({ name: "Signos", params: { curp: this.id, name: this.name } });
         }
     },
     created: function(){

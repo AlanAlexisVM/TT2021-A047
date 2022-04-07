@@ -12,10 +12,10 @@
 </template>
         
 <script>
-import axios from 'axios'
 import Tabla from '@/components/Tabla.vue'
 import global_ from "@/components/Global"
-
+import axios from 'axios'
+ 
 export default {
     name: 'Buscador',
     components: {
@@ -23,7 +23,7 @@ export default {
     },
     props: {
         admin: Boolean
-    },
+    }, 
     data: function(){
         return{
             cadena: "",
