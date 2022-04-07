@@ -614,6 +614,27 @@ app.get('/buscarPacientes', (req, res) => {
 	}
 });
 
+app.get('/buscarPlacas', (req, res) => {
+	var cadena = req.query.cad;
+	res.setHeader('Access-Control-Allow-Origin', "http://"+ip+":"+port);
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	if (req.session.loggedin) {
+		req.session.cedula
+		//SELECT Nombre, CedulaProf FROM Doctor;
+		//SELECT Curp, Nombre FROM Paciente;
+		//SELECT IdDCH, Clave FROM doccheckerh;
+		let sql = "SELECT IdDCH, Clave FROM doccheckerh;";
+		connection.query(sql, [req.session.cedula], async (error, results) => {
+			//console.log(results)
+			res.send(results);
+			res.end();
+		});
+	} else {
+		res.send("/");
+		res.end();
+	}
+});
+
 app.post('/registrarplaca', async (req, res) => {
 	const IP = req.body.ip;
 	const Clave = req.body.clave;
@@ -657,9 +678,9 @@ app.post('/placa', async (req, res) => {
 	});
 });
 
-app.use("*", (req, res) =>{
-    return res.status(404).json({"error": "No se encontro"})
-});
+//app.use("*", (req, res) =>{
+//    return res.status(404).json({"error": "No se encontro"})
+//});
 
 
 app.listen(8081, (req, res) => {
