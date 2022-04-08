@@ -37,11 +37,19 @@
       </template>
       <template v-else-if="tipoTabla === 'administradorPacientes'">
         <TuplaH v-bind:datos="c4" />
-        <TuplaB v-bind:datos="t1" v-bind:agregar="true" />
+        <TuplaB v-for="tupla in tuplas"
+              :key="tupla[1]"
+              :datos="tupla"
+              :id="tupla[1]"
+              v-bind:eliminar="true" />
       </template>
       <template v-else-if="tipoTabla === 'administradorDoctores'">
         <TuplaH v-bind:datos="c5" />
-        <TuplaB v-bind:datos="t3" v-bind:eliminar="true" />
+        <TuplaB v-for="tupla in tuplas"
+              :key="tupla[1]"
+              :datos="tupla"
+              :id="tupla[1]"
+              v-bind:eliminar="true" />
       </template>
       <template v-else-if="tipoTabla === 'eliminarPacientes'">
         <TuplaH v-bind:datos="c7" />
@@ -55,7 +63,11 @@
       </template>
       <template v-else>
         <TuplaH v-bind:datos="c6" />
-        <TuplaB v-bind:datos="t4" v-bind:eliminar="true" />
+        <TuplaB v-for="tupla in tuplas"
+          :key="tupla[0]"
+          :datos="tupla"
+          :id="tupla[0]"
+          v-bind:eliminar="true" />
       </template>
     </table>
   </div>

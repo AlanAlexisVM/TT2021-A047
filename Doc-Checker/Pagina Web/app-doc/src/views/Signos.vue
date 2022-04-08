@@ -77,7 +77,7 @@ export default {
     },
     pedirSignos: function (direccion) {
       const params = new URLSearchParams();
-      params.append("seg", "3");
+      params.append("seg", "8");
       axios
         .post("http://" + direccion, params, {
           withCredentials: true,
