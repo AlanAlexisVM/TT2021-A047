@@ -41,43 +41,37 @@ export default {
             this.tuplas = []
             if(this.tabIndex===0){
                 console.log('0');
-                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarDoctoresAdmin"
+                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarDoctoresAdmin?cad="+this.cadena
                 axios.get(sol, { withCredentials: true })
                 .then((result) => {
                     this.tuplas = []
-                    const nom = result.data[i].Nombre
-                    const cedula= result.data[i].CedulaProf
                     for(var i=0;i<result.data.length;i++){
-                        this.tuplas.push([cedula, nom])
+                        const nom = result.data[i].Nombre + " " + result.data[i].Apellidos
+                        const cedula= result.data[i].CedulaProf
+                        this.tuplas.push([nom, cedula])
                     }
-                })
-                // axios.get("http://"+global_.server+":"+global_.port_node+"/buscarDoctoresAdmin", { withCredentials: true }).then((result) => {
-                //     console.log(result)
-                //     for(let i=0;i<result.data.length;i++){
-                //         this.tuplas.push([result.data[i].Nombre, result.data[i].CedulaProf]);
-                //     }
-                // }); 
+                })              
             }else if(this.tabIndex===1){  
                 console.log('1');
-                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarPacientesAdmin?cad="
-                axios.get(sol + String(this.cadena), { withCredentials: true })
+                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarPacientesAdmin?cad="+this.cadena
+                axios.get(sol, { withCredentials: true })
                 .then((result) => {
                     console.log(result)                  
-                    const curp = result.data[i].Curp
-                    const nom = result.data[i].Nombre
                     for(var i=0;i<result.data.length;i++){
+                        const curp = result.data[i].Curp
+                        const nom = result.data[i].Nombre + " " +result.data[i].Apellidos
                         this.tuplas.push([curp, nom])
                     }
                 })
             }else if(this.tabIndex===2){
                 console.log('2')
-                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarPlacasAdmin?cad="
-                axios.get(sol + String(this.cadena), { withCredentials: true })
+                const sol = "http://"+global_.server+":"+global_.port_node+"/buscarPlacasAdmin?cad="+this.cadena
+                axios.get(sol, { withCredentials: true })
                 .then((result) => {
                     console.log(result)
-                    const id = result.data[i].IdDCH
-                    const clave = result.data[i].Clave
                     for(var i=0;i<result.data.length;i++){
+                        const id = result.data[i].IdDCH
+                        const clave = result.data[i].Clave
                         this.tuplas.push([id, clave])
                     }
                 })
@@ -86,30 +80,30 @@ export default {
         actualizar (){
             this.tuplas = []
             if(this.tabIndex===0){
-                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarDoctoresAdmin", { withCredentials: true })
+                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarDoctoresAdmin?cad=*", { withCredentials: true })
                 .then((result) => {
                     console.log(result)
                     for(let i=0;i<result.data.length;i++){
-                        this.tuplas.push([result.data[i].Nombre, result.data[i].CedulaProf])
+                        this.tuplas.push([result.data[i].Nombre+" "+result.data[i].Apellidos, result.data[i].CedulaProf])
                     }
                 })
             }else if(this.tabIndex===1){
-                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarPacientesAdmin", { withCredentials: true })
+                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarPacientesAdmin?cad=*", { withCredentials: true })
                 .then((result) => {
                     console.log(result)
-                    const curp = result.data[i].Curp
-                    const nom = result.data[i].Nombre
                     for(var i=0;i<result.data.length;i++){
+                        const curp = result.data[i].Curp
+                        const nom = result.data[i].Nombre+" "+result.data[i].Apellidos
                         this.tuplas.push([curp, nom])
                     }
                 })
             }else if(this.tabIndex===2){
-                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarPlacasAdmin", { withCredentials: true })
+                axios.get("http://"+global_.server+":"+global_.port_node+"/buscarPlacasAdmin?cad=*", { withCredentials: true })
                 .then((result) => {
                     console.log(result)
-                    const id = result.data[i].IdDCH
-                    const clave = result.data[i].Clave
                     for(var i=0;i<result.data.length;i++){
+                        const id = result.data[i].IdDCH
+                        const clave = result.data[i].Clave
                         this.tuplas.push([id, clave])
                     }
                 })

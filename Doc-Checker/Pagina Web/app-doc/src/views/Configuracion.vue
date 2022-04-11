@@ -14,8 +14,8 @@
       </b-alert>
     </div>
     <!-- Error Alert -->
-    <div>
-      <b-alert v-model="iguales" variant="error" fade in>
+    <div v-if="newcontrasenia !== newcontrasenia2">
+      <b-alert show variant="danger" fade in>
         La contraseña nueva debe coincidir
       </b-alert>
     </div>
@@ -36,6 +36,7 @@
               id="form6Example4-1"
               class="form-control"
               v-model="contrasenia"
+              required
             />
           </div>
         </div>
@@ -47,6 +48,7 @@
               id="form6Example4-2"
               class="form-control"
               v-model="newcontrasenia"
+              required
             />
           </div>
         </div>
@@ -57,7 +59,8 @@
               type="password"
               id="form6Example4-3"
               class="form-control"
-              v-model="newcontrasenia2"    
+              v-model="newcontrasenia2"
+              required
             />
           </div>
         </div>
@@ -112,7 +115,6 @@ export default {
       newcontrasenia2: "",
       error: false,
       exito: false,
-      iguales: true
     };
   },
   methods: {
@@ -149,14 +151,7 @@ export default {
           //location.reload()
           else this.error = true;
         });
-    },
-    watch: {
-      newcontrasenia2(value){
-        this.iguales = false
-        if(value!==this.newcontrasenia) return
-        this.iguales = true
-      }
-    }
+    } 
   },
 };
 </script>

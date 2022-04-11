@@ -44,7 +44,6 @@ export default {
         return {
             images: [
                 { name: "gestion", url: require("@/assets/gestion.png") },
-                { name: "buscador", url: require("@/assets/seguir.png") },
                 { name: "administrador", url: require("@/assets/administrar.png") },
                 { name: "configuracion", url: require("@/assets/configuracion.png") }
             ]

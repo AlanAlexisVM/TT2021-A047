@@ -43,11 +43,10 @@
                 <!--</router-link>-->
             </td>
             <td v-if="eliminar === true" >
-                <router-link to="pacientes">
-                    <img src="@/assets/negativo.png"
-                        v-bind:height="alto"
-                        v-bind:width="ancho" />
-                </router-link>
+                <img src="@/assets/negativo.png"
+                    v-bind:height="alto"
+                    v-bind:width="ancho"
+                    v-on:click="feliminar" />
             </td>
             <td v-if="rechazar === true" >
                 <!--<router-link to="pacientes">-->
@@ -120,6 +119,17 @@ export default {
         },
         fsignos: function(){
             this.$router.push({ name: "Signos", params: { curp: this.id, name: this.name } });
+        },
+        feliminar: function(){
+            const params = new URLSearchParams();
+            params.append("id", this.id);
+            axios.post("http://"+ global_.server +":"+global_.port_node+"/eliminar", params, {
+                withCredentials: true,
+                })
+                .then((result) => {
+                    console.log(result);
+                    location.reload();
+                });
         }
     },
     created: function(){

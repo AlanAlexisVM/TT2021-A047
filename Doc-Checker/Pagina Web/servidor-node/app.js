@@ -627,7 +627,7 @@ app.post("/obtener", async (req, res) => {
 //12 - Método para controlar que está auth en todas las páginas
 app.get("/validar", (req, res) => {
   //console.log(req.session);
-  var dirigir = req.query.ruta.toLowerCase();
+  const dirigir = req.query.ruta.toLowerCase();
   //console.log(dirigir);
   res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
   res.setHeader("Access-Control-Allow-Credentials", true);
@@ -745,7 +745,7 @@ app.get("/logout", function (req, res) {
 app.get("/buscarPacientes", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  var cadena = req.query.cad;
+  const cadena = req.query.cad;
   res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
   res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.loggedin) {
@@ -778,52 +778,59 @@ app.get("/buscarPacientes", (req, res) => {
 app.get("/buscarDoctoresAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  var cadena = req.query.cad;
+  const cadena = req.query.cad;
   res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
   res.setHeader("Access-Control-Allow-Credentials", true);
-    req.session.cedula;
-    //SELECT Nombre, CedulaProf FROM Doctor;
-    //SELECT Curp, Nombre FROM Paciente;
-    //SELECT IdDCH, Clave FROM doccheckerh;
-    const sql = "SELECT Nombre, CedulaProf FROM Doctor"
-    connection.query(sql, async (error, results) => {
-      res.send(results);
-      res.end();
-    });
+  req.session.cedula;
+  //SELECT Nombre, CedulaProf FROM Doctor;
+  //SELECT Curp, Nombre FROM Paciente;
+  //SELECT IdDCH, Clave FROM doccheckerh;
+  let sql
+  sql = "SELECT Nombre, Apellidos, CedulaProf FROM Doctor"
+  if(cadena!='*')
+    sql = sql+" WHERE (Doctor.Nombre LIKE '%" + cadena + "%' OR Doctor.Apellidos LIKE '%" + cadena + "%')"
+  connection.query(sql, async (error, results) => {
+    res.send(results);
+    res.end();
+  });
 });
 
 app.get("/buscarPlacasAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  var cadena = req.query.cad;
+  const cadena = req.query.cad;
   res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
   res.setHeader("Access-Control-Allow-Credentials", true);
-    req.session.cedula;
-    //SELECT Nombre, CedulaProf FROM Doctor;
-    //SELECT Curp, Nombre FROM Paciente;
-    //SELECT IdDCH, Clave FROM doccheckerh;
-    const sql = "SELECT IdDCH, Clave FROM doccheckerh"
-    connection.query(sql, async (error, results) => {
-      res.send(results);
-      res.end();
-    });
+  req.session.cedula;
+  //SELECT Nombre, CedulaProf FROM Doctor;
+  //SELECT Curp, Nombre FROM Paciente;
+  //SELECT IdDCH, Clave FROM doccheckerh;
+  let sql = "SELECT IdDCH, Clave FROM doccheckerh"
+  if(cadena!='*')
+    sql = sql+" WHERE doccheckerh.IdDCH LIKE '%" + cadena + "%'"
+  connection.query(sql, async (error, results) => {
+    res.send(results);
+    res.end();
+  });
 });
 
 app.get("/buscarPacientesAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  var cadena = req.query.cad;
+  const cadena = req.query.cad;
   res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
   res.setHeader("Access-Control-Allow-Credentials", true);
-    req.session.cedula;
-    //SELECT Nombre, CedulaProf FROM Doctor;
-    //SELECT Curp, Nombre FROM Paciente;
-    //SELECT IdDCH, Clave FROM doccheckerh;
-    const sql = "SELECT Curp, Nombre FROM Paciente"
-    connection.query(sql, async (error, results) => {
-      res.send(results);
-      res.end();
-    });
+  req.session.cedula;
+  //SELECT Nombre, CedulaProf FROM Doctor;
+  //SELECT Curp, Nombre FROM Paciente;
+  //SELECT IdDCH, Clave FROM doccheckerh;
+  let sql = "SELECT Curp, Nombre, Apellidos FROM Paciente"
+  if(cadena!='*')
+    sql = sql+" WHERE (Paciente.Nombre LIKE '%" + cadena + "%' OR Paciente.Apellidos LIKE '%" + cadena + "%')"
+  connection.query(sql, async (error, results) => {
+    res.send(results);
+    res.end();
+  });
 });
 
 app.post('/registrarplaca', async (req, res) => {
@@ -869,6 +876,29 @@ app.post("/placa", async (req, res) => {
   connection.query(sql, async (error, results) => {
     res.send(results[0].IP);
     res.end();
+  });
+});
+
+app.post("/eliminar", async (req, res) => {
+  const id = req.body.id;
+  res.setHeader("Access-Control-Allow-Origin", "http://" + ip + ":" + port);
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  let sql = 'DELETE FROM paciente WHERE paciente.CURP = "' + id + '"';
+  connection.query(sql, async (error, results) => {
+    sql = 'DELETE FROM doctor WHERE  doctor.CedulaProf = "' + id + '"';
+    console.log(error);
+    console.log(results);
+    connection.query(sql, async (error, results) => {
+      sql = 'DELETE FROM doccheckerh WHERE  doccheckerh.IdDCH = ' + id;
+      console.log(error);
+      console.log(results);
+      connection.query(sql, async (error, results) => {
+        console.log(error);
+        console.log(results);
+        res.send(results);
+        res.end();
+      });
+    });
   });
 });
 
