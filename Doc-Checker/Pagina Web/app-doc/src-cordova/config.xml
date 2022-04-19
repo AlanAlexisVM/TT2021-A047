@@ -10,4 +10,10 @@
     <content src=" " />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <access origin="*" />
+    <allow-navigation href="http://192.168.1.103:8081/" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+    <allow-intent href="*" />
 </widget>
