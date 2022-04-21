@@ -37,6 +37,7 @@
 <script>
 import axios from 'axios'
 import global_ from "@/components/Global"
+
 export default {
   name: 'Iniciodesesion',
   components: {
@@ -69,7 +70,7 @@ export default {
     }
   },
   created: function(){
-      this.validar()
+      this.validar();
   }
 }
 </script>

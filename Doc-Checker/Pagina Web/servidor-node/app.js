@@ -29,8 +29,15 @@ app.use(
 // 8 - Invocamos a la conexion de la DB
 const connection = require("./db/db");
 
+app.all('*',function (req,res,next)
+{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', req.get('origin'));
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
+
 app.get("/", (req, res) => {
-  res.header("Access-Control-Allow-Origin", req.get('origin'));
   //console.log('Cliente');
   res.send("Hola mundo");
   res.end();
@@ -40,9 +47,7 @@ app.get("/", (req, res) => {
 app.post("/auth", async (req, res) => {
   const user = req.body.user;
   const pass = req.body.pass;
-  //console.log(req.body)
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
+  console.log(req.body)
   if (user && pass) {
     connection.query(
       "SELECT * FROM Doctor WHERE CorreoE = ?",
@@ -104,8 +109,6 @@ app.post("/registrar", async (req, res) => {
   const Direccion = req.body.direccion;
   const Telefono1 = req.body.tel1;
   const Telefono2 = req.body.tel2;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
 
   const sql =
     "INSERT INTO Doctor(CedulaProf, Nombre, Apellidos, CorreoE, Contrasenia, Sexo, FechaNac, Especialidad, Direccion, Telefono1, Telefono2, IdAdmin) VALUES (?)";
@@ -160,11 +163,6 @@ app.post("/cambiarcontra", async (req, res) => {
             //console.log(sql);
             connection.query(sql, async (error, results) => {
               //console.log(error)
-              res.setHeader(
-                "Access-Control-Allow-Origin",
-                req.get('origin')
-              );
-              res.setHeader("Access-Control-Allow-Credentials", true);
               res.send(true);
               //res.alert("Good");
               res.end();
@@ -199,11 +197,6 @@ app.post("/cambiarcontra", async (req, res) => {
             //console.log(sql);
             connection.query(sql, async (error, results) => {
               //console.log(error)
-              res.setHeader(
-                "Access-Control-Allow-Origin",
-                req.get('origin')
-              );
-              res.setHeader("Access-Control-Allow-Credentials", true);
               res.send(true);
               //res.alert("Good");
               res.end();
@@ -217,8 +210,6 @@ app.post("/cambiarcontra", async (req, res) => {
 
 app.post("/agregar", async (req, res) => {
   const Id = req.body.id;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
 
   if (req.session.cedula != null) {
     //console.log("Existe");
@@ -259,8 +250,6 @@ app.post("/agregar", async (req, res) => {
 app.post("/rechazarardoc", async (req, res) => {
   const Id = req.body.id;
   console.log(req.body.id);
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.admin) {
     let sql = 'DELETE FROM Doctor WHERE CedulaProf = "' + Id + '"';
     connection.query(sql, async (error, results) => {
@@ -278,8 +267,6 @@ app.post("/rechazarardoc", async (req, res) => {
 
 app.post("/obtenerPaciente", async (req, res) => {
   const CURP = req.body.curp;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
 
   if (req.session.cedula != null && req.session.loggedin) {
     //console.log("Existe");
@@ -299,8 +286,6 @@ app.post("/obtenerPaciente", async (req, res) => {
 
 app.post("/obtenerPaciente2", async (req, res) => {
   const CURP = req.body.curp;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
 
   if (req.session.cedula != null && req.session.loggedin) {
     //console.log("Existe");
@@ -335,8 +320,6 @@ app.post("/registrarPaciente", async (req, res) => {
   const Estado = req.body.estado;
   const Placa = req.body.numPlaca;
   let IdSi = req.session.id;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   //let passwordHash = await bcrypt.hash(pass, 8);
   connection.query(
     "INSERT INTO SignosVitales(IdSi) VALUES (NULL)",
@@ -391,8 +374,6 @@ app.post("/actualizarPaciente", async (req, res) => {
   const Direccion = req.body.direccion;
   const Estado = req.body.estado;
   const Placa = req.body.numPlaca;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   //console.log(error)
   let sql =
     "UPDATE Paciente SET Nombre = '" +
@@ -444,8 +425,6 @@ app.post("/registrarPaciente2", async (req, res) => {
   const Trabajo = req.body.trabajo;
   const VarHumedad = req.body.varHumedad;
   const VarTemperatura = req.body.varTemperatura;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   let IdPac;
   let sql = "SELECT * FROM InformePaciente WHERE CURP = '" + CURP + "'";
   connection.query(sql, async (error, results) => {
@@ -588,8 +567,6 @@ app.post("/registrarPaciente2", async (req, res) => {
 
 app.post("/existeRegistro", async (req, res) => {
   const CURP = req.body.curp;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   let sql = "SELECT * FROM InformePaciente WHERE CURP = '" + CURP + "'";
   connection.query(sql, async (error, results) => {
     if (results.length > 0) res.send(true);
@@ -601,8 +578,6 @@ app.post("/existeRegistro", async (req, res) => {
 app.post("/obtener", async (req, res) => {
   const valor = req.body.valor;
   const CURP = req.body.curp;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   let sql =
     "SELECT " +
     valor +
@@ -630,8 +605,6 @@ app.get("/validar", (req, res) => {
   const dirigir = req.query.ruta.toLowerCase();
   //console.log(dirigir);
   //console.log(req.session);
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.loggedin) {
     if (dirigir == "undefined") res.send([req.session.admin, "/"]);
     else res.send([req.session.admin, dirigir]);
@@ -642,8 +615,6 @@ app.get("/validar", (req, res) => {
 app.get("/solicitarPacientes", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.loggedin) {
     if (req.session.admin) {
       let sql =
@@ -669,8 +640,6 @@ app.get("/solicitarPacientes", (req, res) => {
 });
 
 app.get("/obtenerPlacas", async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   const numMax = 3;
   if (req.session.cedula != null && req.session.loggedin) {
     //console.log("Existe");
@@ -690,8 +659,6 @@ app.get("/obtenerPlacas", async (req, res) => {
 });
 
 app.get("/obtenerClaves", async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   //console.log("Existe");
   //SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
   let sql = "SELECT Clave FROM Unidad";
@@ -705,8 +672,6 @@ app.get("/obtenerClaves", async (req, res) => {
 app.get("/doctoresSolicitantes", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.loggedin) {
     if (req.session.admin) {
       let sql =
@@ -734,8 +699,6 @@ app.use(function (req, res, next) {
 //Destruye la sesión.
 app.get("/logout", function (req, res) {
   req.session.destroy(() => {
-    res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-    res.setHeader("Access-Control-Allow-Credentials", true);
     //res.setHeader('credentials', 'include');
     //res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.send("/");
@@ -747,8 +710,6 @@ app.get("/buscarPacientes", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
   const cadena = req.query.cad;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   if (req.session.loggedin) {
     req.session.cedula;
     //SELECT Nombre, CedulaProf FROM Doctor;
@@ -780,8 +741,6 @@ app.get("/buscarDoctoresAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
   const cadena = req.query.cad;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   req.session.cedula;
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
@@ -800,8 +759,6 @@ app.get("/buscarPlacasAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
   const cadena = req.query.cad;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   req.session.cedula;
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
@@ -819,8 +776,6 @@ app.get("/buscarPacientesAdmin", (req, res) => {
   //console.log(req.session);
   //console.log(dirigir);
   const cadena = req.query.cad;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   req.session.cedula;
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
@@ -837,8 +792,6 @@ app.get("/buscarPacientesAdmin", (req, res) => {
 app.post('/registrarplaca', async (req, res) => {
 	const IP = req.body.ip;
 	const Clave = req.body.clave;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
 
   const sqls =
     'SELECT IdAdmin FROM Administrador WHERE CorreoE = "' +
@@ -868,8 +821,6 @@ app.post('/registrarplaca', async (req, res) => {
 
 app.post("/placa", async (req, res) => {
   const CURP = req.body.curp;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   const sql =
     'SELECT doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON paciente.IdDCH=doccheckerh.IdDCH WHERE  paciente.CURP = "' +
     CURP +
@@ -882,8 +833,6 @@ app.post("/placa", async (req, res) => {
 
 app.post("/eliminar", async (req, res) => {
   const id = req.body.id;
-  res.setHeader("Access-Control-Allow-Origin", req.get('origin'));
-  res.setHeader("Access-Control-Allow-Credentials", true);
   let sql = 'DELETE FROM paciente WHERE paciente.CURP = "' + id + '"';
   connection.query(sql, async (error, results) => {
     sql = 'DELETE FROM doctor WHERE  doctor.CedulaProf = "' + id + '"';
@@ -902,6 +851,8 @@ app.post("/eliminar", async (req, res) => {
     });
   });
 });
+
+app.use(express.static('pdfs'));
 
 app.use("*", (req, res) => {
   return res.status(404).json({ error: "No se encontro" });

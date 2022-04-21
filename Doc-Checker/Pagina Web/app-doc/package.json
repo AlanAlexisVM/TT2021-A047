@@ -29,6 +29,8 @@
     "core-js": "^3.6.5",
     "curp": "^1.1.0",
     "npm-check-updates": "^12.4.0",
+    "push-js": "^1.1.1",
+    "push.js": "^1.0.12",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.1",
     "vue-nav-tabs": "^0.5.7",
