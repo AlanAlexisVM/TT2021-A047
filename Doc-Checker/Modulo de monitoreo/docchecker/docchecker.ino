@@ -25,8 +25,10 @@ WiFiServer server(80);
 
 //const char* ssid     = "Nam-wifi";
 //const char* password = "holahola";
-const char* ssid     = "TP-Link_149C";
-const char* password = "Admin012";
+//const char* ssid     = "TP-Link_149C";
+//const char* password = "Admin012";
+const char* ssid     = "IZZI-3BD8";
+const char* password = "9CC8FC753BD8";
 
 //---------------------VARIABLES GLOBALES-------------------------
 int contconexion = 0;
@@ -299,7 +301,7 @@ void enviarPromedio(cliente *clt){
     pagina.concat("\"");
     clt->conexion.println("HTTP/1.1 200 OK");
     //clt->conexion.println("Cache-Control: private, no-cache, no-store, must-revalidate");
-    clt->conexion.println("Access-Control-Allow-Origin: http://localhost:8080");
+    clt->conexion.println("Access-Control-Allow-Origin: http://localhost");
     clt->conexion.println("Access-Control-Allow-Credentials: true");
     clt->conexion.println("Content-Type: text/html; charset=utf-8");
     //clt->conexion.println("Connection: keep-alive");

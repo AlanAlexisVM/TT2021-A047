@@ -45,7 +45,8 @@ export default {
                 'https://campusinteligencialimite.org/fichas/VENTILACI%C3%93N_DE_ESPACIOS',
 				'https://drive.google.com/file/d/1buzTtnQqEVkumP__-GbFL7xZK_3sFcVD/view?usp=sharing',
 				'https://www.dropbox.com/s/mec1wseke4vfix8/20_ProyectoFinal.pdf',
-				'http://localhost:8081/20_ProyectoFinal.pdf' 
+				'http://localhost:8081/20_ProyectoFinal.pdf',
+				'http://192.168.0.25:8081/20_ProyectoFinal.pdf'
 			],
 			src:'',
 			loadedRatio: 0,
