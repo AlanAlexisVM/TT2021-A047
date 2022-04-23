@@ -10,6 +10,7 @@
       v-bind:rechazar="rechazar"
       v-bind:id="id"
       v-bind:name="name"
+      @errorDel="enviarError"
     />
   </tbody>
 </template>
@@ -34,5 +35,10 @@ export default {
     name: String,
   },
   setup() {},
+  methods: {
+    enviarError: function(error){
+      this.$emit('errorDel', error)
+    }
+  }
 };
 </script>

@@ -127,8 +127,16 @@ export default {
                 withCredentials: true,
                 })
                 .then((result) => {
-                    console.log(result);
-                    location.reload();
+                    console.log(result)
+                    if(result.data){
+                        //console.log(result);
+                        //this.$router.push({params: { error: result } });
+                        //this.$router.push({ name: "Gestion", params: { curp: this.curp } });
+                        //location.reload({params: { error: result } });
+                        this.$emit('errorDel', false)
+                    }else{
+                        this.$emit('errorDel', true)
+                    }
                 });
         }
     },

@@ -804,7 +804,7 @@ app.post('/registrarplaca', async (req, res) => {
     const sql = "INSERT INTO DocCheckerH(IP, Clave, IdAdmin) VALUES (?)";
     const valores = [IP, Clave, id];
     connection.query(sql, [valores], async (error, results) => {
-      res.send("/pacientes");
+      res.send("/gestion");
       res.end();
     });
   });
@@ -835,18 +835,25 @@ app.post("/placa", async (req, res) => {
 app.post("/eliminar", async (req, res) => {
   const id = req.body.id;
   let sql = 'DELETE FROM paciente WHERE paciente.CURP = "' + id + '"';
+  let ret = false;
   connection.query(sql, async (error, results) => {
     sql = 'DELETE FROM doctor WHERE  doctor.CedulaProf = "' + id + '"';
-    console.log(error);
-    console.log(results);
+    //console.log(error);
+    //console.log(results);
+    if(results!=undefined && results.affectedRows>=1)
+      ret = true
     connection.query(sql, async (error, results) => {
       sql = 'DELETE FROM doccheckerh WHERE  doccheckerh.IdDCH = ' + id;
-      console.log(error);
-      console.log(results);
+      //console.log(error);
+      //console.log(results);
+      if(results!=undefined && results.affectedRows>=1)
+        ret = true
       connection.query(sql, async (error, results) => {
-        console.log(error);
-        console.log(results);
-        res.send(results);
+        //console.log(error);
+        //console.log(results);
+        if(results!=undefined && results.affectedRows>=1)
+          ret = true
+        res.send(ret);
         res.end();
       });
     });
