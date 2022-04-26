@@ -1,3 +1,7 @@
+var fork = require("child_process").fork;
+
+var sp1 = fork("solicitarSignosVitales");
+
 // 1 - Invocamos a Express
 const express = require('express');
 const app = express();
@@ -28,6 +32,14 @@ app.use(
 
 // 8 - Invocamos a la conexion de la DB
 const connection = require("./db/db");
+sp1.on('message', msg => {
+  console.log('message from child', msg);
+  connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH", async (error, results) => {
+    //console.log(error);
+    //console.log(results);
+    sp1.send({placas:results})
+  });
+})
 
 app.all('*',function (req,res,next)
 {
