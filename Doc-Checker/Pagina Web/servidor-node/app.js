@@ -32,19 +32,34 @@ app.use(
 
 // 8 - Invocamos a la conexion de la DB
 const connection = require("./db/db");
-sp1.on('message', msg => {
-  console.log('message from child', msg);
-  connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH", async (error, results) => {
-    //console.log(error);
-    //console.log(results);
-    sp1.send({placas:results})
-  });
+sp1.on('message', msj => {
+  if(msj.msj=='Hijo cargado'){
+    console.log('message from child', msj);
+    connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH", async (error, results) => {
+      sp1.send({placas:results})
+    });
+  }else{
+    const lect = msj.msj.split('"');
+    //Posicion 1
+    var temp = lect[1];
+    //Posicion 3
+    var frec = lect[3];
+    //Posicion 5
+    var ox = lect[5];
+    
+    var ip = lect[6].substring(4,lect[6].length);
+    console.log(temp);
+    console.log(frec);
+    console.log(ox);
+    console.log(ip);
+  }
 })
 
 app.all('*',function (req,res,next)
 {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Origin', req.get('origin'));
+  if(req.get('origin')!=undefined)
+    res.setHeader('Access-Control-Allow-Origin', req.get('origin'));
   //console.log(req.get('origin'));
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
@@ -105,6 +120,39 @@ app.post("/auth", async (req, res) => {
     res.send("/");
     res.end();
   }
+});
+
+app.post("/monitorplaca", async (req,res) => {
+  const ip = req.body.ip;
+  res.send("Placa confirmada");
+  res.end;
+  var fork = require("child_process").fork;
+  connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?", ip, async (error, results) => {
+    var sp = fork("signosVitales");
+    sp.send({placa:results[0]});
+    sp.on('message', msj => {
+      const lect = msj.msj.split('"');
+      //Posicion 1
+      var temp = lect[1];
+      //Posicion 3
+      var frec = lect[3];
+      //Posicion 5
+      var ox = lect[5];
+      
+      var ip = lect[6].substring(4,lect[6].length);
+      console.log(temp);
+      console.log(frec);
+      console.log(ox);
+      console.log(ip);
+    });
+  });
+});
+
+app.post("/problemaPaciente", async (req,res) => {
+  const ip = req.body.ip;
+  console.log(ip);
+  res.send("Problema informado");
+  res.end;
 });
 
 app.post("/registrar", async (req, res) => {

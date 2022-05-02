@@ -16,7 +16,7 @@
       <div class="col">Frecuencia Cardiaca</div>
     </div>
     <div class="row mb-4">
-      <div class="col">
+      <div class="col" id="frec">
         <img src="@/assets/Heart.png" height="30" width="30" />
         {{ frec }}
         BPM
@@ -26,7 +26,7 @@
       <div class="col">Temperatura Corporal</div>
     </div>
     <div class="row mb-4">
-      <div class="col">
+      <div class="col" id="temp">
         <img src="@/assets/Temp.png" height="30" width="30" />
         {{ temp }} °C
       </div>
@@ -34,7 +34,7 @@
     <div class="row mb-4">
       <div class="col">Saturación de Oxigeno</div>
     </div>
-    <div class="row mb-4">
+    <div class="row mb-4" id="oxi">
       <div class="col">
         <img src="@/assets/Persona.png" height="30" width="20" />
         {{ ox }}
@@ -74,6 +74,19 @@ export default {
         .then((result) => {
           this.pedirSignos(result.data);
         });
+    },
+    SemaforoSignos: function () {
+      var temp = 36.5;
+      if (temp > 36 && temp < 37) 
+        document.getElementById("temp").style.color = 'green';
+      else if (temp > 37.1 && temp < 38) 
+        document.getElementById("temp").style.color = 'blue'
+      else if (temp > 38.1 && temp < 38.5) 
+        document.getElementById("temp").style.color = 'yellow' 
+      else if (temp > 38.6 && temp < 39)
+        document.getElementById("temp").style.color = 'black' 
+      else if (temp > 39) 
+        document.getElementById("temp").style.color = 'red'; 
     },
     pedirSignos: function (direccion) {
       const params = new URLSearchParams();
