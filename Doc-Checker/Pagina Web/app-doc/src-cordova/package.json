@@ -21,5 +21,9 @@
       "android",
       "browser"
     ]
+  },
+  "dependencies": {
+    "@vue/cli": "^5.0.4",
+    "serve": "^13.0.2"
   }
 }
