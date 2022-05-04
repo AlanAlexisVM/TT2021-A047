@@ -76,7 +76,7 @@ export default {
         });
     },
     SemaforoSignos: function () {
-      var temp = 36.5;
+      var temp = 36.6;
       if (temp > 36 && temp < 37) 
         document.getElementById("temp").style.color = 'green';
       else if (temp > 37.1 && temp < 38) 
@@ -87,7 +87,7 @@ export default {
         document.getElementById("temp").style.color = 'black' 
       else if (temp > 39) 
         document.getElementById("temp").style.color = 'red'; 
-    },
+    }, 
     pedirSignos: function (direccion) {
       const params = new URLSearchParams();
       params.append("seg", "2");
