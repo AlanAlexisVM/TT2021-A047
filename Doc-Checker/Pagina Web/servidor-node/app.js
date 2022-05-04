@@ -3,7 +3,7 @@ var fork = require("child_process").fork;
 var sp1 = fork("solicitarSignosVitales");
 
 // 1 - Invocamos a Express
-const express = require('express');
+const express = require("express");
 const app = express();
 //Const ip = "192.168.1.101"; //Funciona en el navegador de otro dispositivo
 const ip = "localhost";
@@ -32,13 +32,16 @@ app.use(
 
 // 8 - Invocamos a la conexion de la DB
 const connection = require("./db/db");
-sp1.on('message', msj => {
-  if(msj.msj=='Hijo cargado'){
-    console.log('message from child', msj);
-    connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH", async (error, results) => {
-      sp1.send({placas:results})
-    });
-  }else{
+sp1.on("message", (msj) => {
+  if (msj.msj == "Hijo cargado") {
+    console.log("message from child", msj);
+    connection.query(
+      "SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH",
+      async (error, results) => {
+        sp1.send({ placas: results });
+      }
+    );
+  } else {
     const lect = msj.msj.split('"');
     //Posicion 1
     var temp = lect[1];
@@ -46,20 +49,19 @@ sp1.on('message', msj => {
     var frec = lect[3];
     //Posicion 5
     var ox = lect[5];
-    
-    var ip = lect[6].substring(4,lect[6].length);
+
+    var ip = lect[6].substring(4, lect[6].length);
     console.log(temp);
     console.log(frec);
     console.log(ox);
     console.log(ip);
   }
-})
+});
 
-app.all('*',function (req,res,next)
-{
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  if(req.get('origin')!=undefined)
-    res.setHeader('Access-Control-Allow-Origin', req.get('origin'));
+app.all("*", function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  if (req.get("origin") != undefined)
+    res.setHeader("Access-Control-Allow-Origin", req.get("origin"));
   //console.log(req.get('origin'));
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
@@ -75,7 +77,7 @@ app.get("/", (req, res) => {
 app.post("/auth", async (req, res) => {
   const user = req.body.user;
   const pass = req.body.pass;
-  console.log(req.body)
+  console.log(req.body);
   if (user && pass) {
     connection.query(
       "SELECT * FROM Doctor WHERE CorreoE = ?",
@@ -122,33 +124,37 @@ app.post("/auth", async (req, res) => {
   }
 });
 
-app.post("/monitorplaca", async (req,res) => {
+app.post("/monitorplaca", async (req, res) => {
   const ip = req.body.ip;
   res.send("Placa confirmada");
   res.end;
   var fork = require("child_process").fork;
-  connection.query("SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?", ip, async (error, results) => {
-    var sp = fork("signosVitales");
-    sp.send({placa:results[0]});
-    sp.on('message', msj => {
-      const lect = msj.msj.split('"');
-      //Posicion 1
-      var temp = lect[1];
-      //Posicion 3
-      var frec = lect[3];
-      //Posicion 5
-      var ox = lect[5];
-      
-      var ip = lect[6].substring(4,lect[6].length);
-      console.log(temp);
-      console.log(frec);
-      console.log(ox);
-      console.log(ip);
-    });
-  });
+  connection.query(
+    "SELECT paciente.CURP, doccheckerh.IP FROM paciente INNER JOIN doccheckerh ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?",
+    ip,
+    async (error, results) => {
+      var sp = fork("signosVitales");
+      sp.send({ placa: results[0] });
+      sp.on("message", (msj) => {
+        const lect = msj.msj.split('"');
+        //Posicion 1
+        var temp = lect[1];
+        //Posicion 3
+        var frec = lect[3];
+        //Posicion 5
+        var ox = lect[5];
+
+        var ip = lect[6].substring(4, lect[6].length);
+        console.log(temp);
+        console.log(frec);
+        console.log(ox);
+        console.log(ip);
+      });
+    }
+  );
 });
 
-app.post("/problemaPaciente", async (req,res) => {
+app.post("/problemaPaciente", async (req, res) => {
   const ip = req.body.ip;
   console.log(ip);
   res.send("Problema informado");
@@ -806,10 +812,16 @@ app.get("/buscarDoctoresAdmin", (req, res) => {
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
   //SELECT IdDCH, Clave FROM doccheckerh;
-  let sql
-  sql = "SELECT Nombre, Apellidos, CedulaProf FROM Doctor"
-  if(cadena!='*')
-    sql = sql+" WHERE (Doctor.Nombre LIKE '%" + cadena + "%' OR Doctor.Apellidos LIKE '%" + cadena + "%')"
+  let sql;
+  sql = "SELECT Nombre, Apellidos, CedulaProf FROM Doctor";
+  if (cadena != "*")
+    sql =
+      sql +
+      " WHERE (Doctor.Nombre LIKE '%" +
+      cadena +
+      "%' OR Doctor.Apellidos LIKE '%" +
+      cadena +
+      "%')";
   connection.query(sql, async (error, results) => {
     res.send(results);
     res.end();
@@ -824,9 +836,9 @@ app.get("/buscarPlacasAdmin", (req, res) => {
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
   //SELECT IdDCH, Clave FROM doccheckerh;
-  let sql = "SELECT IdDCH, Clave FROM doccheckerh"
-  if(cadena!='*')
-    sql = sql+" WHERE doccheckerh.IdDCH LIKE '%" + cadena + "%'"
+  let sql = "SELECT IdDCH, Clave FROM doccheckerh";
+  if (cadena != "*")
+    sql = sql + " WHERE doccheckerh.IdDCH LIKE '%" + cadena + "%'";
   connection.query(sql, async (error, results) => {
     res.send(results);
     res.end();
@@ -841,18 +853,24 @@ app.get("/buscarPacientesAdmin", (req, res) => {
   //SELECT Nombre, CedulaProf FROM Doctor;
   //SELECT Curp, Nombre FROM Paciente;
   //SELECT IdDCH, Clave FROM doccheckerh;
-  let sql = "SELECT Curp, Nombre, Apellidos FROM Paciente"
-  if(cadena!='*')
-    sql = sql+" WHERE (Paciente.Nombre LIKE '%" + cadena + "%' OR Paciente.Apellidos LIKE '%" + cadena + "%')"
+  let sql = "SELECT Curp, Nombre, Apellidos FROM Paciente";
+  if (cadena != "*")
+    sql =
+      sql +
+      " WHERE (Paciente.Nombre LIKE '%" +
+      cadena +
+      "%' OR Paciente.Apellidos LIKE '%" +
+      cadena +
+      "%')";
   connection.query(sql, async (error, results) => {
     res.send(results);
     res.end();
   });
 });
 
-app.post('/registrarplaca', async (req, res) => {
-	const IP = req.body.ip;
-	const Clave = req.body.clave;
+app.post("/registrarplaca", async (req, res) => {
+  const IP = req.body.ip;
+  const Clave = req.body.clave;
 
   const sqls =
     'SELECT IdAdmin FROM Administrador WHERE CorreoE = "' +
@@ -900,19 +918,16 @@ app.post("/eliminar", async (req, res) => {
     sql = 'DELETE FROM doctor WHERE  doctor.CedulaProf = "' + id + '"';
     //console.log(error);
     //console.log(results);
-    if(results!=undefined && results.affectedRows>=1)
-      ret = true
+    if (results != undefined && results.affectedRows >= 1) ret = true;
     connection.query(sql, async (error, results) => {
-      sql = 'DELETE FROM doccheckerh WHERE  doccheckerh.IdDCH = ' + id;
+      sql = "DELETE FROM doccheckerh WHERE  doccheckerh.IdDCH = " + id;
       //console.log(error);
       //console.log(results);
-      if(results!=undefined && results.affectedRows>=1)
-        ret = true
+      if (results != undefined && results.affectedRows >= 1) ret = true;
       connection.query(sql, async (error, results) => {
         //console.log(error);
         //console.log(results);
-        if(results!=undefined && results.affectedRows>=1)
-          ret = true
+        if (results != undefined && results.affectedRows >= 1) ret = true;
         res.send(ret);
         res.end();
       });
@@ -920,7 +935,7 @@ app.post("/eliminar", async (req, res) => {
   });
 });
 
-app.use(express.static('pdfs'));
+app.use(express.static("pdfs"));
 
 app.use("*", (req, res) => {
   return res.status(404).json({ error: "No se encontro" });
