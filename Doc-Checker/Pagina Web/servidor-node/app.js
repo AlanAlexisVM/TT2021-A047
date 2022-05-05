@@ -80,7 +80,7 @@ app.post("/auth", async (req, res) => {
   console.log(req.body);
   if (user && pass) {
     connection.query(
-      "SELECT * FROM Doctor WHERE CorreoE = ?",
+      "SELECT * FROM Doctor WHERE IdAdmin<>1 AND CorreoE = ?",
       [user],
       async (error, results, fields) => {
         if (
