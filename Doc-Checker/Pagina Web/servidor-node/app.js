@@ -118,6 +118,7 @@ app.post("/auth", async (req, res) => {
   }
 });
 
+/* A POST request that is receiving a JSON object with the IP address of the device. */
 app.post("/monitorplaca", async (req, res) => {
   const ip = req.body.ip;
   res.send("Placa confirmada");
@@ -155,6 +156,7 @@ app.post("/problemaPaciente", async (req, res) => {
   res.end;
 });
 
+/* Taking the data from the form and inserting it into the database. */
 app.post("/registrar", async (req, res) => {
   const Cedula = req.body.cedula;
   const Nombre = req.body.nombre;
@@ -193,6 +195,7 @@ app.post("/registrar", async (req, res) => {
   });
 });
 
+/* Changing the password of the user. */
 app.post("/cambiarcontra", async (req, res) => {
   const user = req.session.name;
   const Contrasenia = req.body.contrasenia;
@@ -257,6 +260,7 @@ app.post("/cambiarcontra", async (req, res) => {
   }
 });
 
+/* Inserting a new row into the Atiende table. */
 app.post("/agregar", async (req, res) => {
   const Id = req.body.id;
 
@@ -293,6 +297,7 @@ app.post("/agregar", async (req, res) => {
   }
 });
 
+/* Deleting a row from the database. */
 app.post("/rechazarardoc", async (req, res) => {
   const Id = req.body.id;
   console.log(req.body.id);
@@ -311,6 +316,7 @@ app.post("/rechazarardoc", async (req, res) => {
   }
 });
 
+/* A POST request that is being sent to the server. */
 app.post("/obtenerPaciente", async (req, res) => {
   const CURP = req.body.curp;
 
@@ -328,6 +334,7 @@ app.post("/obtenerPaciente", async (req, res) => {
   }
 });
 
+/* A POST request that is being sent to the server. */
 app.post("/obtenerPaciente2", async (req, res) => {
   const CURP = req.body.curp;
 
@@ -347,6 +354,7 @@ app.post("/obtenerPaciente2", async (req, res) => {
   }
 });
 
+/* Inserting data into the database. */
 app.post("/registrarPaciente", async (req, res) => {
   const Nombre = req.body.nombre;
   const ApellidoP = req.body.apellidoPaterno;
