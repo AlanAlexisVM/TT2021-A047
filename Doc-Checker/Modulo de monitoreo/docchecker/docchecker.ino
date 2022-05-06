@@ -4,7 +4,18 @@
 #include "Protocentral_MAX30205.h"
 #include <WiFi.h>
 #include "ListLib.h"
+#include <HTTPClient.h>
+#include "heartRate.h"
 
+MAX30105 particleSensor2;
+const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
+byte rates[RATE_SIZE]; //Array of heart rates
+byte rateSpot = 0;
+long lastBeat = 0; //Time at which the last beat occurred
+float beatsPerMinute;
+int beatAvg;
+
+MAX30105 particleSensor;
 typedef struct clientestruct{
   WiFiClient conexion;
   float *lecturasTemp;
@@ -17,6 +28,9 @@ typedef struct clientestruct{
   float promedioFrec;
 }cliente;
 
+
+cliente docchecker;
+
 //------------------Servidor Web en puerto 80---------------------
 
 WiFiServer server(80);
@@ -25,23 +39,25 @@ WiFiServer server(80);
 
 //const char* ssid     = "Nam-wifi";
 //const char* password = "holahola";
-//const char* ssid     = "TP-Link_149C";
-//const char* password = "Admin012";
-const char* ssid     = "IZZI-3BD8";
-const char* password = "9CC8FC753BD8";
+const char* ssid     = "TP-Link_149C";
+const char* password = "Admin012";
+//const char* ssid     = "IZZI-3BD8";
+//const char* password = "9CC8FC753BD8";
+//const char* ssid     = "Internet de casa";
+//const char* password = "Hil09El012021";
 
 //---------------------VARIABLES GLOBALES-------------------------
 int contconexion = 0;
 
 const int salida = 2;
 
+int segTrans = 0;
+
 List<cliente> clientes = List<cliente>();
 
 ////////////////////////////
 
 MAX30205 tempSensor;
-
-MAX30105 particleSensor;
 
 #define MAX_BRIGHTNESS 255
 
@@ -59,6 +75,7 @@ byte readLED = 13; //Blinks with each data read
 float valoresLeidos[3];
 
 void inicializarSensores();
+void informarEncendidoServidor();
 void inicializarServidor();
 void leerSensores(float valores[3]);
 void leerPeticion(cliente *clt);
@@ -67,16 +84,84 @@ void calcularPromedios(cliente *clt);
 float calcularPromedio(float *arreglo);
 void enviarPromedio(cliente *clt);
 void servidor(float valores[3]);
+boolean validarSignos(cliente clt);
+void informarProblemaServidor();
 
 void setup() {
   Serial.begin(115200);
   inicializarSensores();
   inicializarServidor();
+  informarEncendidoServidor();
+  //Inicializacion de objeto que servira para checar los signos vitales y notificar al doctor en caso de un descenso considerable
+  docchecker.numLecturas = 30;
+  docchecker.lecturaActual=0;
+  docchecker.promedioTemp = 0;
+  docchecker.promedioOx = 0;
+  docchecker.promedioFrec = 0;
+  docchecker.lecturasTemp = new float[docchecker.numLecturas];
+  docchecker.lecturasOx = new float[docchecker.numLecturas];
+  docchecker.lecturasFrec = new float[docchecker.numLecturas];
 }
 
 void loop() {
   leerSensores(valoresLeidos);
-  servidor(valoresLeidos);
+  agregar(&docchecker,valoresLeidos);
+  Serial.println("temp");
+  Serial.println(docchecker.promedioTemp);
+  Serial.println("ox");
+  Serial.println(docchecker.promedioOx);
+  Serial.println("frec");
+  Serial.println(docchecker.promedioFrec);
+  
+  if(segTrans>=60 && segTrans%60==0 && !validarSignos(docchecker)){
+    informarProblemaServidor();
+  }else{
+    servidor(valoresLeidos);
+  }
+  segTrans+=2;
+}
+
+boolean validarSignos(cliente clt){
+  boolean ret=true;
+  if(clt.promedioTemp<36 || clt.promedioTemp>37.8){
+    ret = false;
+  }
+  if(clt.promedioOx<92){
+    ret = false;
+  }
+  if(clt.promedioFrec<60||clt.promedioFrec>80){
+    ret = false;
+  }
+}
+
+void informarProblemaServidor(){
+  HTTPClient http;
+  WiFiClient client;
+  const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  String full_url = SERVER_ADDRESS + "/problemaPaciente";
+  http.begin(client, full_url);
+  http.addHeader("Content-Type", "application/json");
+  Serial.println("Making request to " + full_url);
+  int httpCode = http.POST("{\"ip\":\""+WiFi.localIP().toString()+"\"}");
+  if (httpCode > 0)
+  {
+    if (httpCode == HTTP_CODE_OK)
+    {
+      String payload = http.getString(); //Get the request response payload
+      Serial.println("Request is OK! The server says: ");
+      Serial.println(payload);
+    }
+    else
+    {
+      Serial.println("Error: httpCode was " + http.errorToString(httpCode));
+    }
+  }
+  else
+  {
+    Serial.println("Request failed: " + http.errorToString(httpCode));
+  }
+
+  http.end();
 }
 
 void servidor(float valores[3]){
@@ -126,8 +211,8 @@ void inicializarSensores(){
   pinMode(readLED, OUTPUT);
 
   // Initialize sensor
-  //if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) //Use default I2C port, 400kHz speed, el mlx90614 no es compatible con  esta velocidad de 400kHz
-  if (!particleSensor.begin(Wire)) //Use default I2C port, 100kHz speed
+  if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) //Use default I2C port, 400kHz speed, el mlx90614 no es compatible con  esta velocidad de 400kHz
+  //if (!particleSensor.begin(Wire)) //Use default I2C port, 100kHz speed
   {
     Serial.println(F("MAX30105 was not found. Please check wiring/power."));
     while (1);
@@ -141,7 +226,17 @@ void inicializarSensores(){
   int adcRange = 4096; //Options: 2048, 4096, 8192, 16384
 
   particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); //Configure sensor with these settings
-
+  
+  if (!particleSensor2.begin(Wire, I2C_SPEED_FAST)) //Use default I2C port, 400kHz speed
+  {
+    Serial.println("MAX30105 was not found. Please check wiring/power. ");
+    while (1);
+  }
+  particleSensor2.setup(); //Configure sensor with default settings
+  particleSensor2.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
+  particleSensor2.setPulseAmplitudeGreen(0); //Turn off Green LED
+  
+  
   delay(500);
   bufferLength = 100; //buffer length of 100 stores 4 seconds of samples running at 25sps
   //read the first 100 samples, and determine the signal range
@@ -157,6 +252,36 @@ void inicializarSensores(){
 
   //calculate heart rate and SpO2 after first 100 samples (first 4 seconds of samples)
   maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
+}
+
+void informarEncendidoServidor(){
+  HTTPClient http;
+  WiFiClient client;
+  const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  String full_url = SERVER_ADDRESS + "/monitorplaca";
+  http.begin(client, full_url);
+  http.addHeader("Content-Type", "application/json");
+  Serial.println("Making request to " + full_url);
+  int httpCode = http.POST("{\"ip\":\""+WiFi.localIP().toString()+"\"}");
+  if (httpCode > 0)
+  {
+    if (httpCode == HTTP_CODE_OK)
+    {
+      String payload = http.getString(); //Get the request response payload
+      Serial.println("Request is OK! The server says: ");
+      Serial.println(payload);
+    }
+    else
+    {
+      Serial.println("Error: httpCode was " + http.errorToString(httpCode));
+    }
+  }
+  else
+  {
+    Serial.println("Request failed: " + http.errorToString(httpCode));
+  }
+
+  http.end();
 }
 
 void inicializarServidor(){
@@ -188,15 +313,30 @@ void inicializarServidor(){
 
 void leerSensores(float valores[3]){
   valores[0] = 0; valores[1] = 0; valores[2] = 0;
-  //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
   int aux = millis();
-  float temp = tempSensor.getTemperature(); // read temperature for every 100ms
-  //delay(100);
-  //delay(500);
-  //dumping the first 25 sets of samples in the memory and shift the last 75 sets of samples to the top
+  float temp = tempSensor.getTemperature();
   for (byte i = 25; i < 100; i++){
     redBuffer[i - 25] = redBuffer[i];
     irBuffer[i - 25] = irBuffer[i];
+    long irValue = particleSensor2.getIR();
+    if (checkForBeat(irValue) == true)
+    {
+      //We sensed a beat!
+      long delta = millis() - lastBeat;
+      lastBeat = millis();
+      beatsPerMinute = 60 / (delta / 1000.0);
+      Serial.println(delta);
+      if (beatsPerMinute < 255 && beatsPerMinute > 20)
+      {
+        rates[rateSpot++] = (byte)beatsPerMinute; //Store this reading in the array
+        rateSpot %= RATE_SIZE; //Wrap variable
+        //Take average of readings
+        beatAvg = 0;
+        for (byte x = 0 ; x < RATE_SIZE ; x++)
+          beatAvg += rates[x];
+        beatAvg /= RATE_SIZE;
+      }
+    }
   }
   //take 25 sets of samples before calculating the heart rate.
   for (byte i = 75; i < 100; i++){
@@ -206,23 +346,36 @@ void leerSensores(float valores[3]){
     redBuffer[i] = particleSensor.getRed();
     irBuffer[i] = particleSensor.getIR();
     particleSensor.nextSample(); //We're finished with this sample so move to next sample
-    //En este punto tenemos las lecturas del sensor
-    //valores[0] = temp; valores[1] = heartRate; valores[2] = spo2;
-    //servidor(valores);
+    //
+    long irValue = particleSensor2.getIR();
+    if (checkForBeat(irValue) == true)
+    {
+      //We sensed a beat!
+      long delta = millis() - lastBeat;
+      lastBeat = millis();
+      beatsPerMinute = 60 / (delta / 1000.0);
+      Serial.println(delta);
+      if (beatsPerMinute < 255 && beatsPerMinute > 20)
+      {
+        rates[rateSpot++] = (byte)beatsPerMinute; //Store this reading in the array
+        rateSpot %= RATE_SIZE; //Wrap variable
+        //Take average of readings
+        beatAvg = 0;
+        for (byte x = 0 ; x < RATE_SIZE ; x++)
+          beatAvg += rates[x];
+        beatAvg /= RATE_SIZE;
+      }
+    }
   }
   //After gathering 25 new samples recalculate HR and SP02
   maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
   int aux2 = millis();
-  Serial.println("Tiempo");
-  Serial.println(aux);
-  Serial.println(aux2);
   aux = aux2-aux;
-  Serial.println(aux);
-  Serial.println("Tiempo2");
+  Serial.print("Tiempo de lectura:"); Serial.print(aux); Serial.println(" seg");
   Serial.print("Temperatura MAX30205: "); Serial.print(temp ,2); Serial.println("'c" );
-  Serial.print(F("Frecuencia cardiaca: ")); Serial.println(heartRate, DEC);
+  Serial.print(F("Frecuencia cardiaca: ")); Serial.println(beatAvg, DEC);
   Serial.print(F("Saturación de oxígeno: ")); Serial.println(spo2, DEC); Serial.println();
-  valores[0] = temp; valores[1] = heartRate; valores[2] = spo2;
+  valores[0] = temp; valores[1] = beatAvg; valores[2] = spo2;
 }
 
 void leerPeticion(cliente *clt){
@@ -266,6 +419,7 @@ void agregar(cliente *clt, float valores[3]){
   }else{
     calcularPromedio(&(*clt));
     enviarPromedio(&(*clt));
+    clt->lecturaActual = 0;
   }
 }
 void calcularPromedio(cliente *clt){
@@ -291,29 +445,31 @@ void calcularPromedio(cliente *clt){
     clt->promedioOx/=cont2;
 }
 void enviarPromedio(cliente *clt){
-  if (clt->conexion.connected()){
-    String pagina = "Temp:\"";
-    pagina.concat(clt->promedioTemp);
-    pagina.concat("\",Frec:\"");
-    pagina.concat(clt->promedioFrec);
-    pagina.concat("\",Ox:\"");
-    pagina.concat(clt->promedioOx);
-    pagina.concat("\"");
-    clt->conexion.println("HTTP/1.1 200 OK");
-    //clt->conexion.println("Cache-Control: private, no-cache, no-store, must-revalidate");
-    clt->conexion.println("Access-Control-Allow-Origin: http://localhost");
-    clt->conexion.println("Access-Control-Allow-Credentials: true");
-    clt->conexion.println("Content-Type: text/html; charset=utf-8");
-    //clt->conexion.println("Connection: keep-alive");
-    clt->conexion.println("Connection: close");
-    //clt->conexion.println("Keep-Alive: timeout=5");
-    clt->conexion.println();
-    Serial.println(pagina);
-    clt->conexion.println(pagina);
-    // la respuesta HTTP temina con una linea en blanco
-    clt->conexion.println();
-    clt->conexion.stop();
-  }else{
-    clt->conexion.stop();
+  if(clt->conexion !=  NULL){
+    if (clt->conexion.connected()){
+      String pagina = "Temp:\"";
+      pagina.concat(clt->promedioTemp);
+      pagina.concat("\",Frec:\"");
+      pagina.concat(clt->promedioFrec);
+      pagina.concat("\",Ox:\"");
+      pagina.concat(clt->promedioOx);
+      pagina.concat("\"");
+      clt->conexion.println("HTTP/1.1 200 OK");
+      //clt->conexion.println("Cache-Control: private, no-cache, no-store, must-revalidate");
+      clt->conexion.println("Access-Control-Allow-Origin: http://localhost");
+      clt->conexion.println("Access-Control-Allow-Credentials: true");
+      clt->conexion.println("Content-Type: text/html; charset=utf-8");
+      //clt->conexion.println("Connection: keep-alive");
+      clt->conexion.println("Connection: close");
+      //clt->conexion.println("Keep-Alive: timeout=5");
+      clt->conexion.println();
+      //Serial.println(pagina);
+      clt->conexion.println(pagina);
+      // la respuesta HTTP temina con una linea en blanco
+      clt->conexion.println();
+      clt->conexion.stop();
+    }else{
+      clt->conexion.stop();
+    }
   }
 }
