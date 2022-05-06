@@ -62,13 +62,11 @@ app.all("*", function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   if (req.get("origin") != undefined)
     res.setHeader("Access-Control-Allow-Origin", req.get("origin"));
-  //console.log(req.get('origin'));
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
 app.get("/", (req, res) => {
-  //console.log('Cliente');
   res.send("Hola mundo");
   res.end();
 });
@@ -87,8 +85,6 @@ app.post("/auth", async (req, res) => {
           results.length == 0 ||
           !(await bcryptjs.compare(pass, results[0].Contrasenia))
         ) {
-          //console.log(results[0]);
-          //Contrasenia incorrecta
           connection.query(
             "SELECT * FROM Administrador WHERE CorreoE = ?",
             [user],
@@ -102,7 +98,6 @@ app.post("/auth", async (req, res) => {
                 req.session.loggedin = true;
                 req.session.name = results[0].CorreoE;
                 req.session.admin = true;
-                //console.log(req.session);
                 res.send("gestion");
               }
               res.end();
@@ -112,7 +107,6 @@ app.post("/auth", async (req, res) => {
           req.session.loggedin = true;
           req.session.name = results[0].CorreoE;
           req.session.cedula = results[0].CedulaProf;
-          //console.log(req.session);
           res.send("pacientes");
           res.end();
         }
@@ -214,8 +208,6 @@ app.post("/cambiarcontra", async (req, res) => {
             results.length == 0 ||
             !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))
           ) {
-            //console.log(results[0]);
-            //Contrasenia incorrecta
             console.log("Contraseña incorrecta");
             res.send(false);
           } else {
@@ -227,11 +219,8 @@ app.post("/cambiarcontra", async (req, res) => {
               '" WHERE CorreoE = "' +
               user +
               '"';
-            //console.log(sql);
             connection.query(sql, async (error, results) => {
-              //console.log(error)
               res.send(true);
-              //res.alert("Good");
               res.end();
             });
           }
@@ -248,24 +237,17 @@ app.post("/cambiarcontra", async (req, res) => {
             results.length == 0 ||
             !(await bcryptjs.compare(Contrasenia, results[0].Contrasenia))
           ) {
-            //console.log(results[0]);
-            //Contrasenia incorrecta
-            //alert("Contraseña incorrecta");
             res.send(false);
           } else {
             let ContraHaash = await bcryptjs.hash(newContrasenia, 8);
-
             const sql =
               'UPDATE Doctor SET Contrasenia = "' +
               ContraHaash +
               '" WHERE CorreoE = "' +
               user +
               '"';
-            //console.log(sql);
             connection.query(sql, async (error, results) => {
-              //console.log(error)
               res.send(true);
-              //res.alert("Good");
               res.end();
             });
           }
@@ -282,9 +264,7 @@ app.post("/agregar", async (req, res) => {
     //console.log("Existe");
     const sql = "INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)";
     valores = [req.session.cedula, Id];
-    //console.log(valores);
     connection.query(sql, [valores], async (error, results) => {
-      //console.log(error)
       res.send("/");
       res.end();
     });
@@ -308,7 +288,6 @@ app.post("/agregar", async (req, res) => {
       });
     });
   } else {
-    //console.log("No existe");
     res.send("/buscador");
     res.end();
   }
@@ -336,7 +315,6 @@ app.post("/obtenerPaciente", async (req, res) => {
   const CURP = req.body.curp;
 
   if (req.session.cedula != null && req.session.loggedin) {
-    //console.log("Existe");
     const sql =
       "SELECT Nombre, Apellidos, CURP, FechaNac, Sexo, Telefono1, Telefono2, CorreoE, Direccion, Estado, IdDCH, IdSi FROM Paciente WHERE Paciente.CURP = (?)";
     valores = [CURP];
@@ -345,7 +323,6 @@ app.post("/obtenerPaciente", async (req, res) => {
       res.end();
     });
   } else {
-    //console.log("No existe");
     res.send("/");
     res.end();
   }
@@ -355,7 +332,6 @@ app.post("/obtenerPaciente2", async (req, res) => {
   const CURP = req.body.curp;
 
   if (req.session.cedula != null && req.session.loggedin) {
-    //console.log("Existe");
     const sql1 =
       "SELECT Nombre, Apellidos, CURP, FechaNac, Sexo, Telefono1, Telefono2, CorreoE, Direccion, Estado, IdDCH, IdSi FROM Paciente WHERE Paciente.CURP = (?)";
     const sql =
@@ -366,7 +342,6 @@ app.post("/obtenerPaciente2", async (req, res) => {
       res.end();
     });
   } else {
-    //console.log("No existe");
     res.send("/");
     res.end();
   }
@@ -387,11 +362,9 @@ app.post("/registrarPaciente", async (req, res) => {
   const Estado = req.body.estado;
   const Placa = req.body.numPlaca;
   let IdSi = req.session.id;
-  //let passwordHash = await bcrypt.hash(pass, 8);
   connection.query(
     "INSERT INTO SignosVitales(IdSi) VALUES (NULL)",
     async (error, results) => {
-      //console.log(error)
       IdSi = results.insertId;
       let sql =
         "INSERT INTO Paciente(Nombre,Apellidos,CURP,FechaNac,Sexo,Telefono1,Telefono2,CorreoE,Direccion,Estado,IdDCH,IdSi) VALUES (?)";
@@ -409,16 +382,10 @@ app.post("/registrarPaciente", async (req, res) => {
         Placa,
         IdSi,
       ];
-      //console.log(req.session);
-      //console.log(valores);
       connection.query(sql, [valores], async (error, results) => {
-        //console.log(error)
         sql = "INSERT INTO Atiende(CedulaProf,CURP) VALUES (?)";
         valores = [req.session.cedula, CURP];
-        //console.log(req.session);
-        //console.log(valores);
         connection.query(sql, [valores], async (error, results) => {
-          //console.log(error)
           res.send("Registropacientes2");
           res.end();
         });
@@ -441,7 +408,6 @@ app.post("/actualizarPaciente", async (req, res) => {
   const Direccion = req.body.direccion;
   const Estado = req.body.estado;
   const Placa = req.body.numPlaca;
-  //console.log(error)
   let sql =
     "UPDATE Paciente SET Nombre = '" +
     Nombre +
@@ -466,11 +432,7 @@ app.post("/actualizarPaciente", async (req, res) => {
     "' WHERE CURP = '" +
     CURP +
     "'";
-
-  //console.log(req.session);
-  //console.log(valores);
   connection.query(sql, async (error, results) => {
-    //console.log(error)
     res.send("Registropacientes2");
     res.end();
   });
@@ -548,7 +510,6 @@ app.post("/registrarPaciente2", async (req, res) => {
         CURP +
         "')";
     connection.query(sql, async (error, results) => {
-      //INSERT INTO `InformePaciente_Adicciones`(`Adicciones`, `IdInforme`) VALUES ('[value-1]','[value-2]')
       if (existeRegistro <= 0) IdPac = results.insertId;
       sqlAdic =
         "INSERT INTO InformePaciente_Adicciones(Adicciones,IdInforme) VALUES ?";
@@ -655,7 +616,6 @@ app.post("/obtener", async (req, res) => {
     ".IdInforme WHERE InformePaciente.CURP='" +
     CURP +
     "'";
-  //SELECT Adicciones FROM InformePaciente_Adicciones INNER JOIN InformePaciente ON InformePaciente.IdInforme=InformePaciente_Adicciones.IdInforme WHERE InformePaciente.CURP=ANDFKHQEROHQWOI"
   connection.query(sql, async (error, results) => {
     ret = [];
     for (const result in results) {
@@ -668,10 +628,7 @@ app.post("/obtener", async (req, res) => {
 
 //12 - Método para controlar que está auth en todas las páginas
 app.get("/validar", (req, res) => {
-  //console.log(req.session);
   const dirigir = req.query.ruta.toLowerCase();
-  //console.log(dirigir);
-  //console.log(req.session);
   if (req.session.loggedin) {
     if (dirigir == "undefined") res.send([req.session.admin, "/"]);
     else res.send([req.session.admin, dirigir]);
@@ -680,13 +637,10 @@ app.get("/validar", (req, res) => {
 });
 
 app.get("/solicitarPacientes", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   if (req.session.loggedin) {
     if (req.session.admin) {
       let sql =
         "SELECT DISTINCTROW Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Administrador INNER JOIN Doctor ON Administrador.IdAdmin=Doctor.IdAdmin INNER JOIN Atiende on Atiende.CedulaProf=Doctor.CedulaProf INNER JOIN Paciente ON Atiende.CURP=Paciente.CURP WHERE Administrador.CorreoE = ?";
-      //console.log(sql)
       connection.query(sql, [req.session.name], async (error, results) => {
         res.send(results);
         res.end();
@@ -694,7 +648,6 @@ app.get("/solicitarPacientes", (req, res) => {
     } else {
       let sql =
         "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Doctor INNER JOIN Atiende ON Doctor.CedulaProf=Atiende.CedulaProf INNER JOIN Paciente on Atiende.CURP=Paciente.CURP WHERE Doctor.CorreoE = ?";
-      //console.log(sql)
       connection.query(sql, [req.session.name], async (error, results) => {
         res.send(results);
         res.end();
@@ -709,8 +662,6 @@ app.get("/solicitarPacientes", (req, res) => {
 app.get("/obtenerPlacas", async (req, res) => {
   const numMax = 3;
   if (req.session.cedula != null && req.session.loggedin) {
-    //console.log("Existe");
-    //SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
     let sql =
       "SELECT DISTINCTROW DocCheckerH.IdDCH FROM DocCheckerH INNER JOIN Tiene ON DocCheckerH.Clave=Tiene.Clave WHERE Tiene.CedulaProf = ?";
     valores = [req.session.cedula];
@@ -719,17 +670,13 @@ app.get("/obtenerPlacas", async (req, res) => {
       res.end();
     });
   } else {
-    //console.log("No existe");
     res.send("/");
     res.end();
   }
 });
 
 app.get("/obtenerClaves", async (req, res) => {
-  //console.log("Existe");
-  //SELECT DISTINCTROW count(*) FROM Pacientes where IdDCH = ?
   let sql = "SELECT Clave FROM Unidad";
-  //valores = [req.session.cedula]
   connection.query(sql, async (error, results) => {
     res.send(results);
     res.end();
@@ -737,13 +684,10 @@ app.get("/obtenerClaves", async (req, res) => {
 });
 
 app.get("/doctoresSolicitantes", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   if (req.session.loggedin) {
     if (req.session.admin) {
       let sql =
         "SELECT DISTINCTROW Doctor.Nombre, Doctor.Apellidos, Doctor.CedulaProf FROM Doctor WHERE Doctor.IdAdmin = 1";
-      //console.log(sql)
       connection.query(sql, async (error, results) => {
         res.send(results);
         res.end();
@@ -766,16 +710,12 @@ app.use(function (req, res, next) {
 //Destruye la sesión.
 app.get("/logout", function (req, res) {
   req.session.destroy(() => {
-    //res.setHeader('credentials', 'include');
-    //res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.send("/");
     res.end();
   });
 });
 
 app.get("/buscarPacientes", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   const cadena = req.query.cad;
   if (req.session.loggedin) {
     req.session.cedula;
