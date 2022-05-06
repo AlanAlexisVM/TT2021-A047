@@ -757,8 +757,6 @@ app.get("/buscarDoctoresAdmin", (req, res) => {
 });
 
 app.get("/buscarPlacasAdmin", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   const cadena = req.query.cad;
   req.session.cedula;
   let sql = "SELECT IdDCH, Clave FROM doccheckerh";
@@ -826,17 +824,11 @@ app.post("/eliminar", async (req, res) => {
   let ret = false;
   connection.query(sql, async (error, results) => {
     sql = 'DELETE FROM doctor WHERE  doctor.CedulaProf = "' + id + '"';
-    //console.log(error);
-    //console.log(results);
     if (results != undefined && results.affectedRows >= 1) ret = true;
     connection.query(sql, async (error, results) => {
       sql = "DELETE FROM doccheckerh WHERE  doccheckerh.IdDCH = " + id;
-      //console.log(error);
-      //console.log(results);
       if (results != undefined && results.affectedRows >= 1) ret = true;
       connection.query(sql, async (error, results) => {
-        //console.log(error);
-        //console.log(results);
         if (results != undefined && results.affectedRows >= 1) ret = true;
         res.send(ret);
         res.end();
