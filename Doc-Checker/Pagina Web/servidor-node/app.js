@@ -779,9 +779,6 @@ app.get("/buscarPacientes", (req, res) => {
   const cadena = req.query.cad;
   if (req.session.loggedin) {
     req.session.cedula;
-    //SELECT Nombre, CedulaProf FROM Doctor;
-    //SELECT Curp, Nombre FROM Paciente;
-    //SELECT IdDCH, Clave FROM doccheckerh;
     let sql =
       "SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=" +
       req.session.cedula +
@@ -790,11 +787,7 @@ app.get("/buscarPacientes", (req, res) => {
       "%' OR Paciente.Apellidos LIKE '%" +
       cadena +
       "%');";
-    //console.log(sql)
-    //SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Paciente.Nombre LIKE '%R%';
-    //SELECT Paciente.Nombre, Paciente.Apellidos, Paciente.CURP FROM Tiene INNER JOIN DocCheckerH ON Tiene.Clave=DocCheckerH.Clave INNER JOIN Paciente on DocCheckerH.IdDCH=Paciente.IdDCH WHERE Tiene.CedulaProf=18345 AND (Paciente.Nombre LIKE '%a%' OR Paciente.Apellidos LIKE '%a%');
     connection.query(sql, [req.session.cedula], async (error, results) => {
-      //console.log(results)
       res.send(results);
       res.end();
     });
@@ -805,13 +798,8 @@ app.get("/buscarPacientes", (req, res) => {
 });
 
 app.get("/buscarDoctoresAdmin", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   const cadena = req.query.cad;
   req.session.cedula;
-  //SELECT Nombre, CedulaProf FROM Doctor;
-  //SELECT Curp, Nombre FROM Paciente;
-  //SELECT IdDCH, Clave FROM doccheckerh;
   let sql;
   sql = "SELECT Nombre, Apellidos, CedulaProf FROM Doctor";
   if (cadena != "*")
@@ -833,9 +821,6 @@ app.get("/buscarPlacasAdmin", (req, res) => {
   //console.log(dirigir);
   const cadena = req.query.cad;
   req.session.cedula;
-  //SELECT Nombre, CedulaProf FROM Doctor;
-  //SELECT Curp, Nombre FROM Paciente;
-  //SELECT IdDCH, Clave FROM doccheckerh;
   let sql = "SELECT IdDCH, Clave FROM doccheckerh";
   if (cadena != "*")
     sql = sql + " WHERE doccheckerh.IdDCH LIKE '%" + cadena + "%'";
@@ -846,13 +831,8 @@ app.get("/buscarPlacasAdmin", (req, res) => {
 });
 
 app.get("/buscarPacientesAdmin", (req, res) => {
-  //console.log(req.session);
-  //console.log(dirigir);
   const cadena = req.query.cad;
   req.session.cedula;
-  //SELECT Nombre, CedulaProf FROM Doctor;
-  //SELECT Curp, Nombre FROM Paciente;
-  //SELECT IdDCH, Clave FROM doccheckerh;
   let sql = "SELECT Curp, Nombre, Apellidos FROM Paciente";
   if (cadena != "*")
     sql =
@@ -886,16 +866,6 @@ app.post("/registrarplaca", async (req, res) => {
       res.end();
     });
   });
-
-  /*const sql = 'INSERT INTO DocCheckerH(IP, Clave, IdAdmin) VALUES (?)';
-	const valores = [
-		IP,
-		Clave,
-		results];
-	connection.query(sql, [valores], async (error, results) => {
-		res.send("/pacientes");
-		res.end();
-	});*/
 });
 
 app.post("/placa", async (req, res) => {
