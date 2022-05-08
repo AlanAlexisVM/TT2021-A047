@@ -5,9 +5,6 @@ var sp1 = fork("solicitarSignosVitales");
 // 1 - Invocamos a Express
 const express = require("express");
 const app = express();
-//Const ip = "192.168.1.101"; //Funciona en el navegador de otro dispositivo
-const ip = "localhost";
-const port = "8080";
 
 //2 - Para poder capturar los datos del formulario (sin urlencoded nos devuelve "undefined")
 app.use(express.urlencoded({ extended: false }));
@@ -55,6 +52,39 @@ sp1.on("message", (msj) => {
     console.log(frec);
     console.log(ox);
     console.log(ip);
+    var sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
+    connection.query(sql, ip, async (error, results) => {
+      console.log(results);
+      console.log(error);
+      var idsi = results[0].IdSi;
+      sql = "INSERT INTO signosvitales_frecuenciacardiaca(FrecuenciaCardiaca, IdSi) VALUES (?)";
+      const valores = [
+        frec,
+        idsi
+      ];
+      connection.query(sql, [valores], async (error, results) => {
+        console.log(results);
+        console.log(error);
+        sql = "INSERT INTO signosvitales_oxigenación(Oxigenación, IdSi) VALUES (?)";
+        const valores = [
+          ox,
+          idsi
+        ];
+        connection.query(sql, [valores], async (error, results) => {
+          console.log(results);
+          console.log(error);
+          sql = "INSERT INTO signosvitales_temperatura(Temperatura, IdSi) VALUES (?)";
+          const valores = [
+            temp,
+            idsi
+          ];
+          connection.query(sql, [valores], async (error, results) => {
+            console.log(results);
+            console.log(error);
+          });
+        });
+      });
+    });
   }
 });
 
@@ -144,6 +174,39 @@ app.post("/monitorplaca", async (req, res) => {
         console.log(frec);
         console.log(ox);
         console.log(ip);
+        const sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
+        connection.query(sql, ip, async (error, results) => {
+          console.log(results);
+          console.log(error);
+          var idsi = results
+          sql = "INSERT INTO signosvitales_frecuenciacardiaca(FrecuenciaCardiaca, IdSi) VALUES (?)";
+          const valores = [
+            frec,
+            idsi
+          ];
+          connection.query(sql, [valores], async (error, results) => {
+            console.log(results);
+            console.log(error);
+            sql = "INSERT INTO signosvitales_oxigenación(Oxigenación, IdSi) VALUES (?)";
+            const valores = [
+              ox,
+              idsi
+            ];
+            connection.query(sql, [valores], async (error, results) => {
+              console.log(results);
+              console.log(error);
+              sql = "INSERT INTO signosvitales_temperatura(Temperatura, IdSi) VALUES (?)";
+              const valores = [
+                temp,
+                idsi
+              ];
+              connection.query(sql, [valores], async (error, results) => {
+                console.log(results);
+                console.log(error);
+              });
+            });
+          });
+        });
       });
     }
   );

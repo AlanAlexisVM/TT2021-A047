@@ -93,8 +93,8 @@ void setup() {
   inicializarServidor();
   informarEncendidoServidor();
   //Inicializacion de objeto que servira para checar los signos vitales y notificar al doctor en caso de un descenso considerable
-  docchecker.numLecturas = 30;
-  docchecker.lecturaActual=0;
+  docchecker.numLecturas = 15;
+  docchecker.lecturaActual = 0;
   docchecker.promedioTemp = 0;
   docchecker.promedioOx = 0;
   docchecker.promedioFrec = 0;
@@ -113,11 +113,10 @@ void loop() {
   Serial.println("frec");
   Serial.println(docchecker.promedioFrec);
   
-  if(segTrans>=60 && segTrans%60==0 && !validarSignos(docchecker)){
+  if(segTrans>=360 && segTrans%30==0 && !validarSignos(docchecker)){
     informarProblemaServidor();
-  }else{
-    servidor(valoresLeidos);
   }
+  servidor(valoresLeidos);
   segTrans+=2;
 }
 
@@ -444,8 +443,9 @@ void calcularPromedio(cliente *clt){
   if(cont2>0)
     clt->promedioOx/=cont2;
 }
+
 void enviarPromedio(cliente *clt){
-  if(clt->conexion !=  NULL){
+  if(String(clt->conexion)!="0"){
     if (clt->conexion.connected()){
       String pagina = "Temp:\"";
       pagina.concat(clt->promedioTemp);
@@ -459,9 +459,7 @@ void enviarPromedio(cliente *clt){
       clt->conexion.println("Access-Control-Allow-Origin: http://localhost");
       clt->conexion.println("Access-Control-Allow-Credentials: true");
       clt->conexion.println("Content-Type: text/html; charset=utf-8");
-      //clt->conexion.println("Connection: keep-alive");
-      clt->conexion.println("Connection: close");
-      //clt->conexion.println("Keep-Alive: timeout=5");
+      clt->conexion.println("Connection: keep-alive");
       clt->conexion.println();
       //Serial.println(pagina);
       clt->conexion.println(pagina);

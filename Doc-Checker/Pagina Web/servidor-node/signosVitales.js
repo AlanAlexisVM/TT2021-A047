@@ -18,8 +18,7 @@ function pedirSignos(http, options) {
     .post(options, (err, res, body) => {
       if (body == undefined) process.exit(1);
       else if (body.length > 0) {
-        //console.log(body)
-        //console.log(body.Temp)
+        console.log(body);
         //console.log("conectado")
         process.send({ msj: body + ip });
         pedirSignos(http, options);
