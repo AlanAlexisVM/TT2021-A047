@@ -234,7 +234,7 @@ export default {
             estadosCiviles: ["Soltero", "Casado", "Divorciado", "Separación en proceso judicial", "Viudo", "Concubinato"],
             horariosSuenio: ["1 hora", "2 horas", "3 horas", "4 horas", "5 horas", "6 horas", "7 horas", "8 horas", "9 horas", "10 horas", "11 horas", "12 horas"],
             num: [1,2,3,4,5,6,7,8,9,10,11,12],
-            trabajos: ["Obrero", "Futbolista"],
+            trabajos: ["Obrero", "Futbolista", "Piloto", "Ingeniero", "Abogado", "Otro"],
         }
     },
     methods: {

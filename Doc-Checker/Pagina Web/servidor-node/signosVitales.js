@@ -7,7 +7,7 @@ process.on("message", (msj) => {
   const options = {
     url: "http://" + msj.placa.IP,
     form: {
-      seg: "2",
+      seg: "30",
     },
   };
   pedirSignos(http, options);

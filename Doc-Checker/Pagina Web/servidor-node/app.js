@@ -48,14 +48,8 @@ sp1.on("message", (msj) => {
     var ox = lect[5];
 
     var ip = lect[6].substring(4, lect[6].length);
-    console.log(temp);
-    console.log(frec);
-    console.log(ox);
-    console.log(ip);
     var sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
     connection.query(sql, ip, async (error, results) => {
-      console.log(results);
-      console.log(error);
       var idsi = results[0].IdSi;
       sql = "INSERT INTO signosvitales_frecuenciacardiaca(FrecuenciaCardiaca, IdSi) VALUES (?)";
       const valores = [
@@ -63,24 +57,18 @@ sp1.on("message", (msj) => {
         idsi
       ];
       connection.query(sql, [valores], async (error, results) => {
-        console.log(results);
-        console.log(error);
         sql = "INSERT INTO signosvitales_oxigenación(Oxigenación, IdSi) VALUES (?)";
         const valores = [
           ox,
           idsi
         ];
         connection.query(sql, [valores], async (error, results) => {
-          console.log(results);
-          console.log(error);
           sql = "INSERT INTO signosvitales_temperatura(Temperatura, IdSi) VALUES (?)";
           const valores = [
             temp,
             idsi
           ];
           connection.query(sql, [valores], async (error, results) => {
-            console.log(results);
-            console.log(error);
           });
         });
       });
@@ -105,7 +93,7 @@ app.get("/", (req, res) => {
 app.post("/auth", async (req, res) => {
   const user = req.body.user;
   const pass = req.body.pass;
-  console.log(req.body);
+  //console.log(req.body);
   if (user && pass) {
     connection.query(
       "SELECT * FROM Doctor WHERE IdAdmin<>1 AND CorreoE = ?",
@@ -170,14 +158,8 @@ app.post("/monitorplaca", async (req, res) => {
         var ox = lect[5];
 
         var ip = lect[6].substring(4, lect[6].length);
-        console.log(temp);
-        console.log(frec);
-        console.log(ox);
-        console.log(ip);
         const sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
         connection.query(sql, ip, async (error, results) => {
-          console.log(results);
-          console.log(error);
           var idsi = results
           sql = "INSERT INTO signosvitales_frecuenciacardiaca(FrecuenciaCardiaca, IdSi) VALUES (?)";
           const valores = [
@@ -185,24 +167,18 @@ app.post("/monitorplaca", async (req, res) => {
             idsi
           ];
           connection.query(sql, [valores], async (error, results) => {
-            console.log(results);
-            console.log(error);
             sql = "INSERT INTO signosvitales_oxigenación(Oxigenación, IdSi) VALUES (?)";
             const valores = [
               ox,
               idsi
             ];
             connection.query(sql, [valores], async (error, results) => {
-              console.log(results);
-              console.log(error);
               sql = "INSERT INTO signosvitales_temperatura(Temperatura, IdSi) VALUES (?)";
               const valores = [
                 temp,
                 idsi
               ];
               connection.query(sql, [valores], async (error, results) => {
-                console.log(results);
-                console.log(error);
               });
             });
           });

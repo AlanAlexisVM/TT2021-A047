@@ -34,7 +34,7 @@
     <div class="row mb-4">
       <div class="col">Saturación de Oxigeno</div>
     </div>
-    <div class="row mb-4" id="oxi">
+    <div class="row mb-4" id="ox">
       <div class="col">
         <img src="@/assets/Persona.png" height="30" width="20" />
         {{ ox }}
@@ -93,6 +93,31 @@ export default {
       } else if (temp > 39){ 
         document.getElementById("temp").style.color = 'red';
       }
+
+      let frec = parseFloat(this.frec);
+      if (frec < 36){
+        document.getElementById("frec").style.color = 'blue';
+      } else if (frec <= 60){ 
+        document.getElementById("frec").style.color = 'green';
+      } else if (frec > 60 && temp <= 70){
+        document.getElementById("frec").style.color = 'yellow'; 
+      } else if (frec > 70 && temp <= 85){
+        document.getElementById("frec").style.color = 'orange';
+      } else if (frec > 85){ 
+        document.getElementById("frec").style.color = 'red';
+      }
+
+      let ox = parseFloat(this.ox);
+      if (ox <= 85){
+        document.getElementById("ox").style.color = 'red';
+      } else if (ox >= 86 && ox <= 90){
+        document.getElementById("ox").style.color = 'orange'; 
+      } else if (ox >= 91 && ox <= 94){
+        document.getElementById("ox").style.color = 'yellow';
+      } else if (ox >= 95){ 
+        document.getElementById("ox").style.color = 'green';
+      }
+
     }, 
     pedirSignos: function (direccion) {
       const params = new URLSearchParams();
