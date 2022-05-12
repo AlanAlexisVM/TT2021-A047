@@ -87,7 +87,7 @@ export default {
       } else if (temp > 37.1 && temp <= 38){ 
         document.getElementById("temp").style.color = '#c6ce00';
       } else if (temp > 38 && temp <= 38.5){
-        document.getElementById("temp").style.color = '#b57c00'; 
+        document.getElementById("temp").style.color = '#fbc02d'; 
       } else if (temp > 38.5 && temp <= 39){
         document.getElementById("temp").style.color = 'orange';
       } else if (temp > 39){ 
@@ -100,7 +100,7 @@ export default {
       } else if (frec > 50 && frec <= 60){ 
         document.getElementById("frec").style.color = 'green';
       } else if (frec > 60 && temp <= 70){
-        document.getElementById("frec").style.color = '#b57c00'; 
+        document.getElementById("frec").style.color = '#fbc02d'; 
       } else if (frec > 70 && temp <= 85){
         document.getElementById("frec").style.color = 'orange';
       } else if (frec > 85){ 
