@@ -157,23 +157,26 @@ app.post("/monitorplaca", async (req, res) => {
         var ox = lect[5];
 
         var ip = lect[6].substring(4, lect[6].length);
-        const sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
+        var sql = "SELECT IdSi FROM doccheckerh INNER JOIN paciente ON doccheckerh.IdDCH=paciente.IdDCH WHERE doccheckerh.IP=?";
         connection.query(sql, ip, async (error, results) => {
           var idsi = results
-          sql = "INSERT INTO signosvitales_frecuenciacardiaca(FrecuenciaCardiaca, IdSi) VALUES (?)";
+          sql = "INSERT INTO signosvitales_frecuenciacardiaca(Id, FrecuenciaCardiaca, IdSi) VALUES (?)";
           const valores = [
+            null,
             frec,
             idsi
           ];
           connection.query(sql, [valores], async (error, results) => {
-            sql = "INSERT INTO signosvitales_oxigenación(Oxigenación, IdSi) VALUES (?)";
+            sql = "INSERT INTO signosvitales_oxigenación(Id, Oxigenación, IdSi) VALUES (?)";
             const valores = [
+              null,
               ox,
               idsi
             ];
             connection.query(sql, [valores], async (error, results) => {
-              sql = "INSERT INTO signosvitales_temperatura(Temperatura, IdSi) VALUES (?)";
+              sql = "INSERT INTO signosvitales_temperatura(Id, Temperatura, IdSi) VALUES (?)";
               const valores = [
+                null,
                 temp,
                 idsi
               ];

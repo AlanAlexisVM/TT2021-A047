@@ -26,6 +26,7 @@ typedef struct clientestruct{
   float promedioTemp;
   float promedioOx;
   float promedioFrec;
+  String origen;
 }cliente;
 
 
@@ -174,6 +175,7 @@ void servidor(float valores[3]){
     c1.promedioOx = 0;
     c1.promedioFrec = 0;
     c1.conexion = client;
+    c1.origen = "";
     clientes.Add(c1);
     leerPeticion(&clientes[clientes.Count()-1]);
     Serial.println("Tamanio de la lista:");
@@ -370,6 +372,7 @@ void leerSensores(float valores[3]){
   maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
   int aux2 = millis();
   aux = aux2-aux;
+  temp = temp+1.06;
   Serial.print("Tiempo de lectura:"); Serial.print(aux); Serial.println(" seg");
   Serial.print("Temperatura MAX30205: "); Serial.print(temp ,2); Serial.println("'c" );
   Serial.print(F("Frecuencia cardiaca: ")); Serial.println(beatAvg, DEC);
@@ -395,6 +398,9 @@ void leerPeticion(cliente *clt){
     }
   }
   Serial.println(peticion);
+  if(peticion.indexOf("Origin: ")>=0){
+    clt->origen = peticion.substring(peticion.indexOf("Origin: ")+8);
+  }
   //En la ultima linea tendremos algo como seg=5
   if(peticion.indexOf("seg=")>=0){
     clt->numLecturas=peticion.substring(peticion.indexOf("seg=")+4).toInt();
@@ -403,11 +409,6 @@ void leerPeticion(cliente *clt){
     clt->lecturasOx = new float[clt->numLecturas];
     clt->lecturasFrec = new float[clt->numLecturas];
   }
-  // Limpiamos la variable peticion
-  // Cerramos la conexión
-  //client.stop();
-  //Serial.println("Client disconnected.");
-  //Serial.println("");
 }
 void agregar(cliente *clt, float valores[3]){
   if(clt->numLecturas > clt->lecturaActual){
@@ -456,14 +457,12 @@ void enviarPromedio(cliente *clt){
       pagina.concat("\"");
       clt->conexion.println("HTTP/1.1 200 OK");
       //clt->conexion.println("Cache-Control: private, no-cache, no-store, must-revalidate");
-      clt->conexion.println("Access-Control-Allow-Origin: http://localhost");
+      clt->conexion.println("Access-Control-Allow-Origin: "+clt->origen);
       clt->conexion.println("Access-Control-Allow-Credentials: true");
       clt->conexion.println("Content-Type: text/html; charset=utf-8");
       clt->conexion.println("Connection: keep-alive");
       clt->conexion.println();
-      //Serial.println(pagina);
       clt->conexion.println(pagina);
-      // la respuesta HTTP temina con una linea en blanco
       clt->conexion.println();
       clt->conexion.stop();
     }else{
