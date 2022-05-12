@@ -87,7 +87,7 @@ export default {
       } else if (temp > 37.1 && temp <= 38){ 
         document.getElementById("temp").style.color = '#c6ce00';
       } else if (temp > 38 && temp <= 38.5){
-        document.getElementById("temp").style.color = 'yellow'; 
+        document.getElementById("temp").style.color = '#b57c00'; 
       } else if (temp > 38.5 && temp <= 39){
         document.getElementById("temp").style.color = 'orange';
       } else if (temp > 39){ 
@@ -95,12 +95,12 @@ export default {
       }
 
       let frec = parseFloat(this.frec);
-      if (frec < 36){
+      if (frec < 50){
         document.getElementById("frec").style.color = 'blue';
-      } else if (frec <= 60){ 
+      } else if (frec > 50 && frec <= 60){ 
         document.getElementById("frec").style.color = 'green';
       } else if (frec > 60 && temp <= 70){
-        document.getElementById("frec").style.color = 'yellow'; 
+        document.getElementById("frec").style.color = '#b57c00'; 
       } else if (frec > 70 && temp <= 85){
         document.getElementById("frec").style.color = 'orange';
       } else if (frec > 85){ 
@@ -113,7 +113,7 @@ export default {
       } else if (ox >= 86 && ox <= 90){
         document.getElementById("ox").style.color = 'orange'; 
       } else if (ox >= 91 && ox <= 94){
-        document.getElementById("ox").style.color = 'yellow';
+        document.getElementById("ox").style.color = 'b57c00';
       } else if (ox >= 95){ 
         document.getElementById("ox").style.color = 'green';
       }

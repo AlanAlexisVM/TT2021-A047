@@ -399,7 +399,11 @@ void leerPeticion(cliente *clt){
   }
   Serial.println(peticion);
   if(peticion.indexOf("Origin: ")>=0){
-    clt->origen = peticion.substring(peticion.indexOf("Origin: ")+8);
+    String aux = peticion.substring(peticion.indexOf("Origin: ")+8);
+    Serial.println(aux.substring(0,aux.lastIndexOf('\n')));
+    clt->origen = aux.substring(0,aux.lastIndexOf('\n'));
+  }else{
+    clt->origen = "http://localhost";
   }
   //En la ultima linea tendremos algo como seg=5
   if(peticion.indexOf("seg=")>=0){
