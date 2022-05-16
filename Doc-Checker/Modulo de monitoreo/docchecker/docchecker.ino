@@ -38,10 +38,10 @@ WiFiServer server(80);
 
 //---------------------Credenciales de WiFi-----------------------
 
-//const char* ssid     = "Nam-wifi";
-//const char* password = "holahola";
-const char* ssid     = "TP-Link_149C";
-const char* password = "Admin012";
+const char* ssid     = "Nam-wifi";
+const char* password = "holahola";
+//const char* ssid     = "TP-Link_149C";
+//const char* password = "Admin012";
 //const char* ssid     = "IZZI-3BD8";
 //const char* password = "9CC8FC753BD8";
 //const char* ssid     = "Internet de casa";
@@ -137,7 +137,8 @@ boolean validarSignos(cliente clt){
 void informarProblemaServidor(){
   HTTPClient http;
   WiFiClient client;
-  const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  //const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  const String SERVER_ADDRESS = "http://192.168.33.23:8081";
   String full_url = SERVER_ADDRESS + "/problemaPaciente";
   http.begin(client, full_url);
   http.addHeader("Content-Type", "application/json");
@@ -258,7 +259,8 @@ void inicializarSensores(){
 void informarEncendidoServidor(){
   HTTPClient http;
   WiFiClient client;
-  const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  //const String SERVER_ADDRESS = "http://192.168.1.103:8081";
+  const String SERVER_ADDRESS = "http://192.168.33.23:8081";
   String full_url = SERVER_ADDRESS + "/monitorplaca";
   http.begin(client, full_url);
   http.addHeader("Content-Type", "application/json");
