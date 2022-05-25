@@ -1,6 +1,5 @@
 <template>
     <div class="Mineria" style="height: 75vh;overflow-y: auto;overflow-x: hidden;">
-        <!--Fuente: https://programmerclick.com/article/17441571952/-->
         <select v-model="src" style="width: 30em">
             <option disabled value=" ">Selecciona un pdf</option>
             <option v-for="item in pdfList" :key="item" :label="item" :v-text="item"></option>
