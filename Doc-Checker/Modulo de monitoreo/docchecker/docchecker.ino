@@ -38,10 +38,10 @@ WiFiServer server(80);
 
 //---------------------Credenciales de WiFi-----------------------
 
-const char* ssid     = "Nam-wifi";
-const char* password = "holahola";
-//const char* ssid     = "TP-Link_149C";
-//const char* password = "Admin012";
+//const char* ssid     = "Nam-wifi";
+//const char* password = "holahola";
+const char* ssid     = "TP-Link_149C";
+const char* password = "Admin012";
 //const char* ssid     = "IZZI-3BD8";
 //const char* password = "9CC8FC753BD8";
 //const char* ssid     = "Internet de casa";
