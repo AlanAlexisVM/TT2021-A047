@@ -26,6 +26,7 @@
 
 <script>
 import pdf from 'vue-pdf'
+import global_ from "@/components/Global"
 export default {
     name: 'Informe',
     components: {
@@ -35,7 +36,7 @@ export default {
 		return {
 			show: true,
 			pdfList: [
-				'http://192.168.1.103:8081/Reporte.pdf'
+				"http://"+global_.server+":"+global_.port_node+"/Reporte.pdf"
 			],
 			src:'',
 			loadedRatio: 0,

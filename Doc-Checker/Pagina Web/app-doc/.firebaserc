@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "notificaciones-docchecker",
+    "docchecker": "notificaciones-docchecker"
+  },
+  "targets": {}
+}

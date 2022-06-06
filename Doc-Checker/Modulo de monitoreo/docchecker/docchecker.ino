@@ -38,10 +38,10 @@ WiFiServer server(80);
 
 //---------------------Credenciales de WiFi-----------------------
 
-//const char* ssid     = "Nam-wifi";
-//const char* password = "holahola";
-const char* ssid     = "TP-Link_149C";
-const char* password = "Admin012";
+const char* ssid     = "Nam-wifi";
+const char* password = "holahola";
+//const char* ssid     = "TP-Link_149C";
+//const char* password = "Admin012";
 //const char* ssid     = "IZZI-3BD8";
 //const char* password = "9CC8FC753BD8";
 //const char* ssid     = "Internet de casa";
@@ -137,8 +137,8 @@ boolean validarSignos(cliente clt){
 void informarProblemaServidor(){
   HTTPClient http;
   WiFiClient client;
-  //const String SERVER_ADDRESS = "http://192.168.1.103:8081";
-  const String SERVER_ADDRESS = "http://192.168.33.23:8081";
+  //const String SERVER_ADDRESS = "http://192.168.173.23:8081";
+  const String SERVER_ADDRESS = "http://192.168.173.23:8081";
   String full_url = SERVER_ADDRESS + "/problemaPaciente";
   http.begin(client, full_url);
   http.addHeader("Content-Type", "application/json");
@@ -259,8 +259,8 @@ void inicializarSensores(){
 void informarEncendidoServidor(){
   HTTPClient http;
   WiFiClient client;
-  //const String SERVER_ADDRESS = "http://192.168.1.103:8081";
-  const String SERVER_ADDRESS = "http://192.168.33.23:8081";
+  //const String SERVER_ADDRESS = "http://192.168.173.23:8081";
+  const String SERVER_ADDRESS = "http://192.168.173.23:8081";
   String full_url = SERVER_ADDRESS + "/monitorplaca";
   http.begin(client, full_url);
   http.addHeader("Content-Type", "application/json");
@@ -374,7 +374,7 @@ void leerSensores(float valores[3]){
   maxim_heart_rate_and_oxygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
   int aux2 = millis();
   aux = aux2-aux;
-  temp = temp+1.06;
+  temp = temp+2.06;
   Serial.print("Tiempo de lectura:"); Serial.print(aux); Serial.println(" seg");
   Serial.print("Temperatura MAX30205: "); Serial.print(temp ,2); Serial.println("'c" );
   Serial.print(F("Frecuencia cardiaca: ")); Serial.println(beatAvg, DEC);
@@ -405,7 +405,7 @@ void leerPeticion(cliente *clt){
     Serial.println(aux.substring(0,aux.lastIndexOf('\n')));
     clt->origen = aux.substring(0,aux.lastIndexOf('\n'));
   }else{
-    clt->origen = "http://localhost";
+    clt->origen = "http://localhost:8080";
   }
   //En la ultima linea tendremos algo como seg=5
   if(peticion.indexOf("seg=")>=0){

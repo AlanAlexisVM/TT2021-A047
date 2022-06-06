@@ -37,6 +37,7 @@
 <script>
 import axios from 'axios'
 import global_ from "@/components/Global"
+import '@/services/get-token.js' 
 
 export default {
   name: 'Iniciodesesion',
@@ -71,6 +72,9 @@ export default {
   },
   created: function(){
       this.validar();
+  },
+  mounted (){
+  
   }
 }
 </script>
